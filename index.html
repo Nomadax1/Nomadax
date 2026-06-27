@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  NOMADAX VANTA 40 — Página de producto (landing)
+  ============================================================================
+  ESTA PÁGINA ES 100% EDITABLE.
+
+  Cómo editarla sin romper nada:
+  1) COLORES Y TIPOGRAFÍA  -> bloque <style> :root (más abajo). Cambia los valores.
+  2) TEXTOS                -> están directamente en el HTML, marcados con
+                              comentarios <!-- EDITABLE: ... -->. Cambia el texto
+                              entre las etiquetas.
+  3) PRECIOS               -> busca "EDITABLE: PRECIO".
+  4) IMÁGENES              -> usan los planos SVG de la carpeta /planos.
+                              Sustituye el atributo src por tus fotos/renders.
+  5) Para verla: abre este archivo en cualquier navegador (doble clic).
+  ============================================================================
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOMADAX VANTA 40 — Mochila de cabina premium</title>
+  <meta name="description" content="La única mochila de cabina con bolsa de vacío integrada. 40x25x20 cm, candado TSA, bolsillo antirrobo y portátil 15,6&quot;.">
+
+  <style>
+    /* ======================================================================
+       1) PALETA Y AJUSTES GLOBALES  ·  EDITABLE
+       Cambia aquí los colores y la tipografía de toda la web.
+       ====================================================================== */
+    :root {
+      --negro:        #15151a;   /* fondo principal oscuro */
+      --negro-mate:   #1c1c1e;   /* tarjetas / secciones */
+      --beige:        #cbb693;   /* color de acento (tapa beige arena) */
+      --beige-claro:  #e7dcc4;
+      --texto:        #ececec;   /* texto sobre fondo oscuro */
+      --texto-suave:  #a9a9b0;   /* texto secundario */
+      --linea:        #2c2c33;   /* bordes/divisores */
+      --radio:        16px;      /* redondeo de esquinas */
+      --ancho-max:    1120px;    /* ancho máximo del contenido */
+      --fuente: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* ---------- Reset ligero ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--fuente);
+      background: var(--negro);
+      color: var(--texto);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    .contenedor { max-width: var(--ancho-max); margin: 0 auto; padding: 0 24px; }
+    section { padding: 88px 0; }
+    h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
+    h2 { font-size: clamp(28px, 4vw, 42px); margin-bottom: 16px; }
+    .subtitulo { color: var(--texto-suave); font-size: 18px; max-width: 640px; }
+    .acento { color: var(--beige); }
+
+    /* ---------- Botones ---------- */
+    .btn {
+      display: inline-block; padding: 15px 30px; border-radius: 999px;
+      font-weight: 600; font-size: 16px; cursor: pointer; border: none;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primario { background: var(--beige); color: #2a2418; }
+    .btn-secundario { background: transparent; color: var(--texto); border: 1px solid var(--linea); }
+
+    /* ======================================================================
+       CABECERA / NAV
+       ====================================================================== */
+    header.nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(21,21,26,.82); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--linea);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-weight: 800; letter-spacing: .18em; font-size: 18px; }
+    .logo span { color: var(--beige); }
+    .nav-links { display: flex; gap: 28px; font-size: 15px; color: var(--texto-suave); }
+    .nav-links a:hover { color: var(--texto); }
+    @media (max-width: 760px){ .nav-links { display: none; } }
+
+    /* ======================================================================
+       HERO
+       ====================================================================== */
+    .hero { padding: 90px 0 70px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+    .hero h1 { font-size: clamp(38px, 6vw, 64px); }
+    .badge {
+      display: inline-block; font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--beige); border: 1px solid var(--linea); padding: 6px 14px; border-radius: 999px; margin-bottom: 22px;
+    }
+    .hero p.lead { font-size: 20px; color: var(--texto-suave); margin: 20px 0 30px; max-width: 520px; }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+    .precio-hero { margin-left: 6px; color: var(--texto-suave); font-size: 15px; }
+    .hero-visual {
+      background: linear-gradient(160deg, #232329, #15151a);
+      border: 1px solid var(--linea); border-radius: var(--radio); padding: 24px;
+    }
+    @media (max-width: 880px){ .hero-grid { grid-template-columns: 1fr; } }
+
+    /* ======================================================================
+       TIRA DE CONFIANZA (aerolíneas)
+       ====================================================================== */
+    .tira { border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); padding: 22px 0; }
+    .tira-inner { display: flex; flex-wrap: wrap; gap: 14px 34px; justify-content: center; align-items: center; color: var(--texto-suave); font-size: 14px; }
+    .tira b { color: var(--texto); }
+
+    /* ======================================================================
+       DIFERENCIADORES (3 columnas)
+       ====================================================================== */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
+    .card {
+      background: var(--negro-mate); border: 1px solid var(--linea);
+      border-radius: var(--radio); padding: 28px;
+    }
+    .card .ico { font-size: 30px; margin-bottom: 14px; }
+    .card h3 { font-size: 20px; margin-bottom: 8px; }
+    .card p { color: var(--texto-suave); font-size: 15px; }
+    @media (max-width: 820px){ .grid-3 { grid-template-columns: 1fr; } }
+
+    /* ======================================================================
+       BLOQUES ALTERNADOS (feature + imagen)
+       ====================================================================== */
+    .feature { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .feature + .feature { margin-top: 72px; }
+    .feature.invertido .feature-txt { order: 2; }
+    .feature-img { background: #f5f5f3; border-radius: var(--radio); padding: 14px; border: 1px solid var(--linea); }
+    .feature ul { list-style: none; margin-top: 18px; }
+    .feature li { padding: 7px 0 7px 28px; position: relative; color: var(--texto-suave); }
+    .feature li::before { content: "✓"; position: absolute; left: 0; color: var(--beige); font-weight: 700; }
+    @media (max-width: 820px){ .feature { grid-template-columns: 1fr; } .feature.invertido .feature-txt { order: 0; } }
+
+    /* ======================================================================
+       GALERÍA DE PLANOS
+       ====================================================================== */
+    .galeria { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 36px; }
+    .galeria figure { background: #f5f5f3; border-radius: var(--radio); overflow: hidden; border: 1px solid var(--linea); }
+    .galeria figcaption { padding: 12px 14px; font-size: 14px; color: var(--texto-suave); background: var(--negro-mate); }
+    @media (max-width: 820px){ .galeria { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px){ .galeria { grid-template-columns: 1fr; } }
+
+    /* ======================================================================
+       ESPECIFICACIONES (tabla)
+       ====================================================================== */
+    .specs { width: 100%; border-collapse: collapse; margin-top: 28px; }
+    .specs tr { border-bottom: 1px solid var(--linea); }
+    .specs td { padding: 14px 6px; font-size: 15px; }
+    .specs td:first-child { color: var(--texto-suave); width: 45%; }
+    .specs td:last-child { font-weight: 600; }
+
+    /* ======================================================================
+       CTA FINAL
+       ====================================================================== */
+    .cta-final { text-align: center; background: linear-gradient(160deg, #232329, #15151a); border: 1px solid var(--linea); border-radius: var(--radio); padding: 60px 24px; }
+    .cta-final h2 { margin-bottom: 10px; }
+
+    /* ======================================================================
+       FAQ
+       ====================================================================== */
+    details { border-bottom: 1px solid var(--linea); padding: 18px 0; }
+    summary { cursor: pointer; font-weight: 600; font-size: 17px; list-style: none; display: flex; justify-content: space-between; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--beige); font-size: 22px; }
+    details[open] summary::after { content: "–"; }
+    details p { color: var(--texto-suave); margin-top: 12px; }
+
+    /* ======================================================================
+       PIE
+       ====================================================================== */
+    footer { border-top: 1px solid var(--linea); padding: 40px 0; color: var(--texto-suave); font-size: 14px; }
+    .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+
+    .seccion-titulo { text-align: center; margin: 0 auto; }
+    .seccion-titulo .subtitulo { margin: 8px auto 0; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ====================================================================
+       NAVEGACIÓN  ·  EDITABLE (nombre de marca y enlaces)
+       ==================================================================== -->
+  <header class="nav">
+    <div class="contenedor nav-inner">
+      <!-- EDITABLE: NOMBRE DE MARCA -->
+      <div class="logo">NOMA<span>DAX</span></div>
+      <nav class="nav-links">
+        <a href="#diferenciadores">Por qué</a>
+        <a href="#caracteristicas">Características</a>
+        <a href="#planos">Diseño</a>
+        <a href="#specs">Especificaciones</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <!-- EDITABLE: BOTÓN COMPRAR (cambia el href por tu link de Shopify/Amazon) -->
+      <a href="#comprar" class="btn btn-primario" style="padding:10px 22px;font-size:15px;">Comprar</a>
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       HERO
+       ==================================================================== -->
+  <section class="hero">
+    <div class="contenedor hero-grid">
+      <div class="hero-txt">
+        <!-- EDITABLE: ETIQUETA SUPERIOR -->
+        <span class="badge">Mochila de cabina · 40 × 25 × 20 cm</span>
+        <!-- EDITABLE: TITULAR PRINCIPAL -->
+        <h1>Viaja con el <span class="acento">doble de ropa</span> sin pasarte del límite.</h1>
+        <!-- EDITABLE: SUBTÍTULO -->
+        <p class="lead">La <strong>NOMADAX VANTA 40</strong> es la única mochila de cabina con bolsa de vacío integrada. Cabe debajo del asiento, asegura tus objetos de valor y se ve premium en cualquier viaje.</p>
+        <div class="hero-cta">
+          <!-- EDITABLE: BOTÓN PRINCIPAL + PRECIO -->
+          <a href="#comprar" class="btn btn-primario">Comprar ahora</a>
+          <a href="#caracteristicas" class="btn btn-secundario">Ver características</a>
+          <!-- EDITABLE: PRECIO -->
+          <span class="precio-hero">Desde <strong style="color:var(--texto)">149&nbsp;€</strong></span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <!-- EDITABLE: IMAGEN HERO (sustituye por tu render/foto principal) -->
+        <img src="planos/01-frontal.svg" alt="NOMADAX VANTA 40 vista frontal">
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       TIRA DE CONFIANZA  ·  EDITABLE (aerolíneas compatibles)
+       ==================================================================== -->
+  <div class="tira">
+    <div class="contenedor tira-inner">
+      <span>Compatible con equipaje personal de:</span>
+      <span><b>Ryanair</b></span>
+      <span><b>Vueling</b></span>
+      <span><b>EasyJet</b></span>
+      <span><b>Wizz Air</b></span>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       DIFERENCIADORES
+       ==================================================================== -->
+  <section id="diferenciadores">
+    <div class="contenedor">
+      <div class="seccion-titulo">
+        <!-- EDITABLE: TÍTULO SECCIÓN -->
+        <h2>Tres razones para no llevar otra mochila</h2>
+        <p class="subtitulo">Cada detalle resuelve un momento real del viaje.</p>
+      </div>
+      <div class="grid-3">
+        <!-- EDITABLE: TARJETA 1 -->
+        <div class="card">
+          <div class="ico">🧳</div>
+          <h3>Bolsa de vacío integrada</h3>
+          <p>Comprime tu ropa hasta un 50 %. 20 L legales que rinden como 30–35 L. Con mini bomba USB-C o compresión manual.</p>
+        </div>
+        <!-- EDITABLE: TARJETA 2 -->
+        <div class="card">
+          <div class="ico">🔒</div>
+          <h3>Seguridad real</h3>
+          <p>Candado TSA que bloquea de una vez el compartimento principal, el portátil y el bolsillo de objetos de valor.</p>
+        </div>
+        <!-- EDITABLE: TARJETA 3 -->
+        <div class="card">
+          <div class="ico">🕵️</div>
+          <h3>Bolsillo antirrobo oculto</h3>
+          <p>Pegado a la espalda: imposible de abrir mientras llevas la mochila puesta. Para pasaporte, móvil y dinero.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       CARACTERÍSTICAS (bloques con imagen)
+       ==================================================================== -->
+  <section id="caracteristicas" style="background:var(--negro-mate);border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);">
+    <div class="contenedor">
+
+      <!-- EDITABLE: FEATURE 1 -->
+      <div class="feature">
+        <div class="feature-txt">
+          <h2>Compresión que cambia las reglas</h2>
+          <p class="subtitulo">Mete la ropa, sella la cremallera estanca y extrae el aire. El volumen baja a la mitad sin superar el gálibo de la aerolínea.</p>
+          <ul>
+            <li>Bolsa desmontable y lavable</li>
+            <li>Válvula de vacío + mini bomba USB-C incluida</li>
+            <li>También funciona enrollando a mano</li>
+          </ul>
+        </div>
+        <div class="feature-img"><img src="planos/08-bolsa-vacio.svg" alt="Sistema de bolsa de vacío"></div>
+      </div>
+
+      <!-- EDITABLE: FEATURE 2 (invertido) -->
+      <div class="feature invertido">
+        <div class="feature-txt">
+          <h2>Se abre 180°, como una maleta</h2>
+          <p class="subtitulo">Apertura total tipo concha que se queda abierta sola. Hacer la maleta y pasar el control de seguridad es rápido e intuitivo.</p>
+          <ul>
+            <li>Acceso independiente al portátil de hasta 15,6"</li>
+            <li>Organización para cables, cargador, batería y documentos</li>
+            <li>Compartimento ventilado para zapatos</li>
+          </ul>
+        </div>
+        <div class="feature-img"><img src="planos/07-interior-apertura-180.svg" alt="Apertura 180 grados"></div>
+      </div>
+
+      <!-- EDITABLE: FEATURE 3 -->
+      <div class="feature">
+        <div class="feature-txt">
+          <h2>Pensada para llevarla puesta todo el día</h2>
+          <p class="subtitulo">Espalda de malla 3D transpirable, tirantes ergonómicos y un asa superior con microesferas de gel que reparte la presión.</p>
+          <ul>
+            <li>Banda trasera para fijarla sobre tu maleta</li>
+            <li>Puerto USB-C pasante para cargar el móvil</li>
+            <li>Bolsillo lateral oculto para botella</li>
+          </ul>
+        </div>
+        <div class="feature-img"><img src="planos/02-trasera.svg" alt="Vista trasera y espalda ergonómica"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       GALERÍA DE PLANOS / DISEÑO
+       ==================================================================== -->
+  <section id="planos">
+    <div class="contenedor">
+      <div class="seccion-titulo">
+        <!-- EDITABLE: TÍTULO -->
+        <h2>Diseñada hasta el último milímetro</h2>
+        <p class="subtitulo">Planos técnicos reales del producto. Sustitúyelos por tus renders cuando los tengas.</p>
+      </div>
+      <div class="galeria">
+        <!-- EDITABLE: cada figura es una imagen + pie -->
+        <figure><img src="planos/01-frontal.svg" alt="Frontal"><figcaption>Vista frontal</figcaption></figure>
+        <figure><img src="planos/03-lateral.svg" alt="Lateral"><figcaption>Vista lateral · fondo 20 cm</figcaption></figure>
+        <figure><img src="planos/04-superior.svg" alt="Superior"><figcaption>Vista superior · asa de gel</figcaption></figure>
+        <figure><img src="planos/06-cotas.svg" alt="Cotas"><figcaption>Plano acotado</figcaption></figure>
+        <figure><img src="planos/05-despiece.svg" alt="Despiece"><figcaption>Despiece de piezas</figcaption></figure>
+        <figure><img src="planos/02-trasera.svg" alt="Trasera"><figcaption>Vista trasera</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       ESPECIFICACIONES
+       ==================================================================== -->
+  <section id="specs" style="background:var(--negro-mate);border-top:1px solid var(--linea);">
+    <div class="contenedor" style="max-width:760px;">
+      <h2 style="text-align:center;">Especificaciones</h2>
+      <!-- EDITABLE: filas de la tabla (etiqueta / valor) -->
+      <table class="specs">
+        <tr><td>Dimensiones</td><td>40 × 25 × 20 cm</td></tr>
+        <tr><td>Volumen</td><td>~20 L (≈30–35 L con vacío)</td></tr>
+        <tr><td>Peso en vacío</td><td>1,1 – 1,3 kg</td></tr>
+        <tr><td>Material exterior</td><td>Oxford 900D + PU, repelente al agua</td></tr>
+        <tr><td>Cremalleras</td><td>YKK AquaGuard estancas</td></tr>
+        <tr><td>Portátil</td><td>Hasta 15,6"</td></tr>
+        <tr><td>Seguridad</td><td>Candado TSA + bolsillo oculto antirrobo</td></tr>
+        <tr><td>Color</td><td>Negro mate + tapa beige arena</td></tr>
+        <tr><td>Carga USB</td><td>Puerto USB-C pasante</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       CTA FINAL / COMPRAR
+       ==================================================================== -->
+  <section id="comprar">
+    <div class="contenedor">
+      <div class="cta-final">
+        <!-- EDITABLE: TÍTULO Y TEXTO CTA -->
+        <h2>“Nunca había visto una mochila así.”</h2>
+        <p class="subtitulo" style="margin:0 auto 26px;">Llévate la NOMADAX VANTA 40 con 30 días de prueba y garantía en herrajes.</p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center;">
+          <!-- EDITABLE: enlaces de compra (Shopify / Amazon) -->
+          <a href="#" class="btn btn-primario">Comprar — 149&nbsp;€</a>
+          <a href="#" class="btn btn-secundario">Ver en Amazon</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       FAQ
+       ==================================================================== -->
+  <section id="faq" style="padding-top:40px;">
+    <div class="contenedor" style="max-width:760px;">
+      <h2 style="text-align:center;margin-bottom:28px;">Preguntas frecuentes</h2>
+      <!-- EDITABLE: cada <details> es una pregunta -->
+      <details open>
+        <summary>¿Cabe debajo del asiento en Ryanair?</summary>
+        <p>Sí. Mide 40 × 25 × 20 cm, dentro del límite de equipaje personal. Su estructura semirrígida evita que se deforme y supere el gálibo aunque vaya llena.</p>
+      </details>
+      <details>
+        <summary>¿La mini bomba de vacío viene incluida?</summary>
+        <p>Sí, se incluye una mini bomba eléctrica recargable por USB-C. La bolsa también se puede comprimir a mano enrollándola.</p>
+      </details>
+      <details>
+        <summary>¿El puerto USB-C carga solo?</summary>
+        <p>No. Es un puerto pasante: conectas tu propia batería externa dentro de la mochila y cargas el móvil desde el puerto exterior sin abrirla.</p>
+      </details>
+      <details>
+        <summary>¿Se puede lavar la bolsa de vacío?</summary>
+        <p>Sí. Es desmontable, se extrae con 4 clips y se lava a mano. También hay recambios disponibles.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       PIE
+       ==================================================================== -->
+  <footer>
+    <div class="contenedor footer-inner">
+      <!-- EDITABLE: marca y enlaces de pie -->
+      <div><strong>NOMADAX</strong> · VANTA 40</div>
+      <div>© 2026 Nomadax. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+
+</body>
+</html>
