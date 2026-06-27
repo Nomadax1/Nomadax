@@ -1,0 +1,65 @@
+{%- comment -%}
+  NOMADAX · Tarjetas de diferenciadores (cada tarjeta = un bloque editable)
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+{%- assign uid = section.id -%}
+<style>
+  #nx-dif-{{ uid }} { background: {{ s.color_fondo }}; color: {{ s.color_texto }}; padding: {{ s.padding }}px 0; }
+  #nx-dif-{{ uid }} .nx-wrap { max-width:1120px; margin:0 auto; padding:0 24px; }
+  #nx-dif-{{ uid }} .nx-head { text-align:center; margin-bottom:40px; }
+  #nx-dif-{{ uid }} h2 { font-size:clamp(28px,4vw,42px); margin:0 0 12px; font-weight:700; letter-spacing:-.02em; }
+  #nx-dif-{{ uid }} .nx-sub { opacity:.72; font-size:18px; }
+  #nx-dif-{{ uid }} .nx-grid { display:grid; grid-template-columns:repeat({{ s.columnas }},1fr); gap:22px; }
+  #nx-dif-{{ uid }} .nx-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:28px; }
+  #nx-dif-{{ uid }} .nx-card .ic { font-size:30px; margin-bottom:14px; }
+  #nx-dif-{{ uid }} .nx-card h3 { margin:0 0 8px; font-size:20px; }
+  #nx-dif-{{ uid }} .nx-card p { margin:0; opacity:.72; font-size:15px; }
+  @media (max-width:820px){ #nx-dif-{{ uid }} .nx-grid { grid-template-columns:1fr; } }
+</style>
+<section id="nx-dif-{{ uid }}">
+  <div class="nx-wrap">
+    {%- if s.titulo != blank or s.subtitulo != blank -%}
+    <div class="nx-head">
+      {%- if s.titulo != blank -%}<h2>{{ s.titulo }}</h2>{%- endif -%}
+      {%- if s.subtitulo != blank -%}<div class="nx-sub">{{ s.subtitulo }}</div>{%- endif -%}
+    </div>
+    {%- endif -%}
+    <div class="nx-grid">
+      {%- for block in section.blocks -%}
+        <div class="nx-card" {{ block.shopify_attributes }}>
+          {%- if block.settings.icono != blank -%}<div class="ic">{{ block.settings.icono }}</div>{%- endif -%}
+          <h3>{{ block.settings.titulo }}</h3>
+          <p>{{ block.settings.texto }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "NOMADAX · Diferenciadores",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "titulo", "label": "Título", "default": "Tres razones para no llevar otra mochila" },
+    { "type": "text", "id": "subtitulo", "label": "Subtítulo", "default": "Cada detalle resuelve un momento real del viaje." },
+    { "type": "range", "id": "columnas", "label": "Columnas", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "color", "id": "color_fondo", "label": "Fondo", "default": "#15151a" },
+    { "type": "color", "id": "color_texto", "label": "Texto", "default": "#ececec" },
+    { "type": "range", "id": "padding", "label": "Espaciado vertical (px)", "min": 24, "max": 140, "step": 4, "default": 88 }
+  ],
+  "blocks": [
+    { "type": "tarjeta", "name": "Tarjeta", "settings": [
+      { "type": "text", "id": "icono", "label": "Icono/emoji", "default": "🧳" },
+      { "type": "text", "id": "titulo", "label": "Título", "default": "Bolsa de vacío integrada" },
+      { "type": "textarea", "id": "texto", "label": "Texto", "default": "Comprime tu ropa hasta un 50 %." }
+    ]}
+  ],
+  "presets": [
+    { "name": "NOMADAX · Diferenciadores", "blocks": [
+      { "type": "tarjeta", "settings": { "icono": "🧳", "titulo": "Bolsa de vacío integrada", "texto": "Comprime tu ropa hasta un 50 %. 20 L que rinden como 30–35 L." } },
+      { "type": "tarjeta", "settings": { "icono": "🔒", "titulo": "Seguridad real", "texto": "Candado TSA que bloquea principal, portátil y objetos de valor." } },
+      { "type": "tarjeta", "settings": { "icono": "🕵️", "titulo": "Bolsillo antirrobo oculto", "texto": "Pegado a la espalda: imposible de abrir con la mochila puesta." } }
+    ]}
+  ]
+}
+{% endschema %}

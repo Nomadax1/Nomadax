@@ -1,0 +1,101 @@
+{
+  "//": "Template de página NOMADAX. Asigna este template a una página (Páginas > tu página > Plantilla de tema: 'nomadax'). Luego edítalo todo en Personalizar.",
+  "sections": {
+    "hero": {
+      "type": "nomadax-hero",
+      "settings": {
+        "etiqueta": "Mochila de cabina · 40 × 25 × 20 cm",
+        "titular": "Viaja con el",
+        "acento": "doble de ropa",
+        "titular_fin": "sin pasarte del límite.",
+        "subtitulo": "La NOMADAX VANTA 40 es la única mochila de cabina con bolsa de vacío integrada. Cabe debajo del asiento y se ve premium en cualquier viaje.",
+        "btn1_texto": "Comprar ahora",
+        "btn2_texto": "Ver características",
+        "precio": "Desde 149 €",
+        "flotante": true
+      }
+    },
+    "marquee": {
+      "type": "nomadax-marquee",
+      "blocks": {
+        "b1": { "type": "item", "settings": { "texto": "Compresión al vacío" } },
+        "b2": { "type": "item", "settings": { "texto": "Impermeable" } },
+        "b3": { "type": "item", "settings": { "texto": "Candado TSA" } },
+        "b4": { "type": "item", "settings": { "texto": "Portátil 15,6\"" } },
+        "b5": { "type": "item", "settings": { "texto": "Bolsillo antirrobo" } },
+        "b6": { "type": "item", "settings": { "texto": "USB-C" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"]
+    },
+    "diferenciadores": {
+      "type": "nomadax-diferenciadores",
+      "blocks": {
+        "c1": { "type": "tarjeta", "settings": { "icono": "🧳", "titulo": "Bolsa de vacío integrada", "texto": "Comprime tu ropa hasta un 50 %. 20 L que rinden como 30–35 L." } },
+        "c2": { "type": "tarjeta", "settings": { "icono": "🔒", "titulo": "Seguridad real", "texto": "Candado TSA que bloquea principal, portátil y objetos de valor." } },
+        "c3": { "type": "tarjeta", "settings": { "icono": "🕵️", "titulo": "Bolsillo antirrobo oculto", "texto": "Pegado a la espalda: imposible de abrir con la mochila puesta." } }
+      },
+      "block_order": ["c1", "c2", "c3"]
+    },
+    "feature1": {
+      "type": "nomadax-feature",
+      "settings": { "titulo": "Compresión que cambia las reglas", "subtitulo": "Mete la ropa, sella la cremallera estanca y extrae el aire.", "imagen_lado": "derecha" },
+      "blocks": {
+        "p1": { "type": "punto", "settings": { "texto": "Bolsa desmontable y lavable" } },
+        "p2": { "type": "punto", "settings": { "texto": "Válvula de vacío + mini bomba USB-C incluida" } },
+        "p3": { "type": "punto", "settings": { "texto": "También funciona enrollando a mano" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "feature2": {
+      "type": "nomadax-feature",
+      "settings": { "titulo": "Se abre 180°, como una maleta", "subtitulo": "Apertura total tipo concha que se queda abierta sola.", "imagen_lado": "izquierda" },
+      "blocks": {
+        "p1": { "type": "punto", "settings": { "texto": "Acceso independiente al portátil de hasta 15,6\"" } },
+        "p2": { "type": "punto", "settings": { "texto": "Organización para cables, cargador, batería y documentos" } },
+        "p3": { "type": "punto", "settings": { "texto": "Compartimento ventilado para zapatos" } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "galeria": {
+      "type": "nomadax-galeria",
+      "blocks": {
+        "g1": { "type": "imagen", "settings": { "pie": "Vista frontal" } },
+        "g2": { "type": "imagen", "settings": { "pie": "Vista lateral" } },
+        "g3": { "type": "imagen", "settings": { "pie": "Vista superior" } },
+        "g4": { "type": "imagen", "settings": { "pie": "Plano acotado" } },
+        "g5": { "type": "imagen", "settings": { "pie": "Despiece" } },
+        "g6": { "type": "imagen", "settings": { "pie": "Vista trasera" } }
+      },
+      "block_order": ["g1", "g2", "g3", "g4", "g5", "g6"]
+    },
+    "specs": {
+      "type": "nomadax-specs",
+      "blocks": {
+        "r1": { "type": "fila", "settings": { "etiqueta": "Dimensiones", "valor": "40 × 25 × 20 cm" } },
+        "r2": { "type": "fila", "settings": { "etiqueta": "Volumen", "valor": "~20 L (≈30–35 L con vacío)" } },
+        "r3": { "type": "fila", "settings": { "etiqueta": "Peso en vacío", "valor": "1,1 – 1,3 kg" } },
+        "r4": { "type": "fila", "settings": { "etiqueta": "Material exterior", "valor": "Oxford 900D + PU" } },
+        "r5": { "type": "fila", "settings": { "etiqueta": "Cremalleras", "valor": "YKK AquaGuard estancas" } },
+        "r6": { "type": "fila", "settings": { "etiqueta": "Portátil", "valor": "Hasta 15,6\"" } },
+        "r7": { "type": "fila", "settings": { "etiqueta": "Seguridad", "valor": "Candado TSA + bolsillo oculto" } },
+        "r8": { "type": "fila", "settings": { "etiqueta": "Color", "valor": "Negro mate + tapa beige arena" } }
+      },
+      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8"]
+    },
+    "cta": {
+      "type": "nomadax-cta",
+      "settings": { "titulo": "“Nunca había visto una mochila así.”", "subtitulo": "Llévate la NOMADAX VANTA 40 con 30 días de prueba y garantía en herrajes.", "btn1_texto": "Comprar — 149 €", "btn2_texto": "Ver en Amazon" }
+    },
+    "faq": {
+      "type": "nomadax-faq",
+      "blocks": {
+        "q1": { "type": "pregunta", "settings": { "pregunta": "¿Cabe debajo del asiento en Ryanair?", "respuesta": "Sí. Mide 40 × 25 × 20 cm; su estructura semirrígida evita que se deforme y supere el gálibo aunque vaya llena." } },
+        "q2": { "type": "pregunta", "settings": { "pregunta": "¿La mini bomba de vacío viene incluida?", "respuesta": "Sí, se incluye una mini bomba recargable por USB-C. La bolsa también se comprime a mano." } },
+        "q3": { "type": "pregunta", "settings": { "pregunta": "¿El puerto USB-C carga solo?", "respuesta": "No. Es un puerto pasante: conectas tu propia batería dentro y cargas el móvil desde el puerto exterior." } },
+        "q4": { "type": "pregunta", "settings": { "pregunta": "¿Se puede lavar la bolsa de vacío?", "respuesta": "Sí. Es desmontable, se extrae con 4 clips y se lava a mano. Hay recambios disponibles." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"]
+    }
+  },
+  "order": ["hero", "marquee", "diferenciadores", "feature1", "feature2", "galeria", "specs", "cta", "faq"]
+}

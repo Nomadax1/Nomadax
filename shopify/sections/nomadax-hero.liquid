@@ -1,0 +1,113 @@
+{%- comment -%}
+  NOMADAX · Sección HERO con vídeo editable
+  ------------------------------------------------------------------
+  Editable 100% desde Tienda online > Personalizar:
+   - Vídeo del hero (subido a Shopify o por URL .mp4 / YouTube / Vimeo)
+   - Efecto "flotante" del vídeo (activar/desactivar)
+   - Etiqueta, titular, palabra de acento, subtítulo
+   - Texto y enlace de los 2 botones + precio
+  ------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign s = section.settings -%}
+{%- assign uid = section.id -%}
+
+<style>
+  #nx-hero-{{ uid }} {
+    background: {{ s.color_fondo }};
+    color: {{ s.color_texto }};
+    padding: {{ s.padding_top }}px 0 {{ s.padding_bottom }}px;
+  }
+  #nx-hero-{{ uid }} .nx-wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px;
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+  #nx-hero-{{ uid }} .nx-badge { display:inline-block; font-size:13px; letter-spacing:.12em;
+    text-transform:uppercase; color: {{ s.color_acento }}; border:1px solid rgba(255,255,255,.14);
+    padding:6px 14px; border-radius:999px; margin-bottom:20px; }
+  #nx-hero-{{ uid }} h1 { font-size: clamp(38px,6vw,62px); line-height:1.1; letter-spacing:-.02em; margin:0 0 18px; font-weight:800; }
+  #nx-hero-{{ uid }} h1 .nx-acc { color: {{ s.color_acento }}; }
+  #nx-hero-{{ uid }} .nx-lead { font-size:20px; opacity:.78; max-width:520px; margin:0 0 28px; }
+  #nx-hero-{{ uid }} .nx-cta { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+  #nx-hero-{{ uid }} .nx-btn { display:inline-block; padding:15px 30px; border-radius:999px; font-weight:600; text-decoration:none; }
+  #nx-hero-{{ uid }} .nx-btn-1 { background: {{ s.color_acento }}; color:#2a2418; }
+  #nx-hero-{{ uid }} .nx-btn-2 { background:transparent; color: {{ s.color_texto }}; border:1px solid rgba(255,255,255,.18); }
+  #nx-hero-{{ uid }} .nx-precio { opacity:.7; font-size:15px; }
+  #nx-hero-{{ uid }} .nx-media { border-radius:18px; overflow:hidden; }
+  #nx-hero-{{ uid }} .nx-media video,
+  #nx-hero-{{ uid }} .nx-media iframe,
+  #nx-hero-{{ uid }} .nx-media img { width:100%; display:block; border:0; aspect-ratio: 4/5; object-fit:cover; }
+  {%- if s.flotante -%}
+  @media (prefers-reduced-motion: no-preference) {
+    #nx-hero-{{ uid }} .nx-media { animation: nxFloat-{{ uid }} {{ s.flotante_velocidad }}s ease-in-out infinite; }
+  }
+  @keyframes nxFloat-{{ uid }} { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-{{ s.flotante_amplitud }}px);} }
+  {%- endif -%}
+  @media (max-width: 880px){ #nx-hero-{{ uid }} .nx-wrap { grid-template-columns:1fr; } }
+</style>
+
+<section id="nx-hero-{{ uid }}">
+  <div class="nx-wrap">
+    <div class="nx-txt">
+      {%- if s.etiqueta != blank -%}<span class="nx-badge">{{ s.etiqueta }}</span>{%- endif -%}
+      <h1>{{ s.titular }} {%- if s.acento != blank %} <span class="nx-acc">{{ s.acento }}</span>{%- endif -%} {{ s.titular_fin }}</h1>
+      {%- if s.subtitulo != blank -%}<p class="nx-lead">{{ s.subtitulo }}</p>{%- endif -%}
+      <div class="nx-cta">
+        {%- if s.btn1_texto != blank -%}<a class="nx-btn nx-btn-1" href="{{ s.btn1_link | default: '#' }}">{{ s.btn1_texto }}</a>{%- endif -%}
+        {%- if s.btn2_texto != blank -%}<a class="nx-btn nx-btn-2" href="{{ s.btn2_link | default: '#' }}">{{ s.btn2_texto }}</a>{%- endif -%}
+        {%- if s.precio != blank -%}<span class="nx-precio">{{ s.precio }}</span>{%- endif -%}
+      </div>
+    </div>
+
+    <div class="nx-media">
+      {%- comment -%} Prioridad: vídeo nativo de Shopify > URL de vídeo > imagen {%- endcomment -%}
+      {%- if s.video != blank -%}
+        {{ s.video | video_tag: image_size: '800x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true }}
+      {%- elsif s.video_url != blank -%}
+        {{ s.video_url | external_video_tag }}
+      {%- elsif s.imagen != blank -%}
+        {{ s.imagen | image_url: width: 900 | image_tag: loading: 'lazy', alt: s.titular }}
+      {%- else -%}
+        <div style="aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;background:#222;color:#777;">
+          Añade aquí tu vídeo del hero
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "NOMADAX · Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Vídeo del hero (lo que querías poder cambiar)" },
+    { "type": "video", "id": "video", "label": "Vídeo (subido a Shopify)" },
+    { "type": "video_url", "id": "video_url", "label": "O URL de vídeo (YouTube / Vimeo)", "accept": ["youtube", "vimeo"] },
+    { "type": "image_picker", "id": "imagen", "label": "Imagen de respaldo (si no hay vídeo)" },
+    { "type": "checkbox", "id": "flotante", "label": "Efecto flotante (movimiento suave)", "default": true },
+    { "type": "range", "id": "flotante_amplitud", "label": "Amplitud del flotado (px)", "min": 4, "max": 30, "step": 2, "default": 12 },
+    { "type": "range", "id": "flotante_velocidad", "label": "Velocidad del flotado (s)", "min": 2, "max": 10, "step": 1, "default": 5 },
+
+    { "type": "header", "content": "Textos" },
+    { "type": "text", "id": "etiqueta", "label": "Etiqueta superior", "default": "Mochila de cabina · 40 × 25 × 20 cm" },
+    { "type": "text", "id": "titular", "label": "Titular (parte 1)", "default": "Viaja con el" },
+    { "type": "text", "id": "acento", "label": "Palabra de acento (color beige)", "default": "doble de ropa" },
+    { "type": "text", "id": "titular_fin", "label": "Titular (parte final)", "default": "sin pasarte del límite." },
+    { "type": "textarea", "id": "subtitulo", "label": "Subtítulo", "default": "La NOMADAX VANTA 40 es la única mochila de cabina con bolsa de vacío integrada." },
+
+    { "type": "header", "content": "Botones" },
+    { "type": "text", "id": "btn1_texto", "label": "Botón 1 · texto", "default": "Comprar ahora" },
+    { "type": "url", "id": "btn1_link", "label": "Botón 1 · enlace" },
+    { "type": "text", "id": "btn2_texto", "label": "Botón 2 · texto", "default": "Ver características" },
+    { "type": "url", "id": "btn2_link", "label": "Botón 2 · enlace" },
+    { "type": "text", "id": "precio", "label": "Texto de precio", "default": "Desde 149 €" },
+
+    { "type": "header", "content": "Colores y espaciado" },
+    { "type": "color", "id": "color_fondo", "label": "Fondo", "default": "#15151a" },
+    { "type": "color", "id": "color_texto", "label": "Texto", "default": "#ececec" },
+    { "type": "color", "id": "color_acento", "label": "Acento", "default": "#cbb693" },
+    { "type": "range", "id": "padding_top", "label": "Espacio arriba", "min": 0, "max": 160, "step": 4, "default": 100, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio abajo", "min": 0, "max": 160, "step": 4, "default": 80, "unit": "px" }
+  ],
+  "presets": [{ "name": "NOMADAX · Hero" }]
+}
+{% endschema %}
