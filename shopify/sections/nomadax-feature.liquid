@@ -1,0 +1,73 @@
+{%- comment -%}
+  NOMADAX · Bloque de característica (texto + imagen/vídeo). Añade una sección
+  por cada característica para editarlas una por una. Imagen a izq o der.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+{%- assign uid = section.id -%}
+<style>
+  #nx-ft-{{ uid }} { background: {{ s.color_fondo }}; color: {{ s.color_texto }}; padding: {{ s.padding }}px 0; }
+  #nx-ft-{{ uid }} .nx-wrap { max-width:1120px; margin:0 auto; padding:0 24px;
+    display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+  #nx-ft-{{ uid }} .nx-media { order: {% if s.imagen_lado == 'izquierda' %}0{% else %}1{% endif %};
+    background:#f5f5f3; border-radius:16px; padding:14px; border:1px solid rgba(255,255,255,.08); }
+  #nx-ft-{{ uid }} .nx-media img, #nx-ft-{{ uid }} .nx-media video { width:100%; display:block; border-radius:8px; }
+  #nx-ft-{{ uid }} h2 { font-size:clamp(28px,4vw,40px); margin:0 0 14px; font-weight:700; letter-spacing:-.02em; }
+  #nx-ft-{{ uid }} .nx-sub { opacity:.74; font-size:18px; margin:0; }
+  #nx-ft-{{ uid }} ul { list-style:none; padding:0; margin:18px 0 0; }
+  #nx-ft-{{ uid }} li { position:relative; padding:7px 0 7px 28px; opacity:.78; }
+  #nx-ft-{{ uid }} li::before { content:"✓"; position:absolute; left:0; color: {{ s.color_acento }}; font-weight:700; }
+  @media (max-width:820px){ #nx-ft-{{ uid }} .nx-wrap { grid-template-columns:1fr; } #nx-ft-{{ uid }} .nx-media { order:0; } }
+</style>
+<section id="nx-ft-{{ uid }}">
+  <div class="nx-wrap">
+    <div class="nx-txt">
+      <h2>{{ s.titulo }}</h2>
+      {%- if s.subtitulo != blank -%}<p class="nx-sub">{{ s.subtitulo }}</p>{%- endif -%}
+      {%- if section.blocks.size > 0 -%}
+      <ul>
+        {%- for block in section.blocks -%}
+          <li {{ block.shopify_attributes }}>{{ block.settings.texto }}</li>
+        {%- endfor -%}
+      </ul>
+      {%- endif -%}
+    </div>
+    <div class="nx-media">
+      {%- if s.video != blank -%}
+        {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true }}
+      {%- elsif s.imagen != blank -%}
+        {{ s.imagen | image_url: width: 800 | image_tag: loading: 'lazy', alt: s.titulo }}
+      {%- else -%}
+        <div style="aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;color:#888;">Imagen o vídeo</div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "NOMADAX · Característica",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "titulo", "label": "Título", "default": "Compresión que cambia las reglas" },
+    { "type": "textarea", "id": "subtitulo", "label": "Subtítulo", "default": "Mete la ropa, sella la cremallera estanca y extrae el aire." },
+    { "type": "image_picker", "id": "imagen", "label": "Imagen" },
+    { "type": "video", "id": "video", "label": "Vídeo (opcional, tiene prioridad sobre la imagen)" },
+    { "type": "select", "id": "imagen_lado", "label": "Lado de la imagen", "options": [
+      { "value": "izquierda", "label": "Izquierda" }, { "value": "derecha", "label": "Derecha" } ], "default": "derecha" },
+    { "type": "color", "id": "color_fondo", "label": "Fondo", "default": "#1c1c1e" },
+    { "type": "color", "id": "color_texto", "label": "Texto", "default": "#ececec" },
+    { "type": "color", "id": "color_acento", "label": "Acento (viñetas)", "default": "#cbb693" },
+    { "type": "range", "id": "padding", "label": "Espaciado vertical (px)", "min": 24, "max": 140, "step": 4, "default": 80 }
+  ],
+  "blocks": [
+    { "type": "punto", "name": "Punto de lista", "settings": [
+      { "type": "text", "id": "texto", "label": "Texto", "default": "Bolsa desmontable y lavable" } ] }
+  ],
+  "presets": [
+    { "name": "NOMADAX · Característica", "blocks": [
+      { "type": "punto", "settings": { "texto": "Bolsa desmontable y lavable" } },
+      { "type": "punto", "settings": { "texto": "Válvula de vacío + mini bomba USB-C incluida" } },
+      { "type": "punto", "settings": { "texto": "También funciona enrollando a mano" } }
+    ]}
+  ]
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+{%- comment -%} NOMADAX · Llamada a la acción (CTA) final {%- endcomment -%}
+{%- assign s = section.settings -%}
+{%- assign uid = section.id -%}
+<style>
+  #nx-ct-{{ uid }} { background: {{ s.color_fondo }}; color: {{ s.color_texto }}; padding: {{ s.padding }}px 0; }
+  #nx-ct-{{ uid }} .nx-wrap { max-width:1120px; margin:0 auto; padding:0 24px; }
+  #nx-ct-{{ uid }} .nx-box { text-align:center; background:linear-gradient(160deg,#232329,#15151a);
+    border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:60px 24px; }
+  #nx-ct-{{ uid }} h2 { font-size:clamp(28px,4vw,42px); margin:0 0 10px; font-weight:700; }
+  #nx-ct-{{ uid }} .nx-sub { opacity:.74; font-size:18px; margin:0 auto 26px; max-width:560px; }
+  #nx-ct-{{ uid }} .nx-cta { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  #nx-ct-{{ uid }} .nx-btn { display:inline-block; padding:15px 30px; border-radius:999px; font-weight:600; text-decoration:none; }
+  #nx-ct-{{ uid }} .nx-btn-1 { background: {{ s.color_acento }}; color:#2a2418; }
+  #nx-ct-{{ uid }} .nx-btn-2 { background:transparent; color: {{ s.color_texto }}; border:1px solid rgba(255,255,255,.18); }
+</style>
+<section id="nx-ct-{{ uid }}">
+  <div class="nx-wrap">
+    <div class="nx-box">
+      {%- if s.titulo != blank -%}<h2>{{ s.titulo }}</h2>{%- endif -%}
+      {%- if s.subtitulo != blank -%}<p class="nx-sub">{{ s.subtitulo }}</p>{%- endif -%}
+      <div class="nx-cta">
+        {%- if s.btn1_texto != blank -%}<a class="nx-btn nx-btn-1" href="{{ s.btn1_link | default: '#' }}">{{ s.btn1_texto }}</a>{%- endif -%}
+        {%- if s.btn2_texto != blank -%}<a class="nx-btn nx-btn-2" href="{{ s.btn2_link | default: '#' }}">{{ s.btn2_texto }}</a>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "NOMADAX · CTA",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "titulo", "label": "Título", "default": "“Nunca había visto una mochila así.”" },
+    { "type": "textarea", "id": "subtitulo", "label": "Subtítulo", "default": "Llévate la NOMADAX VANTA 40 con 30 días de prueba y garantía en herrajes." },
+    { "type": "text", "id": "btn1_texto", "label": "Botón 1 · texto", "default": "Comprar — 149 €" },
+    { "type": "url", "id": "btn1_link", "label": "Botón 1 · enlace" },
+    { "type": "text", "id": "btn2_texto", "label": "Botón 2 · texto", "default": "Ver en Amazon" },
+    { "type": "url", "id": "btn2_link", "label": "Botón 2 · enlace" },
+    { "type": "color", "id": "color_fondo", "label": "Fondo", "default": "#15151a" },
+    { "type": "color", "id": "color_texto", "label": "Texto", "default": "#ececec" },
+    { "type": "color", "id": "color_acento", "label": "Acento (botón)", "default": "#cbb693" },
+    { "type": "range", "id": "padding", "label": "Espaciado vertical (px)", "min": 24, "max": 140, "step": 4, "default": 88 }
+  ],
+  "presets": [{ "name": "NOMADAX · CTA" }]
+}
+{% endschema %}

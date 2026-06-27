@@ -1,0 +1,67 @@
+{%- comment -%} NOMADAX · Galería (cada imagen = un bloque editable) {%- endcomment -%}
+{%- assign s = section.settings -%}
+{%- assign uid = section.id -%}
+<style>
+  #nx-gl-{{ uid }} { background: {{ s.color_fondo }}; color: {{ s.color_texto }}; padding: {{ s.padding }}px 0; }
+  #nx-gl-{{ uid }} .nx-wrap { max-width:1120px; margin:0 auto; padding:0 24px; }
+  #nx-gl-{{ uid }} .nx-head { text-align:center; margin-bottom:36px; }
+  #nx-gl-{{ uid }} h2 { font-size:clamp(28px,4vw,42px); margin:0 0 12px; font-weight:700; letter-spacing:-.02em; }
+  #nx-gl-{{ uid }} .nx-sub { opacity:.72; font-size:18px; }
+  #nx-gl-{{ uid }} .nx-grid { display:grid; grid-template-columns:repeat({{ s.columnas }},1fr); gap:16px; }
+  #nx-gl-{{ uid }} figure { margin:0; background:#f5f5f3; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.08); }
+  #nx-gl-{{ uid }} figure img { width:100%; display:block; }
+  #nx-gl-{{ uid }} figcaption { padding:12px 14px; font-size:14px; opacity:.78; background:rgba(255,255,255,.04); }
+  @media (max-width:820px){ #nx-gl-{{ uid }} .nx-grid { grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ #nx-gl-{{ uid }} .nx-grid { grid-template-columns:1fr; } }
+</style>
+<section id="nx-gl-{{ uid }}">
+  <div class="nx-wrap">
+    {%- if s.titulo != blank or s.subtitulo != blank -%}
+    <div class="nx-head">
+      {%- if s.titulo != blank -%}<h2>{{ s.titulo }}</h2>{%- endif -%}
+      {%- if s.subtitulo != blank -%}<div class="nx-sub">{{ s.subtitulo }}</div>{%- endif -%}
+    </div>
+    {%- endif -%}
+    <div class="nx-grid">
+      {%- for block in section.blocks -%}
+        <figure {{ block.shopify_attributes }}>
+          {%- if block.settings.imagen != blank -%}
+            {{ block.settings.imagen | image_url: width: 700 | image_tag: loading: 'lazy', alt: block.settings.pie }}
+          {%- else -%}
+            <div style="aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;color:#888;">Imagen</div>
+          {%- endif -%}
+          {%- if block.settings.pie != blank -%}<figcaption>{{ block.settings.pie }}</figcaption>{%- endif -%}
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "NOMADAX · Galería",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "titulo", "label": "Título", "default": "Diseñada hasta el último milímetro" },
+    { "type": "text", "id": "subtitulo", "label": "Subtítulo", "default": "Sustituye los planos por tus fotos / renders." },
+    { "type": "range", "id": "columnas", "label": "Columnas", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "color", "id": "color_fondo", "label": "Fondo", "default": "#15151a" },
+    { "type": "color", "id": "color_texto", "label": "Texto", "default": "#ececec" },
+    { "type": "range", "id": "padding", "label": "Espaciado vertical (px)", "min": 24, "max": 140, "step": 4, "default": 88 }
+  ],
+  "blocks": [
+    { "type": "imagen", "name": "Imagen", "settings": [
+      { "type": "image_picker", "id": "imagen", "label": "Imagen" },
+      { "type": "text", "id": "pie", "label": "Pie de foto", "default": "Vista del producto" } ] }
+  ],
+  "presets": [
+    { "name": "NOMADAX · Galería", "blocks": [
+      { "type": "imagen", "settings": { "pie": "Vista frontal" } },
+      { "type": "imagen", "settings": { "pie": "Vista lateral" } },
+      { "type": "imagen", "settings": { "pie": "Vista superior" } },
+      { "type": "imagen", "settings": { "pie": "Plano acotado" } },
+      { "type": "imagen", "settings": { "pie": "Despiece" } },
+      { "type": "imagen", "settings": { "pie": "Vista trasera" } }
+    ]}
+  ]
+}
+{% endschema %}

@@ -1,0 +1,52 @@
+{%- comment -%} NOMADAX · FAQ (cada pregunta = un bloque editable, desplegable) {%- endcomment -%}
+{%- assign s = section.settings -%}
+{%- assign uid = section.id -%}
+<style>
+  #nx-fq-{{ uid }} { background: {{ s.color_fondo }}; color: {{ s.color_texto }}; padding: {{ s.padding }}px 0; }
+  #nx-fq-{{ uid }} .nx-wrap { max-width:760px; margin:0 auto; padding:0 24px; }
+  #nx-fq-{{ uid }} h2 { text-align:center; font-size:clamp(28px,4vw,42px); margin:0 0 28px; font-weight:700; }
+  #nx-fq-{{ uid }} details { border-bottom:1px solid rgba(255,255,255,.08); padding:18px 0; }
+  #nx-fq-{{ uid }} summary { cursor:pointer; font-weight:600; font-size:17px; list-style:none; display:flex; justify-content:space-between; gap:16px; }
+  #nx-fq-{{ uid }} summary::-webkit-details-marker { display:none; }
+  #nx-fq-{{ uid }} summary::after { content:"+"; color: {{ s.color_acento }}; font-size:22px; }
+  #nx-fq-{{ uid }} details[open] summary::after { content:"–"; }
+  #nx-fq-{{ uid }} .nx-ans { opacity:.74; margin-top:12px; }
+</style>
+<section id="nx-fq-{{ uid }}">
+  <div class="nx-wrap">
+    {%- if s.titulo != blank -%}<h2>{{ s.titulo }}</h2>{%- endif -%}
+    {%- for block in section.blocks -%}
+      <details {% if forloop.first and s.abrir_primera %}open{% endif %} {{ block.shopify_attributes }}>
+        <summary>{{ block.settings.pregunta }}</summary>
+        <div class="nx-ans">{{ block.settings.respuesta }}</div>
+      </details>
+    {%- endfor -%}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "NOMADAX · FAQ",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "titulo", "label": "Título", "default": "Preguntas frecuentes" },
+    { "type": "checkbox", "id": "abrir_primera", "label": "Abrir la primera pregunta", "default": true },
+    { "type": "color", "id": "color_fondo", "label": "Fondo", "default": "#15151a" },
+    { "type": "color", "id": "color_texto", "label": "Texto", "default": "#ececec" },
+    { "type": "color", "id": "color_acento", "label": "Acento (+/–)", "default": "#cbb693" },
+    { "type": "range", "id": "padding", "label": "Espaciado vertical (px)", "min": 24, "max": 140, "step": 4, "default": 72 }
+  ],
+  "blocks": [
+    { "type": "pregunta", "name": "Pregunta", "settings": [
+      { "type": "text", "id": "pregunta", "label": "Pregunta", "default": "¿Cabe debajo del asiento en Ryanair?" },
+      { "type": "textarea", "id": "respuesta", "label": "Respuesta", "default": "Sí. Mide 40 × 25 × 20 cm, dentro del límite de equipaje personal." } ] }
+  ],
+  "presets": [
+    { "name": "NOMADAX · FAQ", "blocks": [
+      { "type": "pregunta", "settings": { "pregunta": "¿Cabe debajo del asiento en Ryanair?", "respuesta": "Sí. Mide 40 × 25 × 20 cm; su estructura semirrígida evita que se deforme y supere el gálibo aunque vaya llena." } },
+      { "type": "pregunta", "settings": { "pregunta": "¿La mini bomba de vacío viene incluida?", "respuesta": "Sí, se incluye una mini bomba recargable por USB-C. La bolsa también se comprime a mano." } },
+      { "type": "pregunta", "settings": { "pregunta": "¿El puerto USB-C carga solo?", "respuesta": "No. Es un puerto pasante: conectas tu propia batería dentro y cargas el móvil desde el puerto exterior." } },
+      { "type": "pregunta", "settings": { "pregunta": "¿Se puede lavar la bolsa de vacío?", "respuesta": "Sí. Es desmontable, se extrae con 4 clips y se lava a mano. Hay recambios disponibles." } }
+    ]}
+  ]
+}
+{% endschema %}

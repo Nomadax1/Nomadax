@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="380" height="360" viewBox="0 0 380 360" font-family="Arial, Helvetica, sans-serif">
+  <rect width="380" height="360" fill="#f5f5f3"/>
+  <text x="190" y="30" font-size="18" font-weight="bold" text-anchor="middle" fill="#1a1a1a">NOMADAX VANTA 40 — VISTA SUPERIOR</text>
+  <text x="190" y="48" font-size="11" text-anchor="middle" fill="#666">Asa de gel · candado TSA central · 250 × 200 mm</text>
+
+  <!-- top view: width 250 x depth 200 = 200 x 160 px. x=90 y=80 -->
+  <rect x="90" y="80" width="200" height="160" rx="18" fill="#1c1c1e" stroke="#000" stroke-width="2"/>
+
+  <!-- back edge label (left) -->
+  <rect x="90" y="80" width="200" height="20" rx="10" fill="#2f2f33"/>
+  <text x="190" y="94" font-size="9" text-anchor="middle" fill="#999">ESPALDA</text>
+  <!-- front edge beige -->
+  <rect x="90" y="220" width="200" height="20" rx="10" fill="#cbb693"/>
+  <text x="190" y="234" font-size="9" text-anchor="middle" fill="#5b4a26">FRONTAL (tapa beige)</text>
+
+  <!-- gel handle center -->
+  <ellipse cx="190" cy="160" rx="55" ry="20" fill="#111" stroke="#333"/>
+  <ellipse cx="190" cy="160" rx="40" ry="9" fill="#0a0a0a"/>
+  <!-- gel microspheres hint -->
+  <g fill="#3a3a3d">
+    <circle cx="172" cy="158" r="2"/><circle cx="182" cy="162" r="2"/><circle cx="192" cy="157" r="2"/>
+    <circle cx="202" cy="162" r="2"/><circle cx="178" cy="164" r="1.6"/><circle cx="198" cy="156" r="1.6"/>
+  </g>
+  <text x="190" y="200" font-size="9" text-anchor="middle" fill="#888">Asa con microesferas de gel/silicona</text>
+
+  <!-- TSA lock at front-center top -->
+  <rect x="160" y="120" width="60" height="20" rx="5" fill="#2b2b2e" stroke="#666"/>
+  <circle cx="175" cy="130" r="3" fill="#888"/><circle cx="190" cy="130" r="3" fill="#888"/><circle cx="205" cy="130" r="3" fill="#888"/>
+  <text x="190" y="115" font-size="9" text-anchor="middle" fill="#444">Candado TSA 3 dígitos (integrado)</text>
+
+  <!-- dimensions -->
+  <line x1="90" y1="270" x2="290" y2="270" stroke="#c00"/>
+  <line x1="90" y1="265" x2="90" y2="275" stroke="#c00"/><line x1="290" y1="265" x2="290" y2="275" stroke="#c00"/>
+  <text x="190" y="285" font-size="11" text-anchor="middle" fill="#c00">250 mm (Ancho)</text>
+
+  <line x1="70" y1="80" x2="70" y2="240" stroke="#c00"/>
+  <line x1="65" y1="80" x2="75" y2="80" stroke="#c00"/><line x1="65" y1="240" x2="75" y2="240" stroke="#c00"/>
+  <text x="58" y="160" font-size="11" text-anchor="middle" fill="#c00" transform="rotate(-90 58 160)">200 mm (Fondo)</text>
+
+  <text x="190" y="330" font-size="9" text-anchor="middle" fill="#999">El candado queda enrasado bajo el asa: no rompe la estética</text>
+</svg>

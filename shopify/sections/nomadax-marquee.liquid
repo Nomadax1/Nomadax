@@ -1,0 +1,110 @@
+{%- comment -%}
+  NOMADAX · Marquee / carrusel EN MOVIMIENTO
+  ------------------------------------------------------------------
+  El texto se desplaza en bucle continuo (no se queda fijo).
+  Editable desde Personalizar:
+   - Cada ítem es un BLOQUE (añadir / quitar / reordenar)
+   - Velocidad del movimiento
+   - Dirección (izquierda / derecha)
+   - Pausar al pasar el ratón
+   - Colores y separador
+  ------------------------------------------------------------------
+{%- endcomment -%}
+
+{%- assign s = section.settings -%}
+{%- assign uid = section.id -%}
+
+<style>
+  #nx-mq-{{ uid }} {
+    background: {{ s.color_fondo }};
+    color: {{ s.color_texto }};
+    border-top: 1px solid rgba(255,255,255,.08);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: {{ s.padding }}px 0;
+    overflow: hidden;
+  }
+  #nx-mq-{{ uid }} .nx-mq-mask { display:flex; width:max-content;
+    animation: nxMq-{{ uid }} {{ s.velocidad }}s linear infinite;
+    animation-direction: {% if s.direccion == 'derecha' %}reverse{% else %}normal{% endif %};
+  }
+  {%- if s.pausa_hover -%}
+  #nx-mq-{{ uid }}:hover .nx-mq-mask { animation-play-state: paused; }
+  {%- endif -%}
+  #nx-mq-{{ uid }} .nx-mq-group { display:flex; align-items:center; }
+  #nx-mq-{{ uid }} .nx-mq-item { display:flex; align-items:center; white-space:nowrap;
+    font-size: {{ s.tamano }}px; font-weight:600; padding: 0 {{ s.separacion }}px; }
+  #nx-mq-{{ uid }} .nx-mq-sep { color: {{ s.color_acento }}; margin: 0 {{ s.separacion }}px; font-size: {{ s.tamano }}px; }
+  /* Se desplaza exactamente la mitad (porque duplicamos el grupo) → bucle perfecto */
+  @keyframes nxMq-{{ uid }} { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    #nx-mq-{{ uid }} .nx-mq-mask { animation: none; }
+  }
+</style>
+
+<section id="nx-mq-{{ uid }}" aria-label="{{ s.titulo_accesible | escape }}">
+  <div class="nx-mq-mask">
+    {%- comment -%} El grupo se renderiza DOS veces para lograr el bucle continuo {%- endcomment -%}
+    {%- for repeat in (1..2) -%}
+      <div class="nx-mq-group" {% if repeat == 2 %}aria-hidden="true"{% endif %}>
+        {%- for block in section.blocks -%}
+          <span class="nx-mq-item" {{ block.shopify_attributes }}>
+            {%- if block.settings.icono != blank -%}<span class="nx-mq-sep">{{ block.settings.icono }}</span>{%- endif -%}
+            {{ block.settings.texto }}
+          </span>
+          {%- unless forloop.last -%}<span class="nx-mq-sep">{{ s.separador }}</span>{%- endunless -%}
+        {%- else -%}
+          <span class="nx-mq-item">Añade ítems al carrusel</span>
+        {%- endfor -%}
+        <span class="nx-mq-sep">{{ s.separador }}</span>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "NOMADAX · Carrusel",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Movimiento" },
+    { "type": "range", "id": "velocidad", "label": "Duración del recorrido (s) — menor = más rápido", "min": 8, "max": 80, "step": 2, "default": 28 },
+    { "type": "select", "id": "direccion", "label": "Dirección", "options": [
+        { "value": "izquierda", "label": "Hacia la izquierda" },
+        { "value": "derecha", "label": "Hacia la derecha" } ], "default": "izquierda" },
+    { "type": "checkbox", "id": "pausa_hover", "label": "Pausar al pasar el ratón", "default": true },
+
+    { "type": "header", "content": "Estilo" },
+    { "type": "text", "id": "separador", "label": "Símbolo separador", "default": "✦" },
+    { "type": "range", "id": "tamano", "label": "Tamaño de texto (px)", "min": 12, "max": 30, "step": 1, "default": 16 },
+    { "type": "range", "id": "separacion", "label": "Separación entre ítems (px)", "min": 8, "max": 60, "step": 2, "default": 24 },
+    { "type": "range", "id": "padding", "label": "Altura (padding px)", "min": 8, "max": 60, "step": 2, "default": 22 },
+    { "type": "color", "id": "color_fondo", "label": "Fondo", "default": "#15151a" },
+    { "type": "color", "id": "color_texto", "label": "Texto", "default": "#ececec" },
+    { "type": "color", "id": "color_acento", "label": "Separador / acento", "default": "#cbb693" },
+    { "type": "text", "id": "titulo_accesible", "label": "Título accesible (lectores de pantalla)", "default": "Ventajas de la mochila" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Ítem",
+      "settings": [
+        { "type": "text", "id": "texto", "label": "Texto", "default": "Compresión al vacío" },
+        { "type": "text", "id": "icono", "label": "Icono/emoji opcional (antes del texto)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "NOMADAX · Carrusel",
+      "blocks": [
+        { "type": "item", "settings": { "texto": "Compresión al vacío" } },
+        { "type": "item", "settings": { "texto": "Impermeable" } },
+        { "type": "item", "settings": { "texto": "Candado TSA" } },
+        { "type": "item", "settings": { "texto": "Portátil 15,6\"" } },
+        { "type": "item", "settings": { "texto": "Bolsillo antirrobo" } },
+        { "type": "item", "settings": { "texto": "USB-C" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
