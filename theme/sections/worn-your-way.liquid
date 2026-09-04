@@ -1,0 +1,80 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- assign s = section.settings -%}
+<section class="worn section" data-worn {{ section.shopify_attributes }}>
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <div>
+        {%- if s.eyebrow != blank -%}<p class="eyebrow eyebrow--accent">{{ s.eyebrow }}</p>{%- endif -%}
+        {%- if s.title != blank -%}<h2 class="display-l section-head__title">{{ s.title }}</h2>{%- endif -%}
+      </div>
+      <div class="section-head__aside">
+        {%- if s.text != blank -%}<p class="muted">{{ s.text }}</p>{%- endif -%}
+        {%- if s.handle != blank -%}<a class="link link--lined" href="{{ settings.social_instagram | default: '#' }}" target="_blank" rel="noopener">{{ s.handle }}</a>{%- endif -%}
+      </div>
+    </header>
+
+    <div class="worn__board">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign product = block.settings.product
+          assign speed_cycle = forloop.index0 | modulo: 3
+        -%}
+        <figure class="worn__tile" data-parallax-speed="{{ speed_cycle }}" data-reveal style="--reveal-delay: {{ forloop.index0 | times: 70 }}ms" {{ block.shopify_attributes }}>
+          <a class="worn__link" href="{{ product.url | default: '#' }}" data-cursor="{{ 'general.view' | t }}">
+            <div class="media media--hover">
+              {%- assign ph_label = block.settings.handle | default: 'Community' -%}
+              {% render 'image', image: block.settings.image, sizes: '(min-width: 990px) 25vw, 50vw', placeholder: forloop.index, placeholder_label: ph_label %}
+            </div>
+          </a>
+          <figcaption class="worn__cap">
+            <span class="worn__handle">{{ block.settings.handle }}</span>
+            {%- if product != blank -%}
+              <a class="worn__product" href="{{ product.url }}">{{ 'general.view' | t }} · {{ product.title }}</a>
+            {%- elsif block.settings.product_text != blank -%}
+              <span class="worn__product">{{ block.settings.product_text }}</span>
+            {%- endif -%}
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Worn your way (community)",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Seen on you" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Worn your way" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Real people, real wardrobes. Tag us to be featured." },
+    { "type": "text", "id": "handle", "label": "Brand handle", "default": "@solenne.studio" }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Customer photo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "handle", "label": "Name or handle", "default": "@marta.v" },
+        { "type": "product", "id": "product", "label": "Product worn" },
+        { "type": "text", "id": "product_text", "label": "Product name (if no product linked)", "default": "The Alba Dress" }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Worn your way",
+      "blocks": [
+        { "type": "look", "settings": { "handle": "@marta.v", "product_text": "The Alba Dress" } },
+        { "type": "look", "settings": { "handle": "@ines.wears", "product_text": "Mara Oversized Blazer" } },
+        { "type": "look", "settings": { "handle": "@clara.r", "product_text": "Noir Sculpt Top" } },
+        { "type": "look", "settings": { "handle": "@sofia.mp", "product_text": "Sienna Tailored Trouser" } },
+        { "type": "look", "settings": { "handle": "@lea.in.lisbon", "product_text": "Élan Knit" } },
+        { "type": "look", "settings": { "handle": "@nour", "product_text": "Linea Satin Dress" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

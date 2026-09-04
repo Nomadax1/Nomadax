@@ -1,0 +1,121 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}" dir="{{ request.locale.direction | default: 'ltr' }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="{{ settings.color_bg }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- endif -%}
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  {%- unless settings.font_display.system? -%}
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {{ settings.font_display | font_url | preload_tag: as: 'font', type: 'font/woff2' }}
+  {%- endunless -%}
+  {%- unless settings.font_body.system? -%}
+    {{ settings.font_body | font_url | preload_tag: as: 'font', type: 'font/woff2' }}
+  {%- endunless -%}
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+  {% render 'meta-tags' %}
+
+  {% render 'css-variables' %}
+  {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    window.theme = {
+      moneyFormat: {{ shop.money_format | json }},
+      moneyWithCurrencyFormat: {{ shop.money_with_currency_format | json }},
+      routes: {
+        root: {{ routes.root_url | json }},
+        cart: {{ routes.cart_url | json }},
+        cartAdd: {{ routes.cart_add_url | json }},
+        cartChange: {{ routes.cart_change_url | json }},
+        cartUpdate: {{ routes.cart_update_url | json }},
+        predictiveSearch: {{ routes.predictive_search_url | json }},
+        search: {{ routes.search_url | json }},
+        recommendations: {{ routes.product_recommendations_url | json }},
+        products: "{{ routes.all_products_collection_url }}"
+      },
+      settings: {
+        cartType: {{ settings.cart_type | json }},
+        cursor: {{ settings.motion_cursor | json }},
+        transitions: {{ settings.motion_transitions | json }},
+        reveals: {{ settings.motion_reveals | json }},
+        parallax: {{ settings.motion_parallax | json }},
+        wishlist: {{ settings.wishlist_enabled | json }},
+        freeShippingThreshold: {{ settings.free_shipping_threshold | default: 0 | times: 100 | json }}
+      },
+      strings: {
+        addToBag: {{ 'products.product.add_to_bag' | t | json }},
+        adding: {{ 'products.product.adding' | t | json }},
+        added: {{ 'products.product.added' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }},
+        error: {{ 'general.error' | t | json }},
+        itemAdded: {{ 'cart.item_added' | t | json }},
+        lookAdded: {{ 'shop_the_look.look_added' | t | json }},
+        wishlistEmpty: {{ 'wishlist.empty' | t | json }},
+        wishlistAdd: {{ 'wishlist.quick_add' | t | json }},
+        chooseSize: {{ 'wishlist.choose_size' | t | json }},
+        remove: {{ 'cart.remove' | t | json }},
+        freeShippingProgress: {{ 'cart.free_shipping_progress' | t: amount: '[amount]' | json }},
+        freeShippingUnlocked: {{ 'cart.free_shipping_unlocked' | t | json }},
+        view: {{ 'general.view' | t | json }},
+        drag: {{ 'general.drag' | t | json }},
+        discover: {{ 'general.discover' | t | json }}
+      },
+      shopCurrency: {{ cart.currency.iso_code | json }},
+      locale: {{ request.locale.iso_code | json }}
+    };
+  </script>
+  {{ content_for_header }}
+</head>
+
+<body class="template-{{ request.page_type | handle }}{% if template.suffix %} template-{{ request.page_type | handle }}-{{ template.suffix | handle }}{% endif %}">
+  <a class="skip-link" href="#MainContent">{{ 'general.skip_to_content' | t }}</a>
+  <div class="page-veil" aria-hidden="true"></div>
+
+  {% sections 'header-group' %}
+
+  <main id="MainContent" class="main-content" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {% sections 'footer-group' %}
+
+  <div class="scrim" data-scrim aria-hidden="true"></div>
+  {%- if settings.cart_type == 'drawer' -%}
+    {% section 'cart-drawer' %}
+  {%- endif -%}
+  {%- if settings.wishlist_enabled -%}
+    {% render 'wishlist-drawer' %}
+  {%- endif -%}
+  <div class="toast" data-toast role="status" aria-live="polite"></div>
+  {%- if settings.motion_cursor -%}
+    <div class="cursor" data-cursor-el aria-hidden="true"><span class="cursor__label"></span></div>
+  {%- endif -%}
+
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  {%- if request.page_type == 'product' -%}
+    <script src="{{ 'product.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+  {%- if request.page_type == 'collection' or request.page_type == 'search' -%}
+    <script src="{{ 'collection.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+  {%- if request.page_type == 'index' -%}
+    <script src="{{ 'home.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+</body>
+</html>

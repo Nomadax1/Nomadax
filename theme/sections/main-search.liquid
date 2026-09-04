@@ -1,0 +1,81 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign sort_by = search.sort_by | default: search.default_sort_by
+  assign per_page = section.settings.per_page | default: 24
+-%}
+<section class="search-page section--tight" data-section-id="{{ section.id }}" {{ section.shopify_attributes }}>
+  <div class="container">
+    <header class="search-page__head">
+      <p class="eyebrow eyebrow--accent">{{ 'search.title' | t }}</p>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-form search-page__form">
+        <label for="SearchPageInput" class="visually-hidden">{{ 'search.label' | t }}</label>
+        <input id="SearchPageInput" class="search-form__input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}">
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="submit" class="icon-btn search-form__submit" aria-label="{{ 'search.submit' | t }}">{% render 'icon', name: 'arrow-right' %}</button>
+      </form>
+      {%- if search.performed -%}
+        <p class="muted" style="margin-top:1rem">
+          {%- if search.results_count == 0 -%}
+            {{ 'search.no_results' | t: terms: search.terms | escape }}
+          {%- else -%}
+            {{ 'search.results_with_count' | t: count: search.results_count, terms: search.terms | escape }}
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+    </header>
+
+    {%- if search.performed and search.results_count > 0 -%}
+      {%- paginate search.results by per_page -%}
+        <div id="SearchResults" data-results>
+          {% render 'facets', results: search, section_id: section.id, sort_by: sort_by, form_id: 'SearchFilters' %}
+          <div class="product-grid coll__grid" data-product-grid data-cols="3" data-cols-mobile="2" style="--cols-desktop: 3; --cols-tablet: 3;">
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'product' -%}
+                <div class="coll__cell" data-reveal>
+                  {% render 'product-card', product: item, index: forloop.index, sizes: '(min-width: 990px) 33vw, 50vw' %}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- assign other = search.results | where: 'object_type', 'article' -%}
+          {%- assign pages = search.results | where: 'object_type', 'page' -%}
+          {%- if other.size > 0 or pages.size > 0 -%}
+            <div class="search-page__groups">
+              {%- if pages.size > 0 -%}
+                <div>
+                  <p class="eyebrow eyebrow--muted">Pages</p>
+                  <div class="search-page__list">{%- for p in pages -%}<a href="{{ p.url }}">{{ p.title }}</a>{%- endfor -%}</div>
+                </div>
+              {%- endif -%}
+              {%- if other.size > 0 -%}
+                <div>
+                  <p class="eyebrow eyebrow--muted">Journal</p>
+                  <div class="search-page__list">{%- for a in other -%}<a href="{{ a.url }}">{{ a.title }}</a>{%- endfor -%}</div>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          {%- if paginate.pages > 1 -%}
+            <nav class="pagination" aria-label="Pagination" data-pagination>
+              {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">{% render 'icon', name: 'arrow-left' %}</a>{%- endif -%}
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>{%- elsif part.title == paginate.current_page -%}<span class="is-current">{{ part.title }}</span>{%- else -%}<span>{{ part.title }}</span>{%- endif -%}
+              {%- endfor -%}
+              {%- if paginate.next -%}<a href="{{ paginate.next.url }}">{% render 'icon', name: 'arrow-right' %}</a>{%- endif -%}
+            </nav>
+          {%- endif -%}
+        </div>
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Search results",
+  "tag": "div",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Results per page", "min": 12, "max": 48, "step": 4, "default": 24 }
+  ]
+}
+{% endschema %}

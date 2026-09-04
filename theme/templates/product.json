@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_vendor": false,
+        "show_quantity": false,
+        "show_dynamic_checkout": false,
+        "reassurance": "Free shipping over €120 · 30-day returns · Secure checkout",
+        "show_share": true
+      },
+      "blocks": {
+        "fit": { "type": "accordion", "settings": { "title": "Fit & size", "source": "text", "content": "<p>Cut to a contemporary fit. Our model is 177 cm and wears a size S. Between sizes? Take the smaller one for a sculpted line, the larger for ease.</p>" } },
+        "details": { "type": "accordion", "settings": { "title": "Details", "source": "description" } },
+        "fabric": { "type": "accordion", "settings": { "title": "Fabric & care", "source": "metafield", "metafield_key": "custom.fabric_care", "content": "<p>Composition and care instructions are listed on the garment label. Dry clean or gentle hand wash, reshape flat, do not tumble dry.</p>" } },
+        "shipping": { "type": "accordion", "settings": { "title": "Shipping & returns", "source": "text", "content": "<p>Complimentary shipping on orders over €120. Delivery in 2–4 working days across the EU. Returns accepted within 30 days, unworn, with tags attached.</p>" } }
+      },
+      "block_order": ["fit", "details", "fabric", "shipping"]
+    },
+    "complete_the_look": {
+      "type": "product-recommendations",
+      "settings": { "eyebrow": "Styled with", "title": "Complete the look", "intent": "complementary", "limit": 4 }
+    },
+    "recently_viewed": {
+      "type": "recently-viewed",
+      "settings": { "eyebrow": "Your trail", "title": "Recently viewed", "limit": 8 }
+    }
+  },
+  "order": ["main", "complete_the_look", "recently_viewed"]
+}

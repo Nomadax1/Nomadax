@@ -1,0 +1,52 @@
+{%- comment -%} Usage: {% render 'icon', name: 'bag', class: 'icon' %} {%- endcomment -%}
+{%- assign c = class | default: 'icon' -%}
+{%- case name -%}
+{%- when 'search' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+{%- when 'account' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+{%- when 'heart' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-7.5-4.6-7.5-10A4.2 4.2 0 0 1 12 8a4.2 4.2 0 0 1 7.5 2.5c0 5.4-7.5 10-7.5 10Z"/></svg>
+{%- when 'bag' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+{%- when 'close' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg>
+{%- when 'menu' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 8h16M4 16h16"/></svg>
+{%- when 'arrow-right' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
+{%- when 'arrow-left' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4m6-6-6 6 6 6"/></svg>
+{%- when 'arrow-down' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4v16m-6-6 6 6 6-6"/></svg>
+{%- when 'chevron-down' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+{%- when 'chevron-right' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 6 6 6-6 6"/></svg>
+{%- when 'plus' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>
+{%- when 'minus' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg>
+{%- when 'check' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 12 4.5 4.5L19 7"/></svg>
+{%- when 'zoom' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8M11 8v6M8 11h6"/></svg>
+{%- when 'play' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 5v14l11-7-11-7Z"/></svg>
+{%- when 'filter' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M7 12h10m-7 5h4"/></svg>
+{%- when 'grid-2' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="7" height="16"/><rect x="13" y="4" width="7" height="16"/></svg>
+{%- when 'grid-3' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="5" height="16"/><rect x="9.5" y="4" width="5" height="16"/><rect x="16" y="4" width="5" height="16"/></svg>
+{%- when 'grid-4' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="3.5" height="16"/><rect x="8" y="4" width="3.5" height="16"/><rect x="13" y="4" width="3.5" height="16"/><rect x="18" y="4" width="3.5" height="16"/></svg>
+{%- when 'instagram' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>
+{%- when 'error' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 8v5m0 3v.5"/></svg>
+{%- when 'trash' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 7h14M9 7V5h6v2m-7 0 1 13h6l1-13"/></svg>
+{%- when 'globe' -%}
+<svg class="{{ c }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>
+{%- endcase -%}

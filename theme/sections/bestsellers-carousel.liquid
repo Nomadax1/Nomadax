@@ -1,0 +1,55 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s = section.settings
+  assign collection = s.collection
+  assign limit = s.count | default: 8
+-%}
+<section class="focus section" {{ section.shopify_attributes }}>
+  <div class="container section-head" data-reveal>
+    <div>
+      {%- if s.eyebrow != blank -%}<p class="eyebrow eyebrow--accent">{{ s.eyebrow }}</p>{%- endif -%}
+      {%- if s.title != blank -%}<h2 class="display-m section-head__title">{{ s.title }}</h2>{%- endif -%}
+    </div>
+    <div class="focus__controls">
+      <button type="button" class="icon-btn" data-carousel-prev-proxy aria-label="{{ 'general.previous' | t }}">{% render 'icon', name: 'arrow-left' %}</button>
+      <button type="button" class="icon-btn" data-carousel-next-proxy aria-label="{{ 'general.next' | t }}">{% render 'icon', name: 'arrow-right' %}</button>
+      {%- if collection != blank -%}<a class="link link--lined" href="{{ collection.url }}">{{ 'collections.general.view_collection' | t }}</a>{%- endif -%}
+    </div>
+  </div>
+
+  <drag-carousel class="focus__carousel" data-focus data-cursor="{{ 'general.drag' | t }}" data-reveal="fade">
+    <div class="focus__track" data-track aria-label="{{ 'accessibility.carousel' | t }}">
+      {%- if collection != blank and collection.products.size > 0 -%}
+        {%- for product in collection.products limit: limit -%}
+          <div class="focus__item">
+            {% render 'product-card', product: product, index: forloop.index, sizes: '(min-width: 990px) 32vw, 72vw', loading: 'lazy' %}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- assign names = 'The Alba Dress,Noir Sculpt Top,Sienna Tailored Trouser,Élan Knit,Mara Oversized Blazer,Linea Satin Dress' | split: ',' -%}
+        {%- for name in names -%}
+          <div class="focus__item">
+            {%- assign ph_price = forloop.index | times: 2000 | plus: 7900 -%}
+            {% render 'product-card', product: blank, index: forloop.index, placeholder_label: name, placeholder_price: ph_price %}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+    <button type="button" class="visually-hidden" data-carousel-prev>{{ 'general.previous' | t }}</button>
+    <button type="button" class="visually-hidden" data-carousel-next>{{ 'general.next' | t }}</button>
+  </drag-carousel>
+</section>
+
+{% schema %}
+{
+  "name": "Bestsellers carousel",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Most wanted" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Bestsellers" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "count", "label": "Products", "min": 4, "max": 12, "step": 1, "default": 8 }
+  ],
+  "presets": [{ "name": "Bestsellers carousel" }]
+}
+{% endschema %}

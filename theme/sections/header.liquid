@@ -1,0 +1,236 @@
+{%- liquid
+  assign menu = section.settings.menu
+  assign mega_title = section.settings.mega_menu_link | downcase | strip
+  assign transparent = false
+  if section.settings.overlay_home and request.page_type == 'index'
+    assign transparent = true
+  endif
+  assign mega_images = section.blocks | where: 'type', 'mega_image'
+-%}
+
+<header class="site-header" id="SiteHeader" data-header data-transparent="{{ transparent }}" data-hide-on-scroll="{{ section.settings.hide_on_scroll_down }}" style="--logo-width: {{ settings.logo_width }}px" {{ section.shopify_attributes }}>
+  <div class="site-header__inner container">
+    <div class="site-header__left">
+      <button type="button" class="icon-btn site-header__burger" data-open-drawer="MobileNav" aria-controls="MobileNav" aria-expanded="false" aria-label="{{ 'general.open_menu' | t }}">
+        {% render 'icon', name: 'menu' %}
+      </button>
+      <nav class="site-header__nav" aria-label="{{ 'general.menu' | t }}">
+        <ul class="nav-list">
+          {%- for link in menu.links -%}
+            {%- assign link_title = link.title | downcase | strip -%}
+            {%- if link_title == mega_title and link.links.size > 0 -%}
+              <li class="nav-item nav-item--mega" data-mega>
+                <button type="button" aria-expanded="false" aria-controls="MegaMenu-{{ forloop.index }}" data-mega-toggle>
+                  {{ link.title }}
+                  {% render 'icon', name: 'chevron-down', class: 'icon icon--xs' %}
+                </button>
+                <div class="mega-menu" id="MegaMenu-{{ forloop.index }}" data-mega-panel>
+                  <div class="mega-menu__inner">
+                    <div class="mega-menu__cols">
+                      {%- assign has_third_level = false -%}
+                      {%- for child in link.links -%}
+                        {%- if child.links.size > 0 -%}{%- assign has_third_level = true -%}{%- endif -%}
+                      {%- endfor -%}
+                      {%- if has_third_level -%}
+                        {%- for child in link.links -%}
+                          <div class="mega-menu__col">
+                            <div class="mega-menu__col-title"><a href="{{ child.url }}">{{ child.title }}</a></div>
+                            <div class="mega-menu__links">
+                              {%- for grandchild in child.links -%}
+                                <a href="{{ grandchild.url }}"><span class="link-index">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ grandchild.title }}</a>
+                              {%- endfor -%}
+                            </div>
+                          </div>
+                        {%- endfor -%}
+                      {%- else -%}
+                        <div class="mega-menu__col">
+                          <div class="mega-menu__col-title">{{ 'header.explore' | t }}</div>
+                          <div class="mega-menu__links">
+                            {%- for child in link.links -%}
+                              <a href="{{ child.url }}"><span class="link-index">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ child.title }}</a>
+                            {%- endfor -%}
+                          </div>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                    <div class="mega-menu__visuals">
+                      {%- for block in mega_images limit: 2 -%}
+                        <a class="mega-menu__visual" href="{{ block.settings.link | default: link.url }}" data-cursor="{{ 'general.discover' | t }}" {{ block.shopify_attributes }}>
+                          <div class="media media--hover">
+                            {% render 'image', image: block.settings.image, sizes: '(min-width: 990px) 30vw, 50vw', placeholder: forloop.index, placeholder_label: block.settings.heading %}
+                          </div>
+                          <span class="mega-menu__visual-caption">
+                            {%- if block.settings.caption != blank -%}<span class="eyebrow eyebrow--bare">{{ block.settings.caption }}</span>{%- endif -%}
+                            {%- if block.settings.heading != blank -%}<span class="serif">{{ block.settings.heading }}</span>{%- endif -%}
+                          </span>
+                        </a>
+                      {%- endfor -%}
+                    </div>
+                    {%- if settings.season_label != blank -%}
+                      <span class="mega-menu__season">{{ settings.season_label }}</span>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </li>
+            {%- else -%}
+              <li class="nav-item"><a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </nav>
+    </div>
+
+    <a class="site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {%- if settings.logo != blank -%}
+        {%- if settings.logo_inverse != blank -%}
+          {{ settings.logo_inverse | image_url: width: 520 | image_tag: class: 'logo-inverse', widths: '260, 520', alt: shop.name, loading: 'eager' }}
+        {%- endif -%}
+        {{ settings.logo | image_url: width: 520 | image_tag: class: 'logo-default', widths: '260, 520', alt: shop.name, loading: 'eager' }}
+      {%- else -%}
+        <span class="wordmark">{{ settings.brand_name | default: shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    <div class="site-header__right">
+      <button type="button" class="hdr-action hdr-action--icon" data-open-search aria-controls="SearchOverlay" aria-expanded="false">
+        {% render 'icon', name: 'search' %}<span class="hdr-label">{{ 'general.search' | t }}</span>
+      </button>
+      {%- if shop.customer_accounts_enabled -%}
+        <a class="hdr-action hdr-action--icon hdr-action--account" href="{{ routes.account_url }}">
+          {% render 'icon', name: 'account' %}<span class="hdr-label">{{ 'general.account' | t }}</span>
+        </a>
+      {%- endif -%}
+      {%- if settings.wishlist_enabled -%}
+        <button type="button" class="hdr-action hdr-action--icon hdr-action--wishlist" data-open-drawer="WishlistDrawer" aria-controls="WishlistDrawer" aria-expanded="false">
+          {% render 'icon', name: 'heart' %}<span class="hdr-label">{{ 'general.wishlist' | t }}</span>
+          <span class="hdr-bubble" data-wishlist-bubble aria-hidden="true"></span>
+        </button>
+      {%- endif -%}
+      <a class="hdr-action hdr-action--icon hdr-action--bag" href="{{ routes.cart_url }}" data-open-cart aria-controls="CartDrawer">
+        {% render 'icon', name: 'bag' %}
+        <span class="hdr-label">{{ 'general.bag' | t }} (<span data-cart-count>{{ cart.item_count }}</span>)</span>
+        <span class="hdr-bubble{% if cart.item_count > 0 %} is-visible{% endif %}" data-cart-bubble aria-hidden="true">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{%- comment -%} Mobile navigation drawer {%- endcomment -%}
+<nav id="MobileNav" class="drawer drawer--left" aria-label="{{ 'general.menu' | t }}" role="dialog" aria-modal="true" tabindex="-1">
+  <div class="drawer__head">
+    <span class="wordmark">{{ settings.brand_name | default: shop.name }}</span>
+    <button type="button" class="icon-btn" data-drawer-close aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+  </div>
+  <div class="drawer__body">
+    <ul class="mobile-nav__list">
+      {%- for link in menu.links -%}
+        <li class="mobile-nav__item">
+          {%- if link.links.size > 0 -%}
+            <details class="mobile-nav__details">
+              <summary class="mobile-nav__link">{{ link.title }} {% render 'icon', name: 'plus' %}</summary>
+              <div class="mobile-nav__sub">
+                <a href="{{ link.url }}" class="link link--lined">{{ 'general.view' | t }} {{ link.title }}</a>
+                {%- for child in link.links -%}
+                  <a href="{{ child.url }}">{{ child.title }}</a>
+                  {%- for grandchild in child.links -%}
+                    <a href="{{ grandchild.url }}" style="padding-left:1rem">{{ grandchild.title }}</a>
+                  {%- endfor -%}
+                {%- endfor -%}
+              </div>
+            </details>
+          {%- else -%}
+            <a class="mobile-nav__link" href="{{ link.url }}">{{ link.title }}</a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+    {%- assign first_img = mega_images | first -%}
+    {%- if first_img -%}
+      <a class="mobile-nav__campaign" href="{{ first_img.settings.link | default: routes.all_products_collection_url }}">
+        <div class="media">
+          {% render 'image', image: first_img.settings.image, sizes: '100vw', placeholder: 2, placeholder_label: first_img.settings.heading %}
+          <span class="mobile-nav__campaign-cap">{{ first_img.settings.heading }}</span>
+        </div>
+      </a>
+    {%- endif -%}
+    <div class="mobile-nav__utils">
+      {%- if shop.customer_accounts_enabled -%}
+        <a href="{{ routes.account_url }}">{% render 'icon', name: 'account' %} {{ 'general.account' | t }}</a>
+      {%- endif -%}
+      {%- if settings.wishlist_enabled -%}
+        <button type="button" data-open-drawer="WishlistDrawer">{% render 'icon', name: 'heart' %} {{ 'general.wishlist' | t }}</button>
+      {%- endif -%}
+      {%- if settings.season_label != blank -%}
+        <span class="eyebrow eyebrow--muted eyebrow--bare" style="margin-top:1rem">{{ settings.season_label }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</nav>
+
+{%- comment -%} Search overlay {%- endcomment -%}
+<div id="SearchOverlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="{{ 'search.title' | t }}" tabindex="-1" data-search-overlay>
+  <div class="search-overlay__inner">
+    <div class="search-overlay__top">
+      <span class="eyebrow eyebrow--muted">{{ 'search.title' | t }}</span>
+      <button type="button" class="icon-btn" data-search-close aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+    </div>
+    <predictive-search data-predictive-search>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+        <label for="SearchInput" class="visually-hidden">{{ 'search.label' | t }}</label>
+        <input id="SearchInput" class="search-form__input" type="search" name="q" placeholder="{{ 'search.placeholder' | t }}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-search-input aria-controls="PredictiveResults" aria-expanded="false" role="combobox">
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="button" class="search-form__clear" data-search-clear hidden>{{ 'search.clear' | t }}</button>
+        <button type="submit" class="icon-btn search-form__submit" aria-label="{{ 'search.submit' | t }}">{% render 'icon', name: 'arrow-right' %}</button>
+      </form>
+
+      <div class="search-results" id="PredictiveResults" role="listbox" aria-live="polite">
+        <div class="search-results__default" data-search-default>
+          <div class="search-results__recent" data-search-recent hidden>
+            <p class="eyebrow eyebrow--muted search-results__group-title">{{ 'search.recent' | t }} <button type="button" class="link" data-search-clear-recent style="margin-left:1rem">{{ 'search.clear_recent' | t }}</button></p>
+            <div class="search-recent" data-search-recent-list></div>
+          </div>
+          {%- if section.settings.popular_searches != blank -%}
+            <div>
+              <p class="eyebrow eyebrow--muted search-results__group-title">{{ 'search.popular' | t }}</p>
+              <div class="search-recent">
+                {%- assign popular = section.settings.popular_searches | split: ',' -%}
+                {%- for term in popular -%}
+                  <button type="button" data-search-term="{{ term | strip | escape }}">{{ term | strip }}</button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+        <div class="search-results__live" data-search-results></div>
+      </div>
+    </predictive-search>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "div",
+  "class": "header-wrap",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "text", "id": "mega_menu_link", "label": "Menu item that opens the mega menu", "default": "Shop", "info": "Must match a top-level menu item title. Its nested items become the mega menu columns." },
+    { "type": "checkbox", "id": "overlay_home", "label": "Float transparently over the homepage hero", "default": true },
+    { "type": "checkbox", "id": "hide_on_scroll_down", "label": "Hide header when scrolling down", "default": false },
+    { "type": "text", "id": "popular_searches", "label": "Popular searches (comma separated)", "default": "Dresses, Tailoring, Knitwear, Satin, New in" }
+  ],
+  "blocks": [
+    {
+      "type": "mega_image",
+      "name": "Mega menu campaign image",
+      "limit": 2,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "The Sculpt Edit" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "New in" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ]
+}
+{% endschema %}

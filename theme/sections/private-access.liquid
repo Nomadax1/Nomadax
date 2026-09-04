@@ -1,0 +1,56 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- assign s = section.settings -%}
+<section class="access section--flush" {{ section.shopify_attributes }}>
+  <div class="access__inner">
+    <div class="access__panel section--inverse">
+      <div class="access__content" data-reveal-group>
+        {%- if s.eyebrow != blank -%}<p class="eyebrow reveal-mask"><span>{{ s.eyebrow }}</span></p>{%- endif -%}
+        <h2 class="display-l access__title">
+          <span class="reveal-mask" style="--reveal-delay:100ms"><span>{{ s.title_1 }}</span></span>
+          {%- if s.title_2 != blank -%}<span class="reveal-mask" style="--reveal-delay:220ms"><span><em>{{ s.title_2 }}</em></span></span>{%- endif -%}
+        </h2>
+        {%- if s.text != blank -%}<p class="lead access__text" data-reveal style="--reveal-delay:340ms">{{ s.text }}</p>{%- endif -%}
+        <div data-reveal style="--reveal-delay:460ms">
+          {%- form 'customer', id: 'PrivateAccessForm', class: 'access__form' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter, private-access">
+            {%- if form.posted_successfully? -%}
+              <p class="form-message form-message--success">{{ 'newsletter.success' | t }}</p>
+            {%- else -%}
+              <div class="access__field">
+                <label class="visually-hidden" for="PrivateAccessEmail">{{ 'newsletter.label' | t }}</label>
+                <input id="PrivateAccessEmail" class="access__input" type="email" name="contact[email]" placeholder="{{ 'newsletter.placeholder' | t }}" required autocomplete="email">
+                <button type="submit" class="btn btn--inverse">{{ s.button | default: 'newsletter.submit' | t }}</button>
+              </div>
+              {%- if form.errors -%}<p class="form-error">{{ 'newsletter.error' | t }}</p>{%- endif -%}
+              {%- if s.fine_print != blank -%}<p class="access__fine text-xs">{{ s.fine_print }}</p>{%- endif -%}
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      </div>
+    </div>
+    <div class="access__media">
+      <div class="media">
+        {% render 'image', image: s.image, sizes: '(min-width: 990px) 45vw, 100vw', placeholder: 1, placeholder_label: 'Private access' %}
+      </div>
+      {%- if s.image_caption != blank -%}<span class="access__caption eyebrow eyebrow--bare">{{ s.image_caption }}</span>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Private access",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Members first" },
+    { "type": "text", "id": "title_1", "label": "Title line 1", "default": "Private" },
+    { "type": "text", "id": "title_2", "label": "Title line 2 (italic)", "default": "access" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Be first to discover new drops, limited pieces and private releases. 48 hours before everyone else." },
+    { "type": "text", "id": "button", "label": "Button", "default": "Join the list" },
+    { "type": "text", "id": "fine_print", "label": "Fine print", "default": "One or two letters a month. Unsubscribe any time." },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_caption", "label": "Image caption", "default": "Drop 02 — coming November" }
+  ],
+  "presets": [{ "name": "Private access" }]
+}
+{% endschema %}

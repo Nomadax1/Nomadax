@@ -1,0 +1,36 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+<section class="ctl section section--tight" data-recommendations data-section-id="{{ section.id }}" data-product-id="{{ product.id }}" data-limit="{{ section.settings.limit }}" data-intent="{{ section.settings.intent }}" {{ section.shopify_attributes }}>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <div class="container">
+      <header class="section-head">
+        <div>
+          <p class="eyebrow eyebrow--accent">{{ section.settings.eyebrow }}</p>
+          <h2 class="display-m section-head__title">{{ section.settings.title | default: 'products.product.complete_the_look' | t }}</h2>
+        </div>
+      </header>
+      <div class="ctl__grid">
+        {%- for product in recommendations.products -%}
+          <div class="ctl__cell" data-reveal style="--reveal-delay: {{ forloop.index0 | times: 80 }}ms">
+            {% render 'product-card', product: product, index: forloop.index, sizes: '(min-width: 990px) 25vw, 50vw', show_quick_add: true %}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Complete the look",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Styled with" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Complete the look" },
+    { "type": "select", "id": "intent", "label": "Recommendation type", "options": [
+      { "value": "complementary", "label": "Complementary (set in Search & Discovery), falls back to related" },
+      { "value": "related", "label": "Related" }
+    ], "default": "complementary" },
+    { "type": "range", "id": "limit", "label": "Products", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ]
+}
+{% endschema %}

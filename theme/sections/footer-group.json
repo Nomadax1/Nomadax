@@ -1,0 +1,24 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "statement": "Designed to be noticed. Made to be worn <em>your way.</em>",
+        "show_newsletter": true,
+        "newsletter_heading": "Private access",
+        "newsletter_text": "First to know about drops, limited pieces and private releases.",
+        "show_wordmark": true,
+        "show_payment_icons": true
+      },
+      "blocks": {
+        "m1": { "type": "menu", "settings": { "title": "Shop", "menu": "main-menu" } },
+        "m2": { "type": "menu", "settings": { "title": "Client care", "menu": "footer" } },
+        "t1": { "type": "text", "settings": { "title": "Atelier", "text": "<p>Studio 4, Carrer de la Cera<br>08001 Barcelona</p><p>Mon–Fri, 10–18h</p>" } }
+      },
+      "block_order": ["m1", "m2", "t1"]
+    }
+  },
+  "order": ["footer"]
+}

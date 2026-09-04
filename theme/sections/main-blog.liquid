@@ -1,0 +1,47 @@
+<section class="blog section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <header class="page-head" data-reveal-group>
+      <p class="eyebrow eyebrow--accent reveal-mask"><span>{{ section.settings.eyebrow }}</span></p>
+      <h1 class="display-xl page-head__title"><span class="reveal-mask" style="--reveal-delay:100ms"><span>{{ blog.title }}</span></span></h1>
+    </header>
+    {%- paginate blog.articles by 9 -%}
+      <div class="blog__grid">
+        {%- for article in blog.articles -%}
+          <article class="blog__card" data-reveal style="--reveal-delay: {{ forloop.index0 | modulo: 3 | times: 80 }}ms">
+            <a href="{{ article.url }}" class="media media--hover {% if forloop.first %}media--landscape{% else %}media--tall{% endif %}" data-cursor="{{ 'blog.read_more' | t }}">
+              {% render 'image', image: article.image, sizes: '(min-width: 990px) 33vw, 100vw', placeholder: forloop.index, placeholder_label: article.title %}
+            </a>
+            <div class="blog__meta">
+              <span class="eyebrow eyebrow--muted eyebrow--bare">{{ article.published_at | date: format: 'month_day_year' }}</span>
+              <h2 class="display-s"><a href="{{ article.url }}">{{ article.title }}</a></h2>
+              {%- if article.excerpt != blank -%}<p class="muted">{{ article.excerpt | strip_html | truncate: 140 }}</p>{%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" aria-label="Pagination">
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>{%- elsif part.title == paginate.current_page -%}<span class="is-current">{{ part.title }}</span>{%- else -%}<span>{{ part.title }}</span>{%- endif -%}
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+<style>
+  .blog__grid { display: grid; gap: var(--space-8) var(--gutter); }
+  .blog__card { display: flex; flex-direction: column; gap: var(--space-4); }
+  .blog__meta { display: flex; flex-direction: column; gap: 0.5rem; }
+  @media (min-width: 750px) { .blog__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .blog__card:first-child { grid-column: span 3; } .blog__card:nth-child(3n+3) { margin-top: var(--space-8); } }
+</style>
+
+{% schema %}
+{
+  "name": "Blog",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Journal" }
+  ]
+}
+{% endschema %}

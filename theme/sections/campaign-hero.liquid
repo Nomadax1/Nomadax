@@ -1,0 +1,88 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s = section.settings
+  assign side = s.side_text | default: settings.season_label
+-%}
+<section class="hero section--under-header{% if s.height == 'tall' %} hero--tall{% endif %}" data-hero data-parallax="{{ settings.motion_parallax }}" style="--hero-overlay: {{ s.overlay | divided_by: 100.0 }}; --hero-align: {% if s.align == 'left' %}flex-start{% elsif s.align == 'right' %}flex-end{% else %}center{% endif %};" {{ section.shopify_attributes }}>
+  <div class="hero__media" data-hero-media>
+    {%- if s.video != blank -%}
+      {{ s.video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, class: 'hero__video' }}
+    {%- elsif s.image != blank -%}
+      <picture>
+        {%- if s.image_mobile != blank -%}
+          <source media="(max-width: 749px)" srcset="{{ s.image_mobile | image_url: width: 750 }} 750w, {{ s.image_mobile | image_url: width: 1100 }} 1100w" sizes="100vw">
+        {%- endif -%}
+        {{ s.image | image_url: width: 2800 | image_tag: widths: '750, 1100, 1500, 1900, 2400, 2800', sizes: '100vw', loading: 'eager', fetchpriority: 'high', preload: true, class: 'hero__img', alt: s.image.alt | default: s.line_1 }}
+      </picture>
+    {%- else -%}
+      {% render 'placeholder', variant: 3, label: 'Campaign image' %}
+    {%- endif -%}
+    <div class="hero__veil" aria-hidden="true"></div>
+  </div>
+
+  <div class="hero__content container" data-hero-content>
+    <div class="hero__text" data-reveal-group>
+      {%- if s.eyebrow != blank -%}
+        <p class="hero__eyebrow eyebrow reveal-mask"><span>{{ s.eyebrow }}</span></p>
+      {%- endif -%}
+      <h1 class="hero__title display-xl">
+        {%- if s.line_1 != blank -%}<span class="reveal-mask" style="--reveal-delay:80ms"><span>{{ s.line_1 }}</span></span>{%- endif -%}
+        {%- if s.line_2 != blank -%}<span class="reveal-mask hero__title-em" style="--reveal-delay:200ms"><span><em>{{ s.line_2 }}</em></span></span>{%- endif -%}
+        {%- if s.line_3 != blank -%}<span class="reveal-mask" style="--reveal-delay:320ms"><span>{{ s.line_3 }}</span></span>{%- endif -%}
+      </h1>
+      <div class="hero__actions" data-reveal="fade" style="--reveal-delay:520ms">
+        {%- if s.cta_text != blank -%}
+          <a class="btn btn--inverse" href="{{ s.cta_link | default: routes.all_products_collection_url }}">{{ s.cta_text }}</a>
+        {%- endif -%}
+        {%- if s.cta2_text != blank -%}
+          <a class="link link--lined hero__link" href="{{ s.cta2_link | default: routes.all_products_collection_url }}">{{ s.cta2_text }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- if side != blank -%}
+    <span class="hero__side vertical-text" aria-hidden="true">{{ side }}</span>
+  {%- endif -%}
+  {%- if s.show_scroll_hint -%}
+    <span class="hero__scroll" aria-hidden="true"><span class="hero__scroll-line"></span>{{ 'general.scroll' | t }}</span>
+  {%- endif -%}
+  {%- if s.credit != blank -%}
+    <span class="hero__credit">{{ s.credit }}</span>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Campaign hero",
+  "tag": "div",
+  "class": "shopify-section--hero",
+  "settings": [
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Campaign image", "info": "Recommended 2400 × 1500px or larger." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image (portrait, optional)" },
+    { "type": "video", "id": "video", "label": "Campaign video (optional)", "info": "Overrides the image. Muted, looping." },
+    { "type": "range", "id": "overlay", "label": "Darken", "min": 0, "max": 70, "step": 5, "unit": "%", "default": 25 },
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Autumn / Winter 26 — Drop 01" },
+    { "type": "text", "id": "line_1", "label": "Headline line 1", "default": "Wear your" },
+    { "type": "text", "id": "line_2", "label": "Headline line 2 (italic)", "default": "attitude" },
+    { "type": "text", "id": "line_3", "label": "Headline line 3 (optional)" },
+    { "type": "text", "id": "cta_text", "label": "Primary button", "default": "Enter the collection" },
+    { "type": "url", "id": "cta_link", "label": "Primary link" },
+    { "type": "text", "id": "cta2_text", "label": "Secondary link text", "default": "Shop the drop" },
+    { "type": "url", "id": "cta2_link", "label": "Secondary link" },
+    { "type": "text", "id": "side_text", "label": "Vertical side text", "info": "Defaults to the season label in Theme settings." },
+    { "type": "text", "id": "credit", "label": "Photo credit (small, bottom right)" },
+    { "type": "header", "content": "Layout" },
+    { "type": "select", "id": "align", "label": "Text alignment", "options": [
+      { "value": "left", "label": "Left" }, { "value": "center", "label": "Centre" }, { "value": "right", "label": "Right" }
+    ], "default": "left" },
+    { "type": "select", "id": "height", "label": "Height", "options": [
+      { "value": "full", "label": "Full viewport" }, { "value": "tall", "label": "Full viewport + extra scroll" }
+    ], "default": "full" },
+    { "type": "checkbox", "id": "show_scroll_hint", "label": "Show scroll hint", "default": true }
+  ],
+  "presets": [{ "name": "Campaign hero" }]
+}
+{% endschema %}

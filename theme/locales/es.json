@@ -1,0 +1,212 @@
+{
+  "general": {
+    "skip_to_content": "Ir al contenido",
+    "close": "Cerrar",
+    "menu": "Menú",
+    "open_menu": "Abrir menú",
+    "search": "Buscar",
+    "account": "Cuenta",
+    "wishlist": "Favoritos",
+    "bag": "Bolsa",
+    "bag_with_count": "Bolsa ({{ count }})",
+    "view": "Ver",
+    "drag": "Arrastra",
+    "discover": "Descubrir",
+    "shop_now": "Comprar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "loading": "Cargando",
+    "error": "Algo ha fallado. Inténtalo de nuevo.",
+    "scroll": "Desliza",
+    "new": "Nuevo",
+    "sold_out": "Agotado",
+    "sale": "Rebajas",
+    "reduced_motion": "Movimiento reducido activado: las animaciones son mínimas.",
+    "select_country": "País / región",
+    "select_language": "Idioma",
+    "update_localization": "Actualizar",
+    "powered_by": "Creado con Shopify",
+    "copyright": "Todos los derechos reservados."
+  },
+  "header": { "season": "Temporada", "mega_menu_campaign": "Campaña", "explore": "Explorar" },
+  "search": {
+    "title": "Buscar",
+    "placeholder": "Busca vestidos, punto, sastrería…",
+    "label": "Buscar en la colección",
+    "submit": "Buscar",
+    "clear": "Borrar",
+    "products": "Productos",
+    "collections": "Colecciones",
+    "suggestions": "Sugerencias",
+    "recent": "Búsquedas recientes",
+    "clear_recent": "Borrar",
+    "popular": "Populares ahora",
+    "view_all": "Ver todos los resultados de \"{{ terms }}\"",
+    "no_results": "Nada encontrado para \"{{ terms }}\". Prueba con otra palabra.",
+    "results_with_count": { "one": "{{ count }} resultado para \"{{ terms }}\"", "other": "{{ count }} resultados para \"{{ terms }}\"" }
+  },
+  "products": {
+    "product": {
+      "add_to_bag": "Añadir a la bolsa",
+      "adding": "Añadiendo…",
+      "added": "Añadido a la bolsa",
+      "sold_out": "Agotado",
+      "unavailable": "No disponible",
+      "notify_me": "Avísame",
+      "quick_add": "Añadir rápido",
+      "select_size": "Elige talla",
+      "select_option": "Elige {{ option }}",
+      "size_guide": "Guía de tallas",
+      "color": "Color",
+      "size": "Talla",
+      "quantity": "Cantidad",
+      "decrease": "Reducir cantidad",
+      "increase": "Aumentar cantidad",
+      "from_price": "Desde {{ price }}",
+      "regular_price": "Precio habitual",
+      "sale_price": "Precio rebajado",
+      "vendor": "Diseñador",
+      "sku": "Ref.",
+      "description": "Descripción",
+      "fit_size": "Corte y talla",
+      "details": "Detalles",
+      "fabric_care": "Tejido y cuidados",
+      "shipping_returns": "Envíos y devoluciones",
+      "complete_the_look": "Completa el look",
+      "recently_viewed": "Vistos recientemente",
+      "you_may_also_like": "También te puede gustar",
+      "view_full_details": "Ver todos los detalles",
+      "share": "Compartir",
+      "zoom": "Ampliar imagen",
+      "gallery": "Galería del producto",
+      "image_of": "Imagen {{ index }} de {{ count }}",
+      "swatch_more": "+{{ count }}",
+      "wishlist_add": "Guardar en favoritos",
+      "wishlist_remove": "Quitar de favoritos",
+      "low_stock": "Solo quedan {{ count }}",
+      "in_stock": "En stock",
+      "preorder": "Reserva",
+      "view_product": "Ver producto",
+      "media_video": "Reproducir vídeo",
+      "colors_available": "{{ count }} colores"
+    },
+    "facets": {
+      "filter": "Filtrar",
+      "filter_and_sort": "Filtrar y ordenar",
+      "sort": "Ordenar",
+      "sort_by": "Ordenar por",
+      "clear_all": "Borrar todo",
+      "apply": "Aplicar",
+      "from": "Desde",
+      "to": "Hasta",
+      "max_price": "El precio más alto es {{ price }}",
+      "results": { "one": "{{ count }} pieza", "other": "{{ count }} piezas" },
+      "view": "Vista",
+      "columns": "{{ count }} columnas",
+      "show_more": "Ver más",
+      "show_less": "Ver menos",
+      "availability": "Disponibilidad",
+      "in_stock_only": "Solo en stock"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_products": "Aún no hay piezas en esta selección. Las novedades llegan pronto.",
+      "all_collections": "Todas las colecciones",
+      "view_collection": "Ver colección",
+      "pieces": "piezas",
+      "load_more": "Cargar más",
+      "page_of": "Página {{ page }} de {{ total }}"
+    }
+  },
+  "cart": {
+    "title": "Tu bolsa",
+    "empty": "Tu bolsa está vacía.",
+    "empty_cta": "Entrar en la colección",
+    "checkout": "Finalizar compra",
+    "continue_shopping": "Seguir comprando",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "taxes_shipping": "Impuestos y envío calculados al finalizar la compra.",
+    "remove": "Quitar",
+    "quantity": "Cant.",
+    "update": "Actualizar",
+    "note": "Nota del pedido",
+    "note_placeholder": "Mensaje de regalo, instrucciones de entrega…",
+    "free_shipping_progress": "Te faltan {{ amount }} para el envío gratis",
+    "free_shipping_unlocked": "Has desbloqueado el envío gratis",
+    "you_may_also_like": "También te puede gustar",
+    "item_added": "Añadido a tu bolsa",
+    "view_bag": "Ver bolsa",
+    "items_count": { "one": "{{ count }} artículo", "other": "{{ count }} artículos" },
+    "discounts": "Descuentos",
+    "shipping": "Envío"
+  },
+  "wishlist": {
+    "title": "Favoritos",
+    "empty": "Tu lista está vacía. Toca el corazón de cualquier pieza para guardarla.",
+    "add": "Guardar",
+    "saved": "Guardado",
+    "quick_add": "Añadir a la bolsa",
+    "choose_size": "Elige talla",
+    "count": { "one": "{{ count }} pieza guardada", "other": "{{ count }} piezas guardadas" }
+  },
+  "newsletter": {
+    "label": "Correo electrónico",
+    "placeholder": "tu@email.com",
+    "submit": "Unirme a la lista",
+    "success": "Bienvenida. Ya estás en la lista.",
+    "error": "Introduce un correo válido."
+  },
+  "shop_the_look": {
+    "title": "Compra el look",
+    "shop_full_look": "Comprar el look completo",
+    "adding_look": "Añadiendo look…",
+    "look_added": "Look añadido a la bolsa",
+    "pieces_in_look": "{{ count }} piezas",
+    "hotspot": "Ver pieza {{ index }}",
+    "total": "Look completo"
+  },
+  "contact": {
+    "form": { "name": "Nombre", "email": "Correo", "phone": "Teléfono", "message": "Mensaje", "send": "Enviar", "success": "Gracias. Te responderemos pronto.", "error": "Corrige los errores indicados." }
+  },
+  "blog": {
+    "read_more": "Leer más",
+    "by": "Por",
+    "back_to_blog": "Volver al diario",
+    "comments": { "one": "{{ count }} comentario", "other": "{{ count }} comentarios" }
+  },
+  "404": { "title": "Esta página no existe", "subtitle": "Pero la colección sí.", "cta": "Entrar en la colección" },
+  "customer": {
+    "account": {
+      "title": "Cuenta", "orders": "Pedidos", "details": "Datos de la cuenta", "addresses": "Direcciones", "view_addresses": "Ver direcciones", "return": "Volver a la cuenta",
+      "no_orders": "Todavía no has realizado ningún pedido.", "order_number": "Pedido", "date": "Fecha", "payment_status": "Pago", "fulfillment_status": "Envío", "total": "Total"
+    },
+    "login": { "title": "Iniciar sesión", "email": "Correo", "password": "Contraseña", "forgot_password": "¿Has olvidado tu contraseña?", "submit": "Entrar", "create_account": "Crear cuenta", "guest_title": "Continuar como invitada", "guest_continue": "Continuar", "cancel": "Cancelar" },
+    "recover_password": { "title": "Restablecer contraseña", "subtext": "Te enviaremos un correo para restablecer tu contraseña.", "submit": "Enviar correo", "success": "Te hemos enviado un correo con un enlace para actualizar tu contraseña." },
+    "register": { "title": "Crear cuenta", "first_name": "Nombre", "last_name": "Apellidos", "email": "Correo", "password": "Contraseña", "submit": "Crear cuenta", "have_account": "¿Ya tienes cuenta?", "sign_in": "Inicia sesión" },
+    "reset_password": { "title": "Restablecer contraseña", "subtext": "Introduce una nueva contraseña", "password": "Contraseña", "password_confirm": "Confirmar contraseña", "submit": "Restablecer" },
+    "activate_account": { "title": "Activar cuenta", "subtext": "Crea tu contraseña para activar la cuenta.", "password": "Contraseña", "password_confirm": "Confirmar contraseña", "submit": "Activar cuenta", "cancel": "Rechazar invitación" },
+    "addresses": {
+      "title": "Direcciones", "default": "Predeterminada", "add_new": "Añadir dirección", "edit_address": "Editar dirección", "first_name": "Nombre", "last_name": "Apellidos", "company": "Empresa",
+      "address1": "Dirección 1", "address2": "Dirección 2", "city": "Ciudad", "country": "País / región", "province": "Provincia", "zip": "Código postal", "phone": "Teléfono",
+      "set_default": "Establecer como predeterminada", "add": "Añadir dirección", "update": "Actualizar dirección", "cancel": "Cancelar", "edit": "Editar", "delete": "Eliminar", "delete_confirm": "¿Seguro que quieres eliminar esta dirección?"
+    },
+    "order": {
+      "title": "Pedido {{ name }}", "date": "Realizado el {{ date }}", "cancelled": "Pedido cancelado el {{ date }}", "cancelled_reason": "Motivo: {{ reason }}", "billing_address": "Dirección de facturación", "shipping_address": "Dirección de envío",
+      "payment_status": "Estado del pago", "fulfillment_status": "Estado del envío", "product": "Producto", "sku": "SKU", "price": "Precio", "quantity": "Cantidad", "total": "Total", "subtotal": "Subtotal", "shipping": "Envío", "tax": "Impuestos", "discount": "Descuento", "track_shipment": "Seguir envío"
+    },
+    "log_out": "Cerrar sesión"
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Aquí tienes tu tarjeta regalo de {{ value }} para {{ shop }}", "subtext": "Tu tarjeta regalo", "gift_card_code": "Código de la tarjeta", "shop_link": "Seguir comprando", "remaining_html": "Saldo restante {{ balance }}",
+      "add_to_apple_wallet": "Añadir a Apple Wallet", "qr_image_alt": "Código QR — escanéalo para canjear la tarjeta", "copy_code": "Copiar código", "copy_code_success": "Código copiado", "print_gift_card": "Imprimir", "expired": "Caducada"
+    }
+  },
+  "accessibility": {
+    "close_dialog": "Cerrar", "star_rating": "Valoración", "carousel": "Carrusel", "slide": "Diapositiva {{ index }}", "next_slide": "Siguiente", "previous_slide": "Anterior", "hotspot": "Punto interactivo", "menu_button": "Menú", "quantity_input": "Cantidad", "loading": "Cargando"
+  },
+  "date_formats": { "month_day_year": "%d de %B de %Y" }
+}

@@ -1,0 +1,133 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s = section.settings
+  assign collection = s.collection
+  assign product_cursor = 0
+-%}
+<section class="drop section" {{ section.shopify_attributes }}>
+  <div class="container">
+    <header class="drop__head">
+      <div class="drop__head-main" data-reveal-group>
+        {%- if s.eyebrow != blank -%}<p class="eyebrow eyebrow--accent reveal-mask"><span>{{ s.eyebrow }}</span></p>{%- endif -%}
+        {%- if s.title != blank -%}<h2 class="drop__title display-l"><span class="reveal-mask" style="--reveal-delay:100ms"><span>{{ s.title }}</span></span></h2>{%- endif -%}
+      </div>
+      <div class="drop__head-aside" data-reveal style="--reveal-delay:220ms">
+        {%- if s.text != blank -%}<p class="lead">{{ s.text }}</p>{%- endif -%}
+        {%- if s.cta_text != blank -%}<a class="link link--lined" href="{{ s.cta_link | default: collection.url | default: routes.all_products_collection_url }}">{{ s.cta_text }}</a>{%- endif -%}
+      </div>
+    </header>
+
+    <div class="drop__grid">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'product' -%}
+            {%- liquid
+              assign product = block.settings.product
+              if product == blank and collection != blank
+                assign product = collection.products[product_cursor]
+              endif
+              assign product_cursor = product_cursor | plus: 1
+              assign sizes = '(min-width: 990px) 25vw, 50vw'
+              if block.settings.size == 'large'
+                assign sizes = '(min-width: 990px) 50vw, 100vw'
+              elsif block.settings.size == 'medium'
+                assign sizes = '(min-width: 990px) 33vw, 50vw'
+              endif
+            -%}
+            <div class="drop__cell drop__cell--{{ block.settings.size }} drop__cell--{{ block.settings.align }}" data-reveal style="--reveal-delay: {{ forloop.index0 | times: 90 }}ms" {{ block.shopify_attributes }}>
+              {% render 'product-card', product: product, index: forloop.index, sizes: sizes, placeholder_label: block.settings.placeholder_title, loading: 'lazy' %}
+              {%- if block.settings.note != blank -%}<p class="drop__note eyebrow eyebrow--muted">{{ block.settings.note }}</p>{%- endif -%}
+            </div>
+          {%- when 'editorial' -%}
+            <div class="drop__cell drop__cell--{{ block.settings.size }} drop__cell--{{ block.settings.align }} drop__cell--editorial" data-reveal style="--reveal-delay: {{ forloop.index0 | times: 90 }}ms" {{ block.shopify_attributes }}>
+              {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" data-cursor="{{ 'general.discover' | t }}" class="drop__editorial-link">{%- endif -%}
+              <div class="media media--hover {% if block.settings.size == 'large' %}media--portrait{% else %}media--tall{% endif %}">
+                {%- assign ph_label = block.settings.caption | default: 'Editorial' -%}
+                {% render 'image', image: block.settings.image, sizes: '(min-width: 990px) 33vw, 100vw', placeholder: forloop.index, placeholder_label: ph_label %}
+              </div>
+              {%- if block.settings.caption != blank -%}<p class="drop__caption serif">{{ block.settings.caption }}</p>{%- endif -%}
+              {%- if block.settings.link != blank -%}</a>{%- endif -%}
+            </div>
+          {%- when 'statement' -%}
+            <div class="drop__cell drop__cell--{{ block.settings.size }} drop__cell--{{ block.settings.align }} drop__cell--statement" data-reveal {{ block.shopify_attributes }}>
+              <p class="drop__statement display-s">{{ block.settings.text }}</p>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Editorial drop",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "New collection" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Drop 01" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Sculpted tailoring, liquid satin and knits with tension. Twelve pieces designed to be noticed and worn on repeat." },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Product blocks without a chosen product fill from this collection in order." },
+    { "type": "text", "id": "cta_text", "label": "Link text", "default": "View the full drop" },
+    { "type": "url", "id": "cta_link", "label": "Link" }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product", "info": "Leave empty to use the next product from the collection." },
+        { "type": "select", "id": "size", "label": "Size", "options": [
+          { "value": "large", "label": "Large portrait" }, { "value": "medium", "label": "Medium" }, { "value": "small", "label": "Small" }
+        ], "default": "medium" },
+        { "type": "select", "id": "align", "label": "Vertical position", "options": [
+          { "value": "top", "label": "Aligned high" }, { "value": "middle", "label": "Middle" }, { "value": "bottom", "label": "Aligned low" }
+        ], "default": "middle" },
+        { "type": "text", "id": "note", "label": "Small note (e.g. 'Limited run')" },
+        { "type": "text", "id": "placeholder_title", "label": "Placeholder name (shown until a product exists)", "default": "The Alba Dress" }
+      ]
+    },
+    {
+      "type": "editorial",
+      "name": "Editorial image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "Shot in Lisbon, October" },
+        { "type": "url", "id": "link", "label": "Link (optional)" },
+        { "type": "select", "id": "size", "label": "Size", "options": [
+          { "value": "large", "label": "Large" }, { "value": "medium", "label": "Medium" }, { "value": "small", "label": "Small" }
+        ], "default": "medium" },
+        { "type": "select", "id": "align", "label": "Vertical position", "options": [
+          { "value": "top", "label": "Aligned high" }, { "value": "middle", "label": "Middle" }, { "value": "bottom", "label": "Aligned low" }
+        ], "default": "bottom" }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": "Statement",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Cut close. Worn <em>loose.</em></p>" },
+        { "type": "select", "id": "size", "label": "Size", "options": [
+          { "value": "medium", "label": "Medium" }, { "value": "small", "label": "Small" }
+        ], "default": "small" },
+        { "type": "select", "id": "align", "label": "Vertical position", "options": [
+          { "value": "top", "label": "Aligned high" }, { "value": "middle", "label": "Middle" }, { "value": "bottom", "label": "Aligned low" }
+        ], "default": "middle" }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Editorial drop",
+      "blocks": [
+        { "type": "product", "settings": { "size": "large", "align": "top", "placeholder_title": "The Alba Dress" } },
+        { "type": "product", "settings": { "size": "small", "align": "top", "placeholder_title": "Noir Sculpt Top", "note": "Limited run" } },
+        { "type": "editorial", "settings": { "size": "small", "align": "bottom", "caption": "Shot in Lisbon, October" } },
+        { "type": "statement", "settings": { "size": "small", "align": "middle" } },
+        { "type": "product", "settings": { "size": "medium", "align": "bottom", "placeholder_title": "Sienna Tailored Trouser" } },
+        { "type": "product", "settings": { "size": "small", "align": "top", "placeholder_title": "Élan Knit" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

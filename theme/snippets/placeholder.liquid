@@ -1,0 +1,55 @@
+{%- comment -%}
+  Editorial placeholder frame, used wherever a merchant hasn't yet uploaded imagery.
+  Tinted warm-neutral compositions so layouts read as art-directed rather than broken.
+  Usage: {% render 'placeholder', variant: 3, label: 'Campaign image', class: 'placeholder' %}
+{%- endcomment -%}
+{%- liquid
+  assign v = variant | default: 1 | modulo: 6
+  assign lbl = label | default: 'Image'
+  case v
+    when 0
+      assign c1 = '#E7DFD1'
+      assign c2 = '#CFC3B1'
+      assign c3 = '#B7A893'
+    when 1
+      assign c1 = '#DED5C6'
+      assign c2 = '#C4B39E'
+      assign c3 = '#9F8C74'
+    when 2
+      assign c1 = '#E9E3D8'
+      assign c2 = '#D2C7B7'
+      assign c3 = '#8D7F6C'
+    when 3
+      assign c1 = '#D8CFC2'
+      assign c2 = '#B9AD9C'
+      assign c3 = '#6E6455'
+    when 4
+      assign c1 = '#E4DACB'
+      assign c2 = '#C9BBA6'
+      assign c3 = '#A38F73'
+    else
+      assign c1 = '#DCD3C5'
+      assign c2 = '#BFB09C'
+      assign c3 = '#7B6E5D'
+  endcase
+  assign gid = 'ph-' | append: v | append: '-' | append: lbl | handle
+-%}
+<div class="{{ class | default: 'placeholder' }}" aria-hidden="true">
+  <svg viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="{{ gid }}-a" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="{{ c1 }}"/>
+        <stop offset="1" stop-color="{{ c2 }}"/>
+      </linearGradient>
+      <radialGradient id="{{ gid }}-b" cx="{{ v | times: 13 | plus: 30 }}%" cy="{{ v | times: 9 | plus: 25 }}%" r="70%">
+        <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.55"/>
+        <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="600" height="800" fill="url(#{{ gid }}-a)"/>
+    <rect width="600" height="800" fill="url(#{{ gid }}-b)"/>
+    <ellipse cx="{{ v | times: 40 | plus: 220 }}" cy="{{ v | times: 30 | plus: 430 }}" rx="150" ry="230" fill="{{ c3 }}" opacity="0.28"/>
+    <path d="M0 {{ v | times: 60 | plus: 520 }} C 150 {{ v | times: 40 | plus: 470 }}, 400 {{ v | times: 50 | plus: 600 }}, 600 {{ v | times: 30 | plus: 500 }}" stroke="{{ c3 }}" stroke-opacity="0.35" fill="none" stroke-width="1"/>
+    <text x="24" y="776" font-family="Georgia, serif" font-size="16" fill="{{ c3 }}" fill-opacity="0.85" letter-spacing="2">{{ lbl | upcase }}</text>
+  </svg>
+</div>

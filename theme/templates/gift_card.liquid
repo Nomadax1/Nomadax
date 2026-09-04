@@ -1,0 +1,35 @@
+{%- layout none -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {%- assign gc_value = gift_card.initial_value | money_with_currency -%}
+  <title>{{ 'gift_cards.issued.title' | t: value: gc_value, shop: shop.name }}</title>
+  {% render 'css-variables' %}
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ content_for_header }}
+</head>
+<body class="template-gift-card">
+  <main class="container section" style="max-width:40rem">
+    <p class="eyebrow eyebrow--accent">{{ shop.name }}</p>
+    <h1 class="display-l">{{ 'gift_cards.issued.subtext' | t }}</h1>
+    <p class="display-m" style="margin:1rem 0">{{ gift_card.initial_value | money }}</p>
+    {%- if gift_card.enabled == false or gift_card.expired -%}<p class="form-error">{{ 'gift_cards.issued.expired' | t }}</p>{%- endif -%}
+    {%- if gift_card.balance != gift_card.initial_value -%}<p class="muted">{%- assign gc_balance = gift_card.balance | money -%}{{ 'gift_cards.issued.remaining_html' | t: balance: gc_balance }}</p>{%- endif -%}
+    <div class="media media--wide" style="margin:2rem 0"><img src="{{ 'gift-card/card.svg' | shopify_asset_url }}" alt="" width="600" height="340"></div>
+    <p class="eyebrow eyebrow--muted">{{ 'gift_cards.issued.gift_card_code' | t }}</p>
+    <p class="display-s" id="GiftCardCode" style="letter-spacing:.1em">{{ gift_card.code | format_code }}</p>
+    <div id="QrCode" style="margin:1.5rem 0"></div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem">
+      <a class="btn" href="{{ shop.url }}">{{ 'gift_cards.issued.shop_link' | t }}</a>
+      <button type="button" class="btn btn--outline" onclick="window.print()">{{ 'gift_cards.issued.print_gift_card' | t }}</button>
+      {%- if gift_card.pass_url -%}<a class="btn btn--outline" href="{{ gift_card.pass_url }}">{{ 'gift_cards.issued.add_to_apple_wallet' | t }}</a>{%- endif -%}
+    </div>
+  </main>
+  <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer="defer"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => { if (window.QRCode) new QRCode(document.getElementById('QrCode'), { text: {{ gift_card.qr_identifier | json }}, width: 120, height: 120 }); });
+  </script>
+</body>
+</html>

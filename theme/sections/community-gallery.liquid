@@ -1,0 +1,96 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s = section.settings
+  assign blocks = section.blocks
+  assign half = blocks.size | divided_by: 2
+  assign blocks_mod = blocks.size | modulo: 2
+  if blocks_mod == 1
+    assign half = half | plus: 1
+  endif
+-%}
+<section class="gallery section section--tight" {{ section.shopify_attributes }}>
+  {%- if s.title != blank or s.eyebrow != blank -%}
+    <div class="container gallery__head" data-reveal>
+      {%- if s.eyebrow != blank -%}<p class="eyebrow eyebrow--accent">{{ s.eyebrow }}</p>{%- endif -%}
+      {%- if s.title != blank -%}<h2 class="display-m">{{ s.title }}</h2>{%- endif -%}
+      {%- if s.link_text != blank -%}<a class="link link--lined" href="{{ s.link | default: settings.social_instagram | default: '#' }}" target="_blank" rel="noopener">{{ s.link_text }}</a>{%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- for row in (1..2) -%}
+    <div class="gallery__row gallery__row--{{ row }}" data-cursor="{{ 'general.discover' | t }}">
+      <div class="gallery__track" style="--dur: {{ s.speed | times: 3 | plus: 30 }}s">
+        {%- for copy in (1..2) -%}
+          <div class="gallery__set">
+          {%- for block in blocks -%}
+            {%- liquid
+              assign in_row = false
+              if row == 1 and forloop.index0 < half
+                assign in_row = true
+              elsif row == 2 and forloop.index0 >= half
+                assign in_row = true
+              endif
+            -%}
+            {%- if in_row -%}
+              {%- assign wrapper = 'div' -%}
+              {%- if block.settings.link != blank -%}{%- assign wrapper = 'a' -%}{%- endif -%}
+              <{{ wrapper }} class="gallery__item gallery__item--{{ block.settings.aspect }}" {% if wrapper == 'a' %}href="{{ block.settings.link }}" target="_blank" rel="noopener"{% endif %} {% if copy == 2 %}aria-hidden="true" tabindex="-1"{% endif %} {% if copy == 1 %}{{ block.shopify_attributes }}{% endif %}>
+                <div class="media">
+                  {%- assign ph_label = block.settings.caption | default: 'Studio' -%}
+                  {% render 'image', image: block.settings.image, sizes: '(min-width: 990px) 24vw, 50vw', placeholder: forloop.index, placeholder_label: ph_label %}
+                </div>
+                {%- if block.settings.caption != blank -%}<span class="gallery__caption eyebrow eyebrow--bare">{{ block.settings.caption }}</span>{%- endif -%}
+              </{{ wrapper }}>
+            {%- endif -%}
+          {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endfor -%}
+</section>
+
+{% schema %}
+{
+  "name": "Community gallery",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Studio & street" },
+    { "type": "text", "id": "title", "label": "Title", "default": "From the community" },
+    { "type": "text", "id": "link_text", "label": "Link text", "default": "Follow @solenne.studio" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "range", "id": "speed", "label": "Drift speed", "min": 1, "max": 10, "step": 1, "default": 5, "info": "Higher is slower." },
+    { "type": "paragraph", "content": "Two rows drift in opposite directions and pause on hover. With reduced motion they become a static swipeable strip." }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "select", "id": "aspect", "label": "Shape", "options": [
+          { "value": "portrait", "label": "Portrait" }, { "value": "square", "label": "Square" }, { "value": "landscape", "label": "Landscape" }
+        ], "default": "portrait" }
+      ]
+    }
+  ],
+  "max_blocks": 14,
+  "presets": [
+    {
+      "name": "Community gallery",
+      "blocks": [
+        { "type": "image", "settings": { "aspect": "portrait", "caption": "Backstage" } },
+        { "type": "image", "settings": { "aspect": "landscape", "caption": "Lisbon" } },
+        { "type": "image", "settings": { "aspect": "square" } },
+        { "type": "image", "settings": { "aspect": "portrait", "caption": "Fitting 04" } },
+        { "type": "image", "settings": { "aspect": "square", "caption": "Atelier" } },
+        { "type": "image", "settings": { "aspect": "portrait" } },
+        { "type": "image", "settings": { "aspect": "landscape", "caption": "Campaign" } },
+        { "type": "image", "settings": { "aspect": "portrait" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

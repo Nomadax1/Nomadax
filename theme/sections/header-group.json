@@ -1,0 +1,32 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": { "enabled": true },
+      "blocks": {
+        "a1": { "type": "message", "settings": { "text": "Complimentary shipping on orders over €120", "link": "" } },
+        "a2": { "type": "message", "settings": { "text": "Autumn / Winter 26 — Drop 01 now live", "link": "shopify://collections/all" } },
+        "a3": { "type": "message", "settings": { "text": "Private access members get 48h early entry", "link": "" } }
+      },
+      "block_order": ["a1", "a2", "a3"]
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "mega_menu_link": "Shop",
+        "overlay_home": true,
+        "hide_on_scroll_down": false,
+        "popular_searches": "Dresses, Tailoring, Knitwear, Satin, New in"
+      },
+      "blocks": {
+        "img1": { "type": "mega_image", "settings": { "heading": "The Sculpt Edit", "caption": "Tailoring with tension", "link": "shopify://collections/all" } },
+        "img2": { "type": "mega_image", "settings": { "heading": "Satin, after dark", "caption": "New in", "link": "shopify://collections/all" } }
+      },
+      "block_order": ["img1", "img2"]
+    }
+  },
+  "order": ["announcement", "header"]
+}

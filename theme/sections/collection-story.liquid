@@ -1,0 +1,73 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- assign s = section.settings -%}
+<section class="story section--flush{% if s.inverse %} section--inverse{% endif %}" data-story {{ section.shopify_attributes }}>
+  <div class="story__inner">
+    <div class="story__text">
+      <div class="story__sticky">
+        {%- if s.eyebrow != blank -%}<p class="eyebrow eyebrow--accent story__eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+        <div class="story__statements">
+          {%- for block in section.blocks -%}
+            <div class="story__statement display-m{% if forloop.first %} is-active{% endif %}" data-story-statement="{{ forloop.index0 }}" aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
+              {{ block.settings.statement }}
+            </div>
+          {%- endfor -%}
+        </div>
+        <div class="story__progress" aria-hidden="true">
+          {%- for block in section.blocks -%}<span class="story__dot{% if forloop.first %} is-active{% endif %}" data-story-dot="{{ forloop.index0 }}"></span>{%- endfor -%}
+        </div>
+        {%- if s.cta_text != blank -%}<a class="link link--lined story__cta" href="{{ s.cta_link | default: routes.all_products_collection_url }}">{{ s.cta_text }}</a>{%- endif -%}
+      </div>
+    </div>
+
+    <div class="story__chapters">
+      {%- for block in section.blocks -%}
+        <figure class="story__chapter" data-story-chapter="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          <div class="story__chapter-text display-s">{{ block.settings.statement }}</div>
+          {%- assign chapter_mod = forloop.index | modulo: 2 -%}
+          <div class="media media--tall story__media{% if chapter_mod == 0 %} story__media--offset{% endif %}">
+            {%- assign ph_label = block.settings.caption | default: 'Chapter' -%}
+            {%- assign ph_index = forloop.index | plus: 1 -%}
+            {% render 'image', image: block.settings.image, sizes: '(min-width: 990px) 55vw, 100vw', placeholder: ph_index, placeholder_label: ph_label %}
+          </div>
+          {%- if block.settings.caption != blank -%}<figcaption class="story__caption eyebrow eyebrow--muted">{{ block.settings.caption }}</figcaption>{%- endif -%}
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection story",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The story" },
+    { "type": "text", "id": "cta_text", "label": "Link text", "default": "Discover the collection" },
+    { "type": "url", "id": "cta_link", "label": "Link" },
+    { "type": "checkbox", "id": "inverse", "label": "Dark background", "default": false },
+    { "type": "paragraph", "content": "Each chapter pairs a statement with an image. On desktop the statement stays pinned and changes as the images scroll past." }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Chapter",
+      "settings": [
+        { "type": "richtext", "id": "statement", "label": "Statement", "default": "<p>Designed to be <em>noticed.</em></p>" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "Chapter I" }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Collection story",
+      "blocks": [
+        { "type": "chapter", "settings": { "statement": "<p>Designed to be <em>noticed.</em></p>", "caption": "I — Presence" } },
+        { "type": "chapter", "settings": { "statement": "<p>Made to be worn <em>your way.</em></p>", "caption": "II — Attitude" } },
+        { "type": "chapter", "settings": { "statement": "<p>Cut close. Finished by <em>hand.</em></p>", "caption": "III — Craft" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

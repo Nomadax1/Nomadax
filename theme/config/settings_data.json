@@ -1,0 +1,48 @@
+{
+  "current": {
+    "brand_name": "SOLENNE",
+    "brand_tagline": "Contemporary womenswear, worn your way.",
+    "season_label": "Autumn / Winter 26",
+    "logo_width": 120,
+    "color_bg": "#F5F1EA",
+    "color_bg_2": "#EAE3D6",
+    "color_ink": "#141311",
+    "color_ink_2": "#6F6A62",
+    "color_line": "#D8D1C5",
+    "color_accent": "#B23A2E",
+    "color_on_accent": "#FBF7F1",
+    "color_inverse_bg": "#151412",
+    "color_inverse_ink": "#F5F1EA",
+    "font_display": "instrument_serif_n4",
+    "font_body": "instrument_sans_n4",
+    "display_scale": 100,
+    "body_scale": 100,
+    "uppercase_nav": true,
+    "container_width": 1560,
+    "radius": 2,
+    "image_hover": "alternate",
+    "card_quick_add": true,
+    "card_show_swatches": true,
+    "motion_reveals": true,
+    "motion_cursor": true,
+    "motion_transitions": true,
+    "motion_parallax": true,
+    "cart_type": "drawer",
+    "free_shipping_threshold": "120",
+    "cart_recommendations": true,
+    "cart_notes": false,
+    "wishlist_enabled": true,
+    "show_country_selector": true,
+    "show_language_selector": true
+  },
+  "presets": {
+    "Default": {
+      "brand_name": "SOLENNE",
+      "color_bg": "#F5F1EA",
+      "color_ink": "#141311",
+      "color_accent": "#B23A2E",
+      "font_display": "instrument_serif_n4",
+      "font_body": "instrument_sans_n4"
+    }
+  }
+}

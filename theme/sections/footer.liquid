@@ -1,0 +1,129 @@
+<footer class="site-footer" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="site-footer__top">
+      <div>
+        {%- if section.settings.statement != blank -%}
+          <p class="site-footer__statement" data-reveal>{{ section.settings.statement }}</p>
+        {%- endif -%}
+        <div class="site-footer__socials" style="margin-top:2rem">
+          {%- if settings.social_instagram != blank -%}<a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">Instagram</a>{%- endif -%}
+          {%- if settings.social_tiktok != blank -%}<a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener">TikTok</a>{%- endif -%}
+          {%- if settings.social_pinterest != blank -%}<a href="{{ settings.social_pinterest }}" target="_blank" rel="noopener">Pinterest</a>{%- endif -%}
+          {%- if settings.social_youtube != blank -%}<a href="{{ settings.social_youtube }}" target="_blank" rel="noopener">YouTube</a>{%- endif -%}
+        </div>
+      </div>
+
+      <div class="site-footer__cols">
+        {%- for block in section.blocks -%}
+          <div class="site-footer__col" {{ block.shopify_attributes }}>
+            {%- if block.settings.title != blank -%}<p class="site-footer__col-title">{{ block.settings.title }}</p>{%- endif -%}
+            {%- case block.type -%}
+              {%- when 'menu' -%}
+                <div class="site-footer__links">
+                  {%- for link in block.settings.menu.links -%}
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                  {%- endfor -%}
+                </div>
+              {%- when 'text' -%}
+                <div class="rte text-sm">{{ block.settings.text }}</div>
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.show_newsletter -%}
+        <div class="site-footer__newsletter">
+          <p class="site-footer__col-title">{{ section.settings.newsletter_heading }}</p>
+          {%- if section.settings.newsletter_text != blank -%}<p class="text-sm" style="opacity:.8;max-width:26em">{{ section.settings.newsletter_text }}</p>{%- endif -%}
+          {%- form 'customer', id: 'FooterNewsletter', class: 'newsletter-form' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            {%- if form.posted_successfully? -%}
+              <p class="form-message form-message--success">{{ 'newsletter.success' | t }}</p>
+            {%- else -%}
+              <div class="field">
+                <label class="visually-hidden" for="FooterNewsletterEmail">{{ 'newsletter.label' | t }}</label>
+                <input id="FooterNewsletterEmail" class="field__input" type="email" name="contact[email]" placeholder="{{ 'newsletter.placeholder' | t }}" required autocomplete="email">
+                <button type="submit" class="link link--lined">{{ 'newsletter.submit' | t }}</button>
+              </div>
+              {%- if form.errors -%}<p class="form-error">{{ 'newsletter.error' | t }}</p>{%- endif -%}
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_wordmark -%}
+      <div class="site-footer__wordmark" aria-hidden="true">{{ settings.brand_name | default: shop.name }}</div>
+    {%- endif -%}
+
+    <div class="site-footer__bottom">
+      <div class="site-footer__bottom-left">
+        <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ 'general.copyright' | t }}</span>
+        {%- if section.settings.show_payment_icons -%}
+          <div class="payment-icons" aria-label="Payment methods">
+            {%- for type in shop.enabled_payment_types -%}
+              {{ type | payment_type_svg_tag: class: 'payment-icon' }}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="site-footer__bottom-right">
+        {%- if settings.show_country_selector and localization.available_countries.size > 1 -%}
+          {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+            <label class="visually-hidden" for="FooterCountry">{{ 'general.select_country' | t }}</label>
+            <select id="FooterCountry" class="select" name="country_code" data-localization-select>
+              {%- for country in localization.available_countries -%}
+                <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})</option>
+              {%- endfor -%}
+            </select>
+          {%- endform -%}
+        {%- endif -%}
+        {%- if settings.show_language_selector and localization.available_languages.size > 1 -%}
+          {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
+            <label class="visually-hidden" for="FooterLanguage">{{ 'general.select_language' | t }}</label>
+            <select id="FooterLanguage" class="select" name="locale_code" data-localization-select>
+              {%- for language in localization.available_languages -%}
+                <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
+              {%- endfor -%}
+            </select>
+          {%- endform -%}
+        {%- endif -%}
+        <a href="https://www.shopify.com" rel="nofollow" target="_blank" style="opacity:.6">{{ 'general.powered_by' | t }}</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "div",
+  "settings": [
+    { "type": "richtext", "id": "statement", "label": "Brand statement", "default": "<p>Designed to be noticed. Made to be worn <em>your way.</em></p>" },
+    { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter", "default": true },
+    { "type": "text", "id": "newsletter_heading", "label": "Newsletter heading", "default": "Private access" },
+    { "type": "text", "id": "newsletter_text", "label": "Newsletter text", "default": "First to know about drops, limited pieces and private releases." },
+    { "type": "checkbox", "id": "show_wordmark", "label": "Show giant wordmark", "default": true },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment icons", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu column",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text column",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Atelier" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Studio 4, Carrer de la Cera, Barcelona</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 4
+}
+{% endschema %}

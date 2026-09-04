@@ -1,0 +1,106 @@
+{%- comment -%}
+  Design tokens. Every visual decision in the theme reads from these variables,
+  so merchants can retune the brand from Theme settings without touching CSS.
+{%- endcomment -%}
+{%- liquid
+  assign font_display = settings.font_display
+  assign font_body = settings.font_body
+  assign font_display_italic = font_display | font_modify: 'style', 'italic'
+  assign font_body_medium = font_body | font_modify: 'weight', '500'
+  assign font_body_semibold = font_body | font_modify: 'weight', '600'
+  assign display_scale = settings.display_scale | default: 100 | divided_by: 100.0
+  assign body_scale = settings.body_scale | default: 100 | divided_by: 100.0
+-%}
+{% style %}
+  {{ font_display | font_face: font_display: 'swap' }}
+  {{ font_display_italic | font_face: font_display: 'swap' }}
+  {{ font_body | font_face: font_display: 'swap' }}
+  {{ font_body_medium | font_face: font_display: 'swap' }}
+  {{ font_body_semibold | font_face: font_display: 'swap' }}
+
+  :root {
+    /* Colour */
+    --color-bg: {{ settings.color_bg }};
+    --color-bg-2: {{ settings.color_bg_2 }};
+    --color-ink: {{ settings.color_ink }};
+    --color-ink-2: {{ settings.color_ink_2 }};
+    --color-line: {{ settings.color_line }};
+    --color-accent: {{ settings.color_accent }};
+    --color-on-accent: {{ settings.color_on_accent }};
+    --color-inverse-bg: {{ settings.color_inverse_bg }};
+    --color-inverse-ink: {{ settings.color_inverse_ink }};
+    --color-ink-rgb: {{ settings.color_ink.red }}, {{ settings.color_ink.green }}, {{ settings.color_ink.blue }};
+    --color-bg-rgb: {{ settings.color_bg.red }}, {{ settings.color_bg.green }}, {{ settings.color_bg.blue }};
+    --color-accent-rgb: {{ settings.color_accent.red }}, {{ settings.color_accent.green }}, {{ settings.color_accent.blue }};
+    --color-success: #2F6B3B;
+    --color-error: #A8321F;
+
+    /* Type */
+    --font-display: {% if font_display.system? %}Georgia, 'Times New Roman', serif{% else %}{{ font_display.family }}, {{ font_display.fallback_families }}{% endif %};
+    --font-body: {% if font_body.system? %}system-ui, -apple-system, 'Segoe UI', sans-serif{% else %}{{ font_body.family }}, {{ font_body.fallback_families }}{% endif %};
+    --font-display-weight: {{ font_display.weight | default: 400 }};
+    --font-body-weight: {{ font_body.weight | default: 400 }};
+    --display-scale: {{ display_scale }};
+    --body-scale: {{ body_scale }};
+    --nav-transform: {% if settings.uppercase_nav %}uppercase{% else %}none{% endif %};
+
+    --text-xs: calc(0.6875rem * var(--body-scale));
+    --text-sm: calc(0.8125rem * var(--body-scale));
+    --text-base: calc(1rem * var(--body-scale));
+    --text-md: calc(1.125rem * var(--body-scale));
+    --text-lead: calc(clamp(1.125rem, 1rem + 0.45vw, 1.4rem) * var(--body-scale));
+    --text-display-s: calc(clamp(1.6rem, 1.15rem + 1.4vw, 2.6rem) * var(--display-scale));
+    --text-display-m: calc(clamp(2.1rem, 1.2rem + 3vw, 4.5rem) * var(--display-scale));
+    --text-display-l: calc(clamp(2.9rem, 1.4rem + 5.4vw, 7.4rem) * var(--display-scale));
+    --text-display-xl: calc(clamp(3.6rem, 1.6rem + 9vw, 12rem) * var(--display-scale));
+    --tracking-eyebrow: 0.18em;
+    --tracking-nav: 0.12em;
+    --leading-display: 0.94;
+    --leading-body: 1.55;
+
+    /* Space & layout */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4.5rem;
+    --space-9: 6.5rem;
+    --section-gap: clamp(4.5rem, 3rem + 6vw, 10rem);
+    --section-gap-s: clamp(2.5rem, 2rem + 3vw, 5rem);
+    --gutter: clamp(1rem, 0.5rem + 2vw, 3rem);
+    --container: {{ settings.container_width }}px;
+    --header-h: 4.25rem;
+    --announcement-h: 0px;
+
+    /* Shape & motion */
+    --radius: {{ settings.radius }}px;
+    --radius-pill: 999px;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-fast: 180ms;
+    --dur-base: 320ms;
+    --dur-slow: 700ms;
+    --dur-reveal: 900ms;
+
+    /* Layers */
+    --z-below: -1;
+    --z-base: 1;
+    --z-raised: 10;
+    --z-sticky: 50;
+    --z-header: 100;
+    --z-scrim: 200;
+    --z-drawer: 210;
+    --z-overlay: 300;
+    --z-modal: 400;
+    --z-cursor: 900;
+    --z-veil: 1000;
+  }
+
+  @media (min-width: 990px) {
+    :root { --header-h: 4.75rem; }
+  }
+{% endstyle %}

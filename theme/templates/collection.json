@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "banner": {
+      "type": "collection-banner",
+      "settings": { "all_title": "The collection", "show_description": true, "show_image": true, "fallback_text": "An edit of pieces designed to be noticed and worn on repeat." }
+    },
+    "products": {
+      "type": "main-collection",
+      "settings": { "per_page": 24, "default_cols": "3" },
+      "blocks": {
+        "img": { "type": "editorial_image", "settings": { "caption": "Campaign — Look 02", "position": 4, "width": "wide" } },
+        "quote": { "type": "editorial_quote", "settings": { "text": "<p>“Cut for movement, finished for permanence.”</p>", "attribution": "Design notes", "position": 9, "width": "wide" } }
+      },
+      "block_order": ["img", "quote"]
+    }
+  },
+  "order": ["banner", "products"]
+}
