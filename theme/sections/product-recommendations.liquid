@@ -5,7 +5,7 @@
       <header class="section-head">
         <div>
           <p class="eyebrow eyebrow--accent">{{ section.settings.eyebrow }}</p>
-          <h2 class="display-m section-head__title">{{ section.settings.title | default: 'products.product.complete_the_look' | t }}</h2>
+          <h2 class="display-m section-head__title">{%- assign td_1 = 'products.product.complete_the_look' | t -%}{{ section.settings.title | default: td_1 }}</h2>
         </div>
       </header>
       <div class="ctl__grid">

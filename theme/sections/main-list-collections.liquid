@@ -3,7 +3,7 @@
   <div class="container">
     <header class="page-head" data-reveal-group>
       <p class="eyebrow eyebrow--accent reveal-mask"><span>{{ settings.season_label }}</span></p>
-      <h1 class="display-xl page-head__title"><span class="reveal-mask" style="--reveal-delay:100ms"><span>{{ section.settings.title | default: 'collections.general.all_collections' | t }}</span></span></h1>
+      <h1 class="display-xl page-head__title"><span class="reveal-mask" style="--reveal-delay:100ms"><span>{%- assign td_7 = 'collections.general.all_collections' | t -%}{{ section.settings.title | default: td_7 }}</span></span></h1>
     </header>
     <div class="coll-list__grid">
       {%- for collection in collections -%}

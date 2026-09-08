@@ -24,7 +24,7 @@
         <span class="panel__content">
           <span class="panel__title display-m">{{ title }}</span>
           {%- if block.settings.subtitle != blank -%}<span class="panel__subtitle">{{ block.settings.subtitle }}</span>{%- endif -%}
-          <span class="link link--lined panel__cta">{{ block.settings.cta | default: 'general.shop_now' | t }}</span>
+          <span class="link link--lined panel__cta">{%- assign td_6 = 'general.shop_now' | t -%}{{ block.settings.cta | default: td_6 }}</span>
         </span>
       </a>
     {%- endfor -%}

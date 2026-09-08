@@ -109,7 +109,7 @@
                     <div class="facet__list">
                       <label class="facet__item">
                         <input type="checkbox" name="{{ filter.true_value.param_name }}" value="{{ filter.true_value.value }}" {% if filter.true_value.active %}checked{% endif %}>
-                        <span class="facet__label">{{ filter.true_value.label | default: 'products.facets.in_stock_only' | t }}</span>
+                        <span class="facet__label">{%- assign td_9 = 'products.facets.in_stock_only' | t -%}{{ filter.true_value.label | default: td_9 }}</span>
                         <span class="facet__count">{{ filter.true_value.count }}</span>
                       </label>
                     </div>

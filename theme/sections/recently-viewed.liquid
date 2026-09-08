@@ -4,7 +4,7 @@
     <header class="section-head">
       <div>
         <p class="eyebrow eyebrow--muted">{{ section.settings.eyebrow }}</p>
-        <h2 class="display-s section-head__title">{{ section.settings.title | default: 'products.product.recently_viewed' | t }}</h2>
+        <h2 class="display-s section-head__title">{%- assign td_8 = 'products.product.recently_viewed' | t -%}{{ section.settings.title | default: td_8 }}</h2>
       </div>
     </header>
     <drag-carousel class="recent__carousel" data-cursor="{{ 'general.drag' | t }}">

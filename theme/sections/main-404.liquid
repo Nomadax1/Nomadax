@@ -1,9 +1,9 @@
 <section class="notfound section" {{ section.shopify_attributes }}>
   <div class="container notfound__inner" data-reveal-group>
     <p class="eyebrow eyebrow--accent reveal-mask"><span>404</span></p>
-    <h1 class="display-xl"><span class="reveal-mask" style="--reveal-delay:100ms"><span>{{ section.settings.title | default: '404.title' | t }}</span></span></h1>
-    <p class="lead" data-reveal style="--reveal-delay:220ms">{{ section.settings.subtitle | default: '404.subtitle' | t }}</p>
-    <a class="btn" href="{{ section.settings.link | default: routes.all_products_collection_url }}" data-reveal style="--reveal-delay:340ms">{{ section.settings.cta | default: '404.cta' | t }}</a>
+    <h1 class="display-xl"><span class="reveal-mask" style="--reveal-delay:100ms"><span>{%- assign td_2 = '404.title' | t -%}{{ section.settings.title | default: td_2 }}</span></span></h1>
+    <p class="lead" data-reveal style="--reveal-delay:220ms">{%- assign td_3 = '404.subtitle' | t -%}{{ section.settings.subtitle | default: td_3 }}</p>
+    <a class="btn" href="{{ section.settings.link | default: routes.all_products_collection_url }}" data-reveal style="--reveal-delay:340ms">{%- assign td_4 = '404.cta' | t -%}{{ section.settings.cta | default: td_4 }}</a>
   </div>
 </section>
 <style>

@@ -19,7 +19,7 @@
               <div class="access__field">
                 <label class="visually-hidden" for="PrivateAccessEmail">{{ 'newsletter.label' | t }}</label>
                 <input id="PrivateAccessEmail" class="access__input" type="email" name="contact[email]" placeholder="{{ 'newsletter.placeholder' | t }}" required autocomplete="email">
-                <button type="submit" class="btn btn--inverse">{{ s.button | default: 'newsletter.submit' | t }}</button>
+                <button type="submit" class="btn btn--inverse">{%- assign td_5 = 'newsletter.submit' | t -%}{{ s.button | default: td_5 }}</button>
               </div>
               {%- if form.errors -%}<p class="form-error">{{ 'newsletter.error' | t }}</p>{%- endif -%}
               {%- if s.fine_print != blank -%}<p class="access__fine text-xs">{{ s.fine_print }}</p>{%- endif -%}

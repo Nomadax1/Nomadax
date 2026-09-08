@@ -261,6 +261,7 @@ em, .italic { font-style: italic; }
 .dialog__close { position: absolute; top: var(--space-3); right: var(--space-3); }
 
 /* ---------- Announcement ------------------------------------------------ */
+.announcement-wrap { position: relative; z-index: var(--z-header); }
 .announcement { background: var(--color-inverse-bg); color: var(--color-inverse-ink); font-size: var(--text-xs); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; overflow: hidden; }
 .announcement__track { display: flex; gap: 4rem; width: max-content; padding: 0.65em 0; animation: marquee 40s linear infinite; }
 .announcement:hover .announcement__track { animation-play-state: paused; }

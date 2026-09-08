@@ -30,7 +30,8 @@ main > .shopify-section--hero { position: sticky; top: 0; z-index: 0; background
   display: flex; justify-content: var(--hero-align);
   transform: translateY(calc(var(--p) * -40px)); opacity: calc(1 - var(--p) * 1.3); will-change: transform, opacity;
 }
-.hero__text { max-width: 14em; }
+.hero__text { max-width: min(100%, 56rem); }
+.hero__title { max-width: 7em; }
 .hero__eyebrow { margin-bottom: var(--space-4); opacity: 0.9; }
 .hero__title { text-transform: uppercase; }
 .hero__title .reveal-mask { padding-bottom: 0.06em; margin-bottom: -0.06em; }
@@ -114,7 +115,7 @@ main > .shopify-section--hero { position: sticky; top: 0; z-index: 0; background
 /* ---------- Collection story ------------------------------------------- */
 .story__inner { display: grid; }
 .story__sticky { position: sticky; top: var(--header-h); min-height: calc(100vh - var(--header-h)); display: flex; flex-direction: column; justify-content: center; padding: var(--section-gap) var(--gutter); gap: var(--space-6); }
-.story__statements { position: relative; min-height: 5em; }
+.story__statements { position: relative; min-height: calc(var(--text-display-m) * 2.4); }
 .story__statement { position: absolute; inset: 0; opacity: 0; transform: translateY(24px); transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out); max-width: 9em; }
 .story__statement.is-active { opacity: 1; transform: none; }
 .story__statement p { margin: 0; }
