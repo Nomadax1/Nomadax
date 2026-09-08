@@ -1,0 +1,8 @@
+{
+  "name": "solenne-theme-preview",
+  "private": true,
+  "type": "module",
+  "description": "Offline preview of the Solenne Editorial Shopify theme with mock products, cart, search and filters.",
+  "scripts": { "start": "node server.mjs" },
+  "dependencies": { "liquidjs": "^10.16.0" }
+}

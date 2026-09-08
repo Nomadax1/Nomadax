@@ -16,7 +16,7 @@
   class FacetFilters extends HTMLElement {
     connectedCallback() {
       this.sectionId = this.dataset.sectionId;
-      this.section = this.closest('[data-section-id]') || this.closest('.shopify-section');
+      this.section = (this.parentElement && this.parentElement.closest('[data-section-id]')) || this.closest('.shopify-section');
       this.results = this.section.querySelector('[data-results]');
       this.form = this.querySelector('[data-facets-form]');
       this.controller = null;
@@ -77,7 +77,7 @@
           this.results.replaceWith(fresh);
           this.results = fresh;
           const nextFacets = fresh.querySelector('facet-filters');
-          if (nextFacets && wasOpen && !window.matchMedia('(max-width: 749px)').matches) nextFacets.togglePanel(true);
+          if (nextFacets && wasOpen) nextFacets.togglePanel(true);
           document.dispatchEvent(new CustomEvent('theme:content', { detail: fresh }));
           if (window.theme && window.theme.wishlist) window.theme.wishlist.sync();
         }

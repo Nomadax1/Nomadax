@@ -1,5 +1,9 @@
 # NOMADAX VANTA 40 — Mochila de cabina premium
 
+> **Nuevo: tema Shopify "Solenne Editorial"** — tienda completa de moda femenina
+> premium (Online Store 2.0) en la carpeta [`theme/`](theme/README.md).
+> Vista previa local sin tienda en [`theme-preview/`](theme-preview/README.md).
+
 > **"Nunca había visto una mochila así."**
 
 Dossier de diseño industrial completo para una mochila de viaje de cabina
