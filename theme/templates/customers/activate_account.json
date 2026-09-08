@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "main-customers", "settings": { "view": "activate" } }
+  },
+  "order": ["main"]
+}

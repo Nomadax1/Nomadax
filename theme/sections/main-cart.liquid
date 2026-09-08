@@ -1,0 +1,74 @@
+<section class="cart-page section--tight" data-section-id="{{ section.id }}" {{ section.shopify_attributes }}>
+  <div class="container">
+    <header class="page-head">
+      <p class="eyebrow eyebrow--accent">{{ 'cart.items_count' | t: count: cart.item_count }}</p>
+      <h1 class="display-xl page-head__title">{{ 'cart.title' | t }}</h1>
+    </header>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="cart-drawer__empty">
+        <p class="display-s">{{ 'cart.empty' | t }}</p>
+        <a class="btn btn--outline" href="{{ routes.all_products_collection_url }}">{{ 'cart.empty_cta' | t }}</a>
+      </div>
+    {%- else -%}
+      <form action="{{ routes.cart_url }}" method="post" class="cart-page__grid" id="CartPageForm">
+        <div class="cart-items cart-page__items">
+          {%- for item in cart.items -%}
+            <div class="cart-item cart-page__item" data-cart-item data-line="{{ forloop.index }}">
+              <a class="cart-item__media" href="{{ item.url }}">
+                <div class="media">
+                  {%- if item.image -%}
+                    {{ item.image | image_url: width: 400 | image_tag: widths: '200, 400', sizes: '140px', loading: 'lazy', alt: item.title }}
+                  {%- else -%}
+                    {% render 'placeholder', variant: forloop.index, label: item.product.title %}
+                  {%- endif -%}
+                </div>
+              </a>
+              <div class="cart-item__body">
+                <a class="cart-item__title" href="{{ item.url }}">{{ item.product.title }}</a>
+                {%- unless item.product.has_only_default_variant -%}
+                  <span class="cart-item__meta">{%- for option in item.options_with_values -%}{{ option.name }}: {{ option.value }}{% unless forloop.last %} · {% endunless %}{%- endfor -%}</span>
+                {%- endunless -%}
+                <span class="cart-item__price">{{ item.final_line_price | money }}</span>
+                <div class="cart-item__row">
+                  <div class="qty" data-qty>
+                    <button type="button" class="qty__btn" data-qty-minus aria-label="{{ 'products.product.decrease' | t }}">−</button>
+                    <input class="qty__input" type="number" name="updates[]" inputmode="numeric" min="0" value="{{ item.quantity }}" aria-label="{{ 'cart.quantity' | t }}" data-qty-input data-line="{{ forloop.index }}">
+                    <button type="button" class="qty__btn" data-qty-plus aria-label="{{ 'products.product.increase' | t }}">+</button>
+                  </div>
+                  <a class="cart-item__remove" href="{{ item.url_to_remove }}" data-cart-remove data-line="{{ forloop.index }}">{{ 'cart.remove' | t }}</a>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+        <aside class="cart-page__summary">
+          {%- if settings.cart_notes -%}
+            <label class="field__label" for="CartNote">{{ 'cart.note' | t }}</label>
+            <textarea id="CartNote" name="note" class="field__input" placeholder="{{ 'cart.note_placeholder' | t }}" rows="3">{{ cart.note }}</textarea>
+          {%- endif -%}
+          <div class="cart-summary__row cart-summary__row--total"><span>{{ 'cart.subtotal' | t }}</span><span>{{ cart.total_price | money_with_currency }}</span></div>
+          <p class="cart-summary__note">{{ 'cart.taxes_shipping' | t }}</p>
+          <div class="cart-summary__actions">
+            <button type="submit" name="checkout" class="btn btn--block">{{ 'cart.checkout' | t }}</button>
+            <a class="link" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue_shopping' | t }}</a>
+          </div>
+        </aside>
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+<style>
+  .cart-page__grid { display: grid; gap: var(--space-8); align-items: start; }
+  .cart-page__item { grid-template-columns: 8.5rem 1fr; }
+  .cart-page__summary { position: sticky; top: calc(var(--header-h) + 1rem); border: 1px solid var(--color-line); padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); }
+  @media (min-width: 990px) { .cart-page__grid { grid-template-columns: 1.6fr 1fr; } }
+</style>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "tag": "div",
+  "settings": []
+}
+{% endschema %}

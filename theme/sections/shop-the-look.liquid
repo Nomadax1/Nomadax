@@ -1,0 +1,126 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s = section.settings
+  assign hotspots = section.blocks | where: 'type', 'hotspot'
+  assign look_total = 0
+  for block in hotspots
+    if block.settings.product != blank
+      assign look_total = look_total | plus: block.settings.product.selected_or_first_available_variant.price
+    endif
+  endfor
+-%}
+<section class="stl section section--sand" {{ section.shopify_attributes }}>
+  <shop-the-look class="stl__inner container" data-shop-the-look>
+    <div class="stl__media" data-reveal="scale">
+      <div class="media media--tall">
+        {% render 'image', image: s.image, sizes: '(min-width: 990px) 55vw, 100vw', placeholder: 4, placeholder_label: 'Look 01' %}
+      </div>
+      {%- for block in hotspots -%}
+        <button type="button" class="stl__hotspot" style="left: {{ block.settings.x }}%; top: {{ block.settings.y }}%" data-hotspot="{{ forloop.index0 }}" aria-label="{{ 'shop_the_look.hotspot' | t: index: forloop.index }}" aria-controls="stl-item-{{ section.id }}-{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          <span class="stl__hotspot-dot"></span>
+          <span class="stl__hotspot-ring"></span>
+        </button>
+      {%- endfor -%}
+      {%- if s.look_label != blank -%}<span class="stl__look-label eyebrow eyebrow--bare">{{ s.look_label }}</span>{%- endif -%}
+    </div>
+
+    <aside class="stl__panel" data-reveal="right">
+      <header class="stl__head">
+        {%- if s.eyebrow != blank -%}<p class="eyebrow eyebrow--accent">{{ s.eyebrow }}</p>{%- endif -%}
+        {%- if s.title != blank -%}<h2 class="display-m">{{ s.title }}</h2>{%- endif -%}
+        {%- if s.text != blank -%}<p class="muted">{{ s.text }}</p>{%- endif -%}
+      </header>
+
+      <ul class="stl__items">
+        {%- for block in hotspots -%}
+          {%- liquid
+            assign product = block.settings.product
+            assign variant = product.selected_or_first_available_variant
+          -%}
+          <li class="stl__item" id="stl-item-{{ section.id }}-{{ forloop.index0 }}" data-look-item="{{ forloop.index0 }}" {% if product != blank %}data-available="{{ product.available }}"{% endif %}>
+            <a class="stl__item-media media" href="{{ product.url | default: '#' }}" tabindex="-1" aria-hidden="true">
+              {%- if product.featured_media -%}
+                {{ product.featured_media | image_url: width: 300 | image_tag: widths: '150, 300', sizes: '96px', loading: 'lazy', alt: '' }}
+              {%- else -%}
+                {% render 'placeholder', variant: forloop.index, label: block.settings.placeholder_title %}
+              {%- endif -%}
+            </a>
+            <div class="stl__item-body">
+              <span class="stl__item-index eyebrow eyebrow--muted eyebrow--bare">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <a class="stl__item-title" href="{{ product.url | default: '#' }}">{{ product.title | default: block.settings.placeholder_title }}</a>
+              <span class="stl__item-price">
+                {%- if product != blank -%}{% render 'price', variant: variant %}{%- else -%}{{ block.settings.placeholder_price | default: 8900 | money }}{%- endif -%}
+              </span>
+              {%- if product != blank -%}
+                <div class="stl__item-actions">
+                  {%- unless product.has_only_default_variant -%}
+                    <label class="visually-hidden" for="stl-select-{{ section.id }}-{{ forloop.index0 }}">{{ 'products.product.select_size' | t }}</label>
+                    <select id="stl-select-{{ section.id }}-{{ forloop.index0 }}" class="select" data-look-variant>
+                      {%- for v in product.variants -%}
+                        <option value="{{ v.id }}" data-price="{{ v.price }}" {% unless v.available %}disabled{% endunless %} {% if v.id == variant.id %}selected{% endif %}>{{ v.title }}{% unless v.available %} — {{ 'products.product.sold_out' | t }}{% endunless %}</option>
+                      {%- endfor -%}
+                    </select>
+                  {%- else -%}
+                    <input type="hidden" value="{{ variant.id }}" data-look-variant data-price="{{ variant.price }}">
+                  {%- endunless -%}
+                  <button type="button" class="btn btn--small btn--outline" data-look-add {% unless product.available %}disabled{% endunless %}>
+                    <span class="btn__label">{% if product.available %}{{ 'products.product.add_to_bag' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</span><span class="btn__spinner" aria-hidden="true"></span>
+                  </button>
+                </div>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <footer class="stl__foot">
+        <div class="stl__total">
+          <span class="eyebrow eyebrow--muted eyebrow--bare">{{ 'shop_the_look.total' | t }} · {{ 'shop_the_look.pieces_in_look' | t: count: hotspots.size }}</span>
+          <span class="stl__total-price display-s" data-look-total>{{ look_total | money }}</span>
+        </div>
+        <button type="button" class="btn btn--block" data-look-add-all {% if hotspots.size == 0 %}disabled{% endif %}>
+          <span class="btn__label">{{ s.cta_text | default: 'Shop the full look' }}</span><span class="btn__spinner" aria-hidden="true"></span>
+        </button>
+      </footer>
+    </aside>
+  </shop-the-look>
+</section>
+
+{% schema %}
+{
+  "name": "Shop the look",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Look image (model, full outfit)", "info": "Portrait, at least 1600px tall. Position hotspots with the X / Y sliders in each block." },
+    { "type": "text", "id": "look_label", "label": "Label on image", "default": "Look 01 — The evening edit" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Styled by us, worn by you" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Shop the look" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Tap a point on the image to discover each piece. Add one, or take the whole look." },
+    { "type": "text", "id": "cta_text", "label": "Full look button", "default": "Shop the full look" }
+  ],
+  "blocks": [
+    {
+      "type": "hotspot",
+      "name": "Hotspot",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "range", "id": "x", "label": "Horizontal position", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 50 },
+        { "type": "range", "id": "y", "label": "Vertical position", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 40 },
+        { "type": "text", "id": "placeholder_title", "label": "Placeholder name", "default": "Mara Oversized Blazer" },
+        { "type": "text", "id": "placeholder_price", "label": "Placeholder price (cents)", "default": "18900" }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Shop the look",
+      "blocks": [
+        { "type": "hotspot", "settings": { "x": 44, "y": 32, "placeholder_title": "Mara Oversized Blazer", "placeholder_price": "18900" } },
+        { "type": "hotspot", "settings": { "x": 55, "y": 48, "placeholder_title": "Noir Sculpt Top", "placeholder_price": "8900" } },
+        { "type": "hotspot", "settings": { "x": 48, "y": 72, "placeholder_title": "Sienna Tailored Trouser", "placeholder_price": "12900" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

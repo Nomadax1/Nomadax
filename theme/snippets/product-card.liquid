@@ -1,0 +1,136 @@
+{%- comment -%}
+  Editorial product card with progressive disclosure.
+  Default: image + name. Hover / focus: alternate image, price, colour swatches, quick add.
+  Usage:
+    {% render 'product-card', product: product, index: forloop.index, sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy', show_quick_add: true, aspect: 'portrait', placeholder_label: 'The Alba Dress' %}
+{%- endcomment -%}
+{%- liquid
+  assign idx = index | default: 1
+  assign sizes_attr = sizes | default: '(min-width: 990px) 25vw, 50vw'
+  assign show_qa = show_quick_add
+  if show_qa == nil
+    assign show_qa = settings.card_quick_add
+  endif
+  assign hover_mode = settings.image_hover
+  assign has_alt = false
+  if product.media.size > 1 and hover_mode == 'alternate'
+    assign has_alt = true
+  endif
+  assign card_title = product.title | default: placeholder_label | default: 'The Alba Dress'
+  assign card_url = product.url | default: '#'
+
+  assign size_index = -1
+  assign color_index = -1
+  for option in product.options_with_values
+    assign oname = option.name | downcase
+    if oname == 'size' or oname == 'talla' or oname == 'taille' or oname == 'größe' or oname == 'taglia'
+      assign size_index = forloop.index0
+    endif
+    if oname == 'color' or oname == 'colour' or oname == 'couleur' or oname == 'farbe' or oname == 'colore'
+      assign color_index = forloop.index0
+    endif
+  endfor
+
+  assign quick_mode = 'link'
+  if product == blank
+    assign quick_mode = 'none'
+  elsif product.variants.size == 1
+    assign quick_mode = 'single'
+  elsif product.options.size == 1
+    assign quick_mode = 'chips'
+  elsif product.options.size == 2 and size_index > -1 and color_index > -1
+    assign quick_mode = 'chips-color'
+  endif
+  assign base_color = product.selected_or_first_available_variant.options[color_index]
+-%}
+<article class="product-card" data-product-card data-hover="{{ hover_mode }}" data-handle="{{ product.handle }}" data-id="{{ product.id }}">
+  <a class="product-card__media" href="{{ card_url }}" aria-label="{{ card_title | escape }}" data-cursor="{{ 'general.view' | t }}" data-transition-image tabindex="-1">
+    {%- if product.featured_media -%}
+      {{ product.featured_media | image_url: width: 1200 | image_tag:
+          widths: '300, 420, 540, 720, 900, 1200',
+          sizes: sizes_attr,
+          loading: loading | default: 'lazy',
+          class: 'product-card__img product-card__img--main',
+          alt: product.featured_media.alt | default: card_title
+      }}
+      {%- if has_alt -%}
+        {{ product.media[1] | image_url: width: 1200 | image_tag:
+            widths: '300, 420, 540, 720, 900, 1200',
+            sizes: sizes_attr,
+            loading: 'lazy',
+            class: 'product-card__img product-card__img--alt',
+            alt: ''
+        }}
+      {%- endif -%}
+    {%- else -%}
+      {% render 'placeholder', variant: idx, label: card_title %}
+    {%- endif -%}
+    {%- if product.available == false and product != blank -%}
+      <span class="product-card__badge product-card__badge--soldout">{{ 'general.sold_out' | t }}</span>
+    {%- elsif product.compare_at_price > product.price -%}
+      <span class="product-card__badge product-card__badge--sale">{{ 'general.sale' | t }}</span>
+    {%- elsif product.tags contains 'new' or product.tags contains 'New' -%}
+      <span class="product-card__badge">{{ 'general.new' | t }}</span>
+    {%- endif -%}
+  </a>
+
+  {%- if settings.wishlist_enabled and product != blank -%}
+    <button type="button" class="wishlist-btn product-card__wishlist" data-wishlist-toggle="{{ product.handle }}" aria-label="{{ 'products.product.wishlist_add' | t }}" aria-pressed="false">
+      {% render 'icon', name: 'heart' %}
+    </button>
+  {%- endif -%}
+
+  {%- if show_qa and quick_mode != 'none' and product.available -%}
+    <div class="product-card__quick js-only">
+      <div class="quick-add" data-quick-add>
+        {%- case quick_mode -%}
+          {%- when 'single' -%}
+            <button type="button" class="btn btn--small btn--block quick-add__btn" data-quick-add-variant="{{ product.selected_or_first_available_variant.id }}">
+              <span class="btn__label">{{ 'products.product.quick_add' | t }}</span><span class="btn__spinner" aria-hidden="true"></span>
+            </button>
+          {%- when 'chips' -%}
+            <span class="quick-add__label">{{ 'products.product.select_size' | t }}</span>
+            <div class="quick-add__sizes" role="group" aria-label="{{ 'products.product.select_size' | t }}">
+              {%- for variant in product.variants -%}
+                <button type="button" class="quick-add__size" data-quick-add-variant="{{ variant.id }}" {% unless variant.available %}disabled aria-disabled="true"{% endunless %} aria-label="{{ variant.title | escape }}{% unless variant.available %} – {{ 'products.product.sold_out' | t }}{% endunless %}">{{ variant.title }}</button>
+              {%- endfor -%}
+            </div>
+          {%- when 'chips-color' -%}
+            <span class="quick-add__label">{{ 'products.product.select_size' | t }} · {{ base_color }}</span>
+            <div class="quick-add__sizes" role="group" aria-label="{{ 'products.product.select_size' | t }}">
+              {%- for variant in product.variants -%}
+                {%- if variant.options[color_index] == base_color -%}
+                  <button type="button" class="quick-add__size" data-quick-add-variant="{{ variant.id }}" {% unless variant.available %}disabled aria-disabled="true"{% endunless %} aria-label="{{ variant.options[size_index] | escape }}{% unless variant.available %} – {{ 'products.product.sold_out' | t }}{% endunless %}">{{ variant.options[size_index] }}</button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            <a class="btn btn--small btn--block quick-add__btn" href="{{ card_url }}">{{ 'products.product.view_product' | t }}</a>
+        {%- endcase -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="product-card__info">
+    <h3 class="product-card__title"><a href="{{ card_url }}">{{ card_title }}</a></h3>
+    <div class="product-card__meta">
+      <span class="product-card__reveal">
+        {%- if product != blank -%}
+          {% render 'price', product: product, show_from: true %}
+        {%- else -%}
+          <span class="price"><span class="price__regular">{{ placeholder_price | default: 12900 | money }}</span></span>
+        {%- endif -%}
+      </span>
+      {%- if settings.card_show_swatches and color_index > -1 -%}
+        <span class="product-card__reveal swatches" aria-label="{{ 'products.product.colors_available' | t: count: product.options_with_values[color_index].values.size }}">
+          {%- for value in product.options_with_values[color_index].values limit: 4 -%}
+            {% render 'swatch', value: value %}
+          {%- endfor -%}
+          {%- if product.options_with_values[color_index].values.size > 4 -%}
+            <span class="swatch swatch--more">{%- assign more_count = product.options_with_values[color_index].values.size | minus: 4 -%}{{ 'products.product.swatch_more' | t: count: more_count }}</span>
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

@@ -1,0 +1,119 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s = section.settings
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign per_page = s.per_page | default: 24
+  assign inserts = section.blocks
+-%}
+<section class="coll section--tight" data-collection data-section-id="{{ section.id }}" {{ section.shopify_attributes }}>
+  <div class="container">
+    {%- paginate collection.products by per_page -%}
+      <div id="CollectionResults" data-results>
+        {% render 'facets', results: collection, section_id: section.id, sort_by: sort_by, form_id: 'CollectionFilters' %}
+
+        {%- if collection.products.size == 0 -%}
+          <div class="coll__empty">
+            <p class="display-s">{{ 'collections.general.no_products' | t }}</p>
+            <a class="btn btn--outline" href="{{ collection.url }}">{{ 'products.facets.clear_all' | t }}</a>
+          </div>
+        {%- else -%}
+          <div class="product-grid coll__grid" id="ProductGrid" data-product-grid data-cols="{{ s.default_cols }}" data-cols-mobile="2" style="--cols-desktop: {{ s.default_cols }}; --cols-tablet: {{ s.default_cols | at_most: 3 }};">
+            {%- for product in collection.products -%}
+              {%- liquid
+                assign card_loading = 'lazy'
+                if forloop.index <= 6
+                  assign card_loading = 'eager'
+                endif
+                assign card_delay = forloop.index0 | modulo: 4 | times: 60
+              -%}
+              <div class="coll__cell" data-reveal style="--reveal-delay: {{ card_delay }}ms">
+                {% render 'product-card', product: product, index: forloop.index, sizes: '(min-width: 990px) 33vw, 50vw', loading: card_loading %}
+              </div>
+              {%- if paginate.current_page == 1 -%}
+                {%- for block in inserts -%}
+                  {%- if block.settings.position == forloop.parentloop.index -%}
+                    {%- case block.type -%}
+                      {%- when 'editorial_image' -%}
+                        <figure class="coll__insert coll__insert--image coll__insert--{{ block.settings.width }}" data-reveal="scale" {{ block.shopify_attributes }}>
+                          {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" data-cursor="{{ 'general.discover' | t }}">{%- endif -%}
+                          <div class="media media--hover {% if block.settings.width == 'wide' %}media--landscape{% else %}media--portrait{% endif %}">
+                            {%- assign ph_label = block.settings.caption | default: 'Campaign' -%}
+                            {% render 'image', image: block.settings.image, sizes: '(min-width: 990px) 50vw, 100vw', placeholder: block.settings.position, placeholder_label: ph_label %}
+                          </div>
+                          {%- if block.settings.caption != blank -%}<figcaption class="coll__insert-caption"><span class="eyebrow eyebrow--muted eyebrow--bare">{{ block.settings.caption }}</span></figcaption>{%- endif -%}
+                          {%- if block.settings.link != blank -%}</a>{%- endif -%}
+                        </figure>
+                      {%- when 'editorial_quote' -%}
+                        <div class="coll__insert coll__insert--quote coll__insert--{{ block.settings.width }}" data-reveal {{ block.shopify_attributes }}>
+                          <blockquote class="coll__quote display-s">{{ block.settings.text }}</blockquote>
+                          {%- if block.settings.attribution != blank -%}<span class="eyebrow eyebrow--muted">{{ block.settings.attribution }}</span>{%- endif -%}
+                        </div>
+                    {%- endcase -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            <nav class="pagination" aria-label="Pagination" data-pagination>
+              {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" aria-label="{{ 'general.previous' | t }}">{% render 'icon', name: 'arrow-left' %}</a>{%- endif -%}
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}">{{ part.title }}</a>
+                {%- elsif part.title == paginate.current_page -%}
+                  <span class="is-current" aria-current="page">{{ part.title }}</span>
+                {%- else -%}
+                  <span>{{ part.title }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if paginate.next -%}<a href="{{ paginate.next.url }}" aria-label="{{ 'general.next' | t }}">{% render 'icon', name: 'arrow-right' %}</a>{%- endif -%}
+            </nav>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection products",
+  "tag": "div",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 12, "max": 48, "step": 4, "default": 24 },
+    { "type": "select", "id": "default_cols", "label": "Default columns (desktop)", "options": [
+      { "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" }
+    ], "default": "3" },
+    { "type": "paragraph", "content": "Filters come from the Search & Discovery app (Apps → Search & Discovery → Filters). Editorial inserts appear on the first page only." }
+  ],
+  "blocks": [
+    {
+      "type": "editorial_image",
+      "name": "Editorial image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "Campaign — Look 02" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "range", "id": "position", "label": "Show after product number", "min": 1, "max": 48, "step": 1, "default": 4 },
+        { "type": "select", "id": "width", "label": "Width", "options": [
+          { "value": "wide", "label": "Two columns (landscape)" }, { "value": "tall", "label": "One column (portrait)" }
+        ], "default": "wide" }
+      ]
+    },
+    {
+      "type": "editorial_quote",
+      "name": "Editorial quote",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Quote", "default": "<p>“Cut for movement, finished for permanence.”</p>" },
+        { "type": "text", "id": "attribution", "label": "Attribution", "default": "Design notes" },
+        { "type": "range", "id": "position", "label": "Show after product number", "min": 1, "max": 48, "step": 1, "default": 9 },
+        { "type": "select", "id": "width", "label": "Width", "options": [
+          { "value": "wide", "label": "Two columns" }, { "value": "tall", "label": "One column" }
+        ], "default": "wide" }
+      ]
+    }
+  ],
+  "max_blocks": 6
+}
+{% endschema %}

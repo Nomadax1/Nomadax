@@ -1,0 +1,102 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- assign s = section.settings -%}
+<section class="hgal{% if s.inverse %} section--inverse{% endif %}" data-hgal style="--count: {{ section.blocks.size }}" {{ section.shopify_attributes }}>
+  <div class="hgal__sticky">
+    <div class="hgal__head container">
+      {%- if s.eyebrow != blank -%}<p class="eyebrow{% if s.inverse %}{% else %} eyebrow--accent{% endif %}">{{ s.eyebrow }}</p>{%- endif -%}
+      {%- if s.title != blank -%}<h2 class="display-m">{{ s.title }}</h2>{%- endif -%}
+      <span class="hgal__progress" aria-hidden="true"><span class="hgal__progress-fill" data-hgal-progress></span></span>
+    </div>
+    <div class="hgal__viewport" data-hgal-viewport data-cursor="{{ 'general.drag' | t }}" data-cursor-theme="{% if s.inverse %}inverse{% endif %}">
+      <div class="hgal__track" data-hgal-track>
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'image' -%}
+              <figure class="hgal__item hgal__item--{{ block.settings.size }}" {{ block.shopify_attributes }}>
+                <div class="media media--hover">
+                  {%- assign ph_label = block.settings.caption | default: 'Campaign' -%}
+                  {% render 'image', image: block.settings.image, sizes: '(min-width: 990px) 40vw, 80vw', placeholder: forloop.index, placeholder_label: ph_label %}
+                </div>
+                {%- if block.settings.caption != blank -%}<figcaption class="hgal__caption eyebrow eyebrow--bare">{{ block.settings.caption }}</figcaption>{%- endif -%}
+              </figure>
+            {%- when 'product' -%}
+              <div class="hgal__item hgal__item--product" {{ block.shopify_attributes }}>
+                {% render 'product-card', product: block.settings.product, index: forloop.index, sizes: '(min-width: 990px) 25vw, 60vw', placeholder_label: block.settings.placeholder_title, show_quick_add: true %}
+              </div>
+            {%- when 'statement' -%}
+              <div class="hgal__item hgal__item--statement" {{ block.shopify_attributes }}>
+                <p class="display-m hgal__statement">{{ block.settings.text }}</p>
+                {%- if block.settings.detail != blank -%}<p class="hgal__detail muted">{{ block.settings.detail }}</p>{%- endif -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+        {%- if s.end_text != blank -%}
+          <div class="hgal__item hgal__item--end">
+            <a class="hgal__end" href="{{ s.end_link | default: routes.all_products_collection_url }}">
+              <span class="display-m">{{ s.end_text }}</span>
+              {% render 'icon', name: 'arrow-right' %}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Horizontal gallery",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Campaign" },
+    { "type": "text", "id": "title", "label": "Title", "default": "A walk through the collection" },
+    { "type": "text", "id": "end_text", "label": "End card text", "default": "See everything" },
+    { "type": "url", "id": "end_link", "label": "End card link" },
+    { "type": "checkbox", "id": "inverse", "label": "Dark background", "default": true },
+    { "type": "paragraph", "content": "On desktop, vertical scrolling drives the gallery sideways. On touch devices and with reduced motion it is a natural swipe." }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "Look 03" },
+        { "type": "select", "id": "size", "label": "Size", "options": [
+          { "value": "portrait", "label": "Portrait" }, { "value": "landscape", "label": "Landscape" }, { "value": "small", "label": "Small" }
+        ], "default": "portrait" }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "placeholder_title", "label": "Placeholder name", "default": "Linea Satin Dress" }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": "Statement",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Twelve pieces. <em>Endless</em> ways.</p>" },
+        { "type": "text", "id": "detail", "label": "Detail line", "default": "Made in Portugal in runs of 200." }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Horizontal gallery",
+      "blocks": [
+        { "type": "statement" },
+        { "type": "image", "settings": { "caption": "Look 01", "size": "portrait" } },
+        { "type": "image", "settings": { "caption": "Detail — hand-finished seams", "size": "small" } },
+        { "type": "product" },
+        { "type": "image", "settings": { "caption": "Look 04", "size": "landscape" } },
+        { "type": "product", "settings": { "placeholder_title": "Mara Oversized Blazer" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

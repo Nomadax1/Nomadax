@@ -1,0 +1,147 @@
+{
+  "sections": {
+    "hero": {
+      "type": "campaign-hero",
+      "settings": {
+        "eyebrow": "Autumn / Winter 26 — Drop 01",
+        "line_1": "Wear your",
+        "line_2": "attitude",
+        "cta_text": "Enter the collection",
+        "cta2_text": "Shop the drop",
+        "overlay": 25,
+        "align": "left",
+        "show_scroll_hint": true
+      }
+    },
+    "drop": {
+      "type": "editorial-drop",
+      "settings": {
+        "eyebrow": "New collection",
+        "title": "Drop 01",
+        "text": "Sculpted tailoring, liquid satin and knits with tension. Twelve pieces designed to be noticed and worn on repeat.",
+        "collection": "all",
+        "cta_text": "View the full drop"
+      },
+      "blocks": {
+        "p1": { "type": "product", "settings": { "size": "large", "align": "top", "placeholder_title": "The Alba Dress" } },
+        "p2": { "type": "product", "settings": { "size": "small", "align": "top", "placeholder_title": "Noir Sculpt Top", "note": "Limited run" } },
+        "e1": { "type": "editorial", "settings": { "size": "small", "align": "bottom", "caption": "Shot in Lisbon, October" } },
+        "s1": { "type": "statement", "settings": { "text": "<p>Cut close. Worn <em>loose.</em></p>", "size": "small", "align": "middle" } },
+        "p3": { "type": "product", "settings": { "size": "medium", "align": "bottom", "placeholder_title": "Sienna Tailored Trouser" } },
+        "p4": { "type": "product", "settings": { "size": "small", "align": "top", "placeholder_title": "Élan Knit" } }
+      },
+      "block_order": ["p1", "p2", "e1", "s1", "p3", "p4"]
+    },
+    "look": {
+      "type": "shop-the-look",
+      "settings": {
+        "look_label": "Look 01 — The evening edit",
+        "eyebrow": "Styled by us, worn by you",
+        "title": "Shop the look",
+        "text": "Tap a point on the image to discover each piece. Add one, or take the whole look.",
+        "cta_text": "Shop the full look"
+      },
+      "blocks": {
+        "h1": { "type": "hotspot", "settings": { "x": 44, "y": 30, "placeholder_title": "Mara Oversized Blazer", "placeholder_price": "18900" } },
+        "h2": { "type": "hotspot", "settings": { "x": 56, "y": 47, "placeholder_title": "Noir Sculpt Top", "placeholder_price": "8900" } },
+        "h3": { "type": "hotspot", "settings": { "x": 48, "y": 74, "placeholder_title": "Sienna Tailored Trouser", "placeholder_price": "12900" } }
+      },
+      "block_order": ["h1", "h2", "h3"]
+    },
+    "story": {
+      "type": "collection-story",
+      "settings": { "eyebrow": "The story", "cta_text": "Discover the collection", "inverse": false },
+      "blocks": {
+        "c1": { "type": "chapter", "settings": { "statement": "<p>Designed to be <em>noticed.</em></p>", "caption": "I — Presence" } },
+        "c2": { "type": "chapter", "settings": { "statement": "<p>Made to be worn <em>your way.</em></p>", "caption": "II — Attitude" } },
+        "c3": { "type": "chapter", "settings": { "statement": "<p>Cut close. Finished by <em>hand.</em></p>", "caption": "III — Craft" } }
+      },
+      "block_order": ["c1", "c2", "c3"]
+    },
+    "categories": {
+      "type": "category-panels",
+      "settings": { "eyebrow": "Discover by", "title": "Category" },
+      "blocks": {
+        "k1": { "type": "panel", "settings": { "title": "New in", "subtitle": "Just landed, in limited numbers", "cta": "Discover" } },
+        "k2": { "type": "panel", "settings": { "title": "Dresses", "subtitle": "Satin, jersey and sculpted crepe", "cta": "Discover" } },
+        "k3": { "type": "panel", "settings": { "title": "Tops", "subtitle": "The pieces that start the outfit", "cta": "Discover" } },
+        "k4": { "type": "panel", "settings": { "title": "Bottoms", "subtitle": "Tailored, wide, fluid", "cta": "Discover" } },
+        "k5": { "type": "panel", "settings": { "title": "Sets", "subtitle": "Two pieces, one decision", "cta": "Discover" } },
+        "k6": { "type": "panel", "settings": { "title": "Essentials", "subtitle": "Worn on repeat", "cta": "Discover" } }
+      },
+      "block_order": ["k1", "k2", "k3", "k4", "k5", "k6"]
+    },
+    "gallery": {
+      "type": "horizontal-gallery",
+      "settings": { "eyebrow": "Campaign", "title": "A walk through the collection", "end_text": "See everything", "inverse": true },
+      "blocks": {
+        "g1": { "type": "statement", "settings": { "text": "<p>Twelve pieces. <em>Endless</em> ways.</p>", "detail": "Made in Portugal in runs of 200." } },
+        "g2": { "type": "image", "settings": { "caption": "Look 01", "size": "portrait" } },
+        "g3": { "type": "image", "settings": { "caption": "Detail — hand-finished seams", "size": "small" } },
+        "g4": { "type": "product", "settings": { "placeholder_title": "Linea Satin Dress" } },
+        "g5": { "type": "image", "settings": { "caption": "Look 04", "size": "landscape" } },
+        "g6": { "type": "product", "settings": { "placeholder_title": "Mara Oversized Blazer" } }
+      },
+      "block_order": ["g1", "g2", "g3", "g4", "g5", "g6"]
+    },
+    "bestsellers": {
+      "type": "bestsellers-carousel",
+      "settings": { "eyebrow": "Most wanted", "title": "Bestsellers", "collection": "all", "count": 8 }
+    },
+    "reveal": {
+      "type": "product-reveal",
+      "settings": {
+        "eyebrow": "The piece",
+        "placeholder_title": "Linea Satin Dress",
+        "placeholder_price": "24900",
+        "image_caption": "Worn in Ivory · Size S",
+        "fabric_label": "Fabric",
+        "fabric_text": "Heavy silk-blend satin with a liquid drape and matte reverse. Cut on the bias so it moves before you do.",
+        "detail_label": "Detail",
+        "detail_text": "Cowl neckline, open back with a single covered button, French seams throughout.",
+        "colors_text": "Ivory, Ink, Oxblood"
+      }
+    },
+    "worn": {
+      "type": "worn-your-way",
+      "settings": { "eyebrow": "Seen on you", "title": "Worn your way", "text": "Real people, real wardrobes. Tag us to be featured.", "handle": "@solenne.studio" },
+      "blocks": {
+        "w1": { "type": "look", "settings": { "handle": "@marta.v", "product_text": "The Alba Dress" } },
+        "w2": { "type": "look", "settings": { "handle": "@ines.wears", "product_text": "Mara Oversized Blazer" } },
+        "w3": { "type": "look", "settings": { "handle": "@clara.r", "product_text": "Noir Sculpt Top" } },
+        "w4": { "type": "look", "settings": { "handle": "@sofia.mp", "product_text": "Sienna Tailored Trouser" } },
+        "w5": { "type": "look", "settings": { "handle": "@lea.in.lisbon", "product_text": "Élan Knit" } },
+        "w6": { "type": "look", "settings": { "handle": "@nour", "product_text": "Linea Satin Dress" } }
+      },
+      "block_order": ["w1", "w2", "w3", "w4", "w5", "w6"]
+    },
+    "community": {
+      "type": "community-gallery",
+      "settings": { "eyebrow": "Studio & street", "title": "From the community", "link_text": "Follow @solenne.studio", "speed": 5 },
+      "blocks": {
+        "i1": { "type": "image", "settings": { "aspect": "portrait", "caption": "Backstage" } },
+        "i2": { "type": "image", "settings": { "aspect": "landscape", "caption": "Lisbon" } },
+        "i3": { "type": "image", "settings": { "aspect": "square" } },
+        "i4": { "type": "image", "settings": { "aspect": "portrait", "caption": "Fitting 04" } },
+        "i5": { "type": "image", "settings": { "aspect": "square", "caption": "Atelier" } },
+        "i6": { "type": "image", "settings": { "aspect": "portrait" } },
+        "i7": { "type": "image", "settings": { "aspect": "landscape", "caption": "Campaign" } },
+        "i8": { "type": "image", "settings": { "aspect": "portrait" } }
+      },
+      "block_order": ["i1", "i2", "i3", "i4", "i5", "i6", "i7", "i8"]
+    },
+    "access": {
+      "type": "private-access",
+      "settings": {
+        "eyebrow": "Members first",
+        "title_1": "Private",
+        "title_2": "access",
+        "text": "Be first to discover new drops, limited pieces and private releases. 48 hours before everyone else.",
+        "button": "Join the list",
+        "fine_print": "One or two letters a month. Unsubscribe any time.",
+        "image_caption": "Drop 02 — coming November"
+      }
+    }
+  },
+  "order": ["hero", "drop", "look", "story", "categories", "gallery", "bestsellers", "reveal", "worn", "community", "access"]
+}

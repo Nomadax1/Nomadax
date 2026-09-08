@@ -1,0 +1,27 @@
+<section class="page section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <header class="page-head" data-reveal-group>
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow eyebrow--accent reveal-mask"><span>{{ section.settings.eyebrow }}</span></p>{%- endif -%}
+      <h1 class="display-l page-head__title"><span class="reveal-mask" style="--reveal-delay:100ms"><span>{{ page.title }}</span></span></h1>
+    </header>
+    <div class="page__body rte{% if section.settings.narrow %} page__body--narrow{% endif %}" data-reveal>
+      {{ page.content }}
+    </div>
+  </div>
+</section>
+<style>
+  .page__body { max-width: 68ch; }
+  .page__body--narrow { max-width: 56ch; }
+  .page__body p { font-size: var(--text-md); }
+</style>
+
+{% schema %}
+{
+  "name": "Page",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "checkbox", "id": "narrow", "label": "Narrow text column", "default": false }
+  ]
+}
+{% endschema %}

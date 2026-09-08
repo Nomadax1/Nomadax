@@ -1,0 +1,284 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s = section.settings
+  assign variant = product.selected_or_first_available_variant
+  assign color_index = -1
+  assign size_index = -1
+  for option in product.options_with_values
+    assign oname = option.name | downcase
+    if oname == 'color' or oname == 'colour' or oname == 'couleur' or oname == 'farbe' or oname == 'colore'
+      assign color_index = forloop.index0
+    endif
+    if oname == 'size' or oname == 'talla' or oname == 'taille' or oname == 'größe' or oname == 'taglia'
+      assign size_index = forloop.index0
+    endif
+  endfor
+  assign size_guide_page = s.size_guide_page
+  assign media_count = product.media.size
+-%}
+<section class="pdp" data-product data-section-id="{{ section.id }}" data-handle="{{ product.handle }}" {{ section.shopify_attributes }}>
+  <div class="pdp__inner">
+    {%- comment -%} Gallery {%- endcomment -%}
+    <div class="pdp__gallery" data-gallery>
+      {%- if media_count > 1 -%}
+        <div class="pdp__thumbs" role="tablist" aria-label="{{ 'products.product.gallery' | t }}">
+          {%- for media in product.media -%}
+            <button type="button" class="pdp__thumb{% if forloop.first %} is-active{% endif %}" data-thumb="{{ media.id }}" role="tab" aria-label="{{ 'products.product.image_of' | t: index: forloop.index, count: media_count }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+              {{ media.preview_image | image_url: width: 160 | image_tag: widths: '80, 160', sizes: '64px', loading: 'lazy', alt: '' }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+      <div class="pdp__media-list" data-media-list>
+        {%- for media in product.media -%}
+          <figure class="pdp__media" data-media="{{ media.id }}" data-media-type="{{ media.media_type }}">
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                <button type="button" class="pdp__zoom-trigger" data-zoom-trigger="{{ forloop.index0 }}" data-cursor="{{ 'products.product.zoom' | t }}" aria-label="{{ 'products.product.zoom' | t }}">
+                  {%- liquid
+                    assign media_loading = 'lazy'
+                    if forloop.first
+                      assign media_loading = 'eager'
+                    endif
+                  -%}
+                  {{ media | image_url: width: 2000 | image_tag: widths: '540, 720, 900, 1080, 1400, 1800, 2000', sizes: '(min-width: 990px) 58vw, 100vw', loading: media_loading, fetchpriority: 'high', class: 'pdp__img', alt: media.alt | default: product.title }}
+                </button>
+              {%- when 'video' -%}
+                {{ media | video_tag: image_size: '1200x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, class: 'pdp__video' }}
+              {%- when 'external_video' -%}
+                {{ media | external_video_tag: class: 'pdp__video' }}
+              {%- when 'model' -%}
+                {{ media | model_viewer_tag: image_size: '1200x' }}
+            {%- endcase -%}
+          </figure>
+        {%- else -%}
+          <figure class="pdp__media">{% render 'placeholder', variant: 2, label: product.title %}</figure>
+        {%- endfor -%}
+      </div>
+      {%- if media_count > 1 -%}
+        <div class="pdp__counter" aria-hidden="true"><span data-media-index>1</span> / {{ media_count }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Purchase panel {%- endcomment -%}
+    <div class="pdp__info">
+      <div class="pdp__sticky">
+        <div class="pdp__eyebrow">
+          {%- if s.show_vendor and product.vendor != blank -%}<span class="eyebrow eyebrow--muted eyebrow--bare">{{ product.vendor }}</span>{%- endif -%}
+          {%- if collection -%}<a class="eyebrow eyebrow--muted" href="{{ collection.url }}">{{ collection.title }}</a>{%- elsif product.collections.first -%}<a class="eyebrow eyebrow--muted" href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>{%- endif -%}
+        </div>
+        <h1 class="pdp__title display-m">{{ product.title }}</h1>
+        <div class="pdp__price" data-price-wrap>{% render 'price', variant: variant %}</div>
+        {%- if s.short_description != blank or product.metafields.custom.short_description != blank -%}
+          <p class="pdp__short muted">{{ product.metafields.custom.short_description | default: s.short_description }}</p>
+        {%- endif -%}
+
+        <variant-selector class="pdp__variants" data-variant-selector data-url="{{ product.url }}" data-section-id="{{ section.id }}">
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              {%- liquid
+                assign oi = forloop.index0
+                assign is_color = false
+                if oi == color_index
+                  assign is_color = true
+                endif
+                assign is_size = false
+                if oi == size_index
+                  assign is_size = true
+                endif
+              -%}
+              <fieldset class="pdp__option{% if is_color %} pdp__option--color{% endif %}{% if is_size %} pdp__option--size{% endif %}" data-option-index="{{ oi }}">
+                <legend class="pdp__option-legend">
+                  <span class="eyebrow eyebrow--muted eyebrow--bare">{{ option.name }}</span>
+                  <span class="pdp__option-value" data-option-value="{{ oi }}">{{ option.selected_value }}</span>
+                  {%- if is_size and size_guide_page != blank -%}
+                    <button type="button" class="link pdp__size-guide" data-open-dialog="SizeGuide-{{ section.id }}">{{ 'products.product.size_guide' | t }}</button>
+                  {%- endif -%}
+                </legend>
+                <div class="pdp__values{% if is_color %} pdp__values--swatches{% else %} pdp__values--chips{% endif %}">
+                  {%- for value in option.values -%}
+                    {%- assign vid = section.id | append: '-' | append: oi | append: '-' | append: forloop.index -%}
+                    <input type="radio" class="visually-hidden" id="Option-{{ vid }}" name="option-{{ section.id }}-{{ oi }}" value="{{ value | escape }}" data-option-input {% if value == option.selected_value %}checked{% endif %}>
+                    <label for="Option-{{ vid }}" class="pdp__value" data-value="{{ value | escape }}">
+                      {%- if is_color -%}
+                        {% render 'swatch', value: value, class: 'swatch swatch--pdp' %}
+                        <span class="visually-hidden">{{ value }}</span>
+                      {%- else -%}
+                        <span>{{ value }}</span>
+                      {%- endif -%}
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </fieldset>
+            {%- endfor -%}
+          {%- endunless -%}
+          <script type="application/json" data-variants-json>{{ product.variants | json }}</script>
+          <script type="application/json" data-media-json>
+            {
+              {%- for variant in product.variants -%}
+                "{{ variant.id }}": {{ variant.featured_media.id | default: 'null' }}{% unless forloop.last %},{% endunless %}
+              {%- endfor -%}
+            }
+          </script>
+        </variant-selector>
+
+        <product-form class="pdp__form">
+          {%- assign product_form_id = 'ProductForm-' | append: section.id -%}
+          {%- form 'product', product, id: product_form_id, novalidate: 'novalidate' -%}
+            <input type="hidden" name="id" value="{{ variant.id }}" data-variant-id>
+            <div class="pdp__buy">
+              {%- if s.show_quantity -%}
+                <div class="qty pdp__qty" data-qty>
+                  <button type="button" class="qty__btn" data-qty-minus aria-label="{{ 'products.product.decrease' | t }}">−</button>
+                  <input class="qty__input" type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="{{ 'products.product.quantity' | t }}" data-qty-input>
+                  <button type="button" class="qty__btn" data-qty-plus aria-label="{{ 'products.product.increase' | t }}">+</button>
+                </div>
+              {%- endif -%}
+              <button type="submit" class="btn btn--accent pdp__atb" data-add-to-bag {% unless variant.available %}disabled{% endunless %}>
+                <span class="btn__label" data-atb-label>{% if variant.available %}{{ 'products.product.add_to_bag' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+                <span class="btn__spinner" aria-hidden="true"></span>
+              </button>
+              {%- if settings.wishlist_enabled -%}
+                <button type="button" class="wishlist-btn pdp__wishlist" data-wishlist-toggle="{{ product.handle }}" aria-label="{{ 'products.product.wishlist_add' | t }}" aria-pressed="false">{% render 'icon', name: 'heart' %}</button>
+              {%- endif -%}
+            </div>
+            {%- if s.show_dynamic_checkout -%}
+              <div class="pdp__dynamic">{{ form | payment_button }}</div>
+            {%- endif -%}
+          {%- endform -%}
+          <p class="pdp__stock text-sm" data-stock-note hidden></p>
+          {%- if s.reassurance != blank -%}<p class="pdp__reassurance text-xs muted">{{ s.reassurance }}</p>{%- endif -%}
+        </product-form>
+
+        <div class="accordion pdp__accordion" data-accordion-single>
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'accordion' -%}
+                {%- liquid
+                  assign content = block.settings.content
+                  if block.settings.source == 'description'
+                    assign content = product.description
+                  elsif block.settings.source == 'metafield' and block.settings.metafield_key != blank
+                    assign parts = block.settings.metafield_key | split: '.'
+                    assign ns = parts[0]
+                    assign key = parts[1]
+                    assign mf = product.metafields[ns][key]
+                    if mf != blank
+                      assign content = mf | metafield_tag
+                    endif
+                  endif
+                -%}
+                {%- if content != blank -%}
+                  <details class="accordion__item" {% if block.settings.open %}open{% endif %} {{ block.shopify_attributes }}>
+                    <summary class="accordion__summary">{{ block.settings.title }} {% render 'icon', name: 'plus' %}</summary>
+                    <div class="accordion__body rte">{{ content }}</div>
+                  </details>
+                {%- endif -%}
+              {%- when 'text' -%}
+                <div class="pdp__text text-sm muted" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if s.show_share -%}
+          <button type="button" class="link pdp__share" data-share data-title="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}">{{ 'products.product.share' | t }}</button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Sticky mobile purchase bar {%- endcomment -%}
+  <div class="pdp__bar" data-sticky-bar aria-hidden="true">
+    <div class="pdp__bar-info">
+      <span class="pdp__bar-title">{{ product.title }}</span>
+      <span class="pdp__bar-price text-sm" data-bar-price>{{ variant.price | money }}</span>
+    </div>
+    <button type="button" class="btn btn--accent btn--small" data-bar-add {% unless variant.available %}disabled{% endunless %}>{% if variant.available %}{{ 'products.product.add_to_bag' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</button>
+  </div>
+
+  {%- comment -%} Lightbox {%- endcomment -%}
+  <div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-label="{{ 'products.product.gallery' | t }}" tabindex="-1">
+    <button type="button" class="icon-btn lightbox__close" data-lightbox-close aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+    <div class="lightbox__track" data-lightbox-track>
+      {%- for media in product.media -%}
+        {%- if media.media_type == 'image' -%}
+          <div class="lightbox__item" data-lightbox-item="{{ forloop.index0 }}">
+            {{ media | image_url: width: 2600 | image_tag: widths: '1200, 1800, 2600', sizes: '100vw', loading: 'lazy', alt: media.alt | default: product.title }}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- if size_guide_page != blank -%}
+    <div class="dialog" id="SizeGuide-{{ section.id }}" role="dialog" aria-modal="true" aria-labelledby="SizeGuideTitle-{{ section.id }}" tabindex="-1" data-dialog>
+      <div class="dialog__panel">
+        <button type="button" class="icon-btn dialog__close" data-dialog-close aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+        <h2 class="display-s" id="SizeGuideTitle-{{ section.id }}" style="margin-bottom:1rem">{{ size_guide_page.title }}</h2>
+        <div class="rte">{{ size_guide_page.content }}</div>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "url": {{ shop.url | append: product.url | json }},
+  {%- if product.featured_media -%}"image": {{ product.featured_media | image_url: width: 1200 | prepend: 'https:' | json }},{%- endif -%}
+  "description": {{ product.description | strip_html | json }},
+  "brand": { "@type": "Brand", "name": {{ product.vendor | json }} },
+  "offers": [
+    {%- for variant in product.variants -%}
+      {
+        "@type": "Offer",
+        "sku": {{ variant.sku | json }},
+        "availability": "http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+        "price": {{ variant.price | divided_by: 100.00 | json }},
+        "priceCurrency": {{ cart.currency.iso_code | json }},
+        "url": {{ shop.url | append: variant.url | json }}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "div",
+  "settings": [
+    { "type": "checkbox", "id": "show_vendor", "label": "Show designer / vendor", "default": false },
+    { "type": "text", "id": "short_description", "label": "Short description fallback", "info": "Used when the product has no custom.short_description metafield." },
+    { "type": "checkbox", "id": "show_quantity", "label": "Show quantity selector", "default": false },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout button", "default": false },
+    { "type": "page", "id": "size_guide_page", "label": "Size guide page" },
+    { "type": "text", "id": "reassurance", "label": "Reassurance line", "default": "Free shipping over €120 · 30-day returns · Secure checkout" },
+    { "type": "checkbox", "id": "show_share", "label": "Show share button", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "accordion",
+      "name": "Expandable section",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Details" },
+        { "type": "select", "id": "source", "label": "Content source", "options": [
+          { "value": "text", "label": "Text below" }, { "value": "description", "label": "Product description" }, { "value": "metafield", "label": "Product metafield" }
+        ], "default": "text" },
+        { "type": "richtext", "id": "content", "label": "Text" },
+        { "type": "text", "id": "metafield_key", "label": "Metafield (namespace.key)", "info": "e.g. custom.fabric_care" },
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Small text",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,74 @@
+{%- comment -%}
+  Colour swatch. Uses Shopify native swatches (value.swatch) when the option
+  is connected to a taxonomy colour; otherwise maps common colour names.
+  Usage: {% render 'swatch', value: value, class: 'swatch' %}
+{%- endcomment -%}
+{%- liquid
+  assign name = value | downcase | strip
+  assign color = ''
+  assign image = ''
+  if value.swatch
+    if value.swatch.image
+      assign image = value.swatch.image | image_url: width: 60
+    elsif value.swatch.color
+      assign color = value.swatch.color
+    endif
+  endif
+  if color == '' and image == ''
+    case name
+      when 'black', 'noir', 'negro', 'ink'
+        assign color = '#151412'
+      when 'white', 'blanc', 'blanco'
+        assign color = '#FFFFFF'
+      when 'ivory', 'cream', 'ecru', 'off-white', 'off white', 'crema'
+        assign color = '#F1EBDD'
+      when 'beige', 'sand', 'arena', 'oat', 'stone'
+        assign color = '#D8C9B0'
+      when 'camel', 'tan', 'caramel', 'tobacco'
+        assign color = '#B07D4B'
+      when 'chocolate', 'brown', 'espresso', 'mocha', 'marrón'
+        assign color = '#5A3E2E'
+      when 'navy', 'marine', 'midnight'
+        assign color = '#1E2740'
+      when 'blue', 'cobalt', 'azul'
+        assign color = '#2F4FA1'
+      when 'sky', 'powder blue', 'ice'
+        assign color = '#BFD3E6'
+      when 'olive', 'khaki', 'moss'
+        assign color = '#6B6A3F'
+      when 'green', 'forest', 'emerald', 'verde'
+        assign color = '#2E5C3E'
+      when 'sage', 'mint', 'pistachio'
+        assign color = '#B5C4A8'
+      when 'red', 'scarlet', 'rojo'
+        assign color = '#B8271F'
+      when 'burgundy', 'wine', 'bordeaux', 'oxblood', 'cherry'
+        assign color = '#5E1E2B'
+      when 'rust', 'terracotta', 'brick', 'clay', 'sienna'
+        assign color = '#B4513A'
+      when 'pink', 'rose', 'rosa'
+        assign color = '#E4A3B4'
+      when 'blush', 'nude', 'powder'
+        assign color = '#E9C9BF'
+      when 'grey', 'gray', 'gris', 'heather'
+        assign color = '#A8A49E'
+      when 'charcoal', 'graphite', 'slate'
+        assign color = '#4A4844'
+      when 'silver', 'metallic'
+        assign color = '#C9C9C9'
+      when 'gold', 'champagne'
+        assign color = '#CDAE6C'
+      when 'lilac', 'lavender', 'mauve'
+        assign color = '#C4B2D4'
+      when 'yellow', 'butter', 'lemon'
+        assign color = '#EAD27A'
+      when 'mustard', 'ochre'
+        assign color = '#C9A03B'
+      when 'orange', 'apricot', 'coral'
+        assign color = '#E07A4B'
+      else
+        assign color = name | replace: ' ', ''
+    endcase
+  endif
+-%}
+<span class="{{ class | default: 'swatch' }}" title="{{ value | escape }}" style="{% if image != '' %}background-image:url('{{ image }}');background-size:cover;{% else %}--swatch:{{ color }};{% endif %}"><span class="visually-hidden">{{ value | escape }}</span></span>

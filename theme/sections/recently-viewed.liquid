@@ -1,0 +1,38 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+<section class="recent section section--tight" data-recently-viewed data-limit="{{ section.settings.limit }}" {% if product %}data-exclude="{{ product.handle }}"{% endif %} hidden {{ section.shopify_attributes }}>
+  <div class="container">
+    <header class="section-head">
+      <div>
+        <p class="eyebrow eyebrow--muted">{{ section.settings.eyebrow }}</p>
+        <h2 class="display-s section-head__title">{%- assign td_8 = 'products.product.recently_viewed' | t -%}{{ section.settings.title | default: td_8 }}</h2>
+      </div>
+    </header>
+    <drag-carousel class="recent__carousel" data-cursor="{{ 'general.drag' | t }}">
+      <div class="recent__track" data-track data-recent-track></div>
+    </drag-carousel>
+  </div>
+  <template data-recent-card>
+    <article class="product-card recent__card" data-product-card>
+      <a class="product-card__media" href="" data-transition-image>
+        <img class="product-card__img product-card__img--main" src="" alt="" loading="lazy" width="600" height="800">
+      </a>
+      <div class="product-card__info">
+        <h3 class="product-card__title"><a href=""></a></h3>
+        <div class="product-card__meta"><span class="price"><span class="price__regular" data-price></span></span></div>
+      </div>
+    </article>
+  </template>
+</section>
+
+{% schema %}
+{
+  "name": "Recently viewed",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Your trail" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Recently viewed" },
+    { "type": "range", "id": "limit", "label": "Products", "min": 4, "max": 12, "step": 1, "default": 8 }
+  ],
+  "presets": [{ "name": "Recently viewed" }]
+}
+{% endschema %}

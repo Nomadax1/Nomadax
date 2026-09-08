@@ -1,0 +1,57 @@
+{%- if predictive_search.performed -%}
+  {%- liquid
+    assign products = predictive_search.resources.products
+    assign collections = predictive_search.resources.collections
+    assign queries = predictive_search.resources.queries
+    assign total = products.size | plus: collections.size | plus: queries.size
+  -%}
+  <div data-predictive-payload data-total="{{ total }}">
+    {%- if total == 0 -%}
+      <p class="lead">{{ 'search.no_results' | t: terms: predictive_search.terms | escape }}</p>
+    {%- else -%}
+      <div>
+        {%- if queries.size > 0 -%}
+          <p class="eyebrow eyebrow--muted search-results__group-title">{{ 'search.suggestions' | t }}</p>
+          <div class="search-results__list" style="margin-bottom:2rem">
+            {%- for q in queries -%}
+              <a href="{{ q.url }}" role="option">{{ q.styled_text }}</a>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        {%- if collections.size > 0 -%}
+          <p class="eyebrow eyebrow--muted search-results__group-title">{{ 'search.collections' | t }}</p>
+          <div class="search-results__list">
+            {%- for collection in collections -%}
+              <a href="{{ collection.url }}" role="option">{{ collection.title }}</a>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+      <div>
+        {%- if products.size > 0 -%}
+          <p class="eyebrow eyebrow--muted search-results__group-title">{{ 'search.products' | t }}</p>
+          <div class="search-results__products">
+            {%- for product in products -%}
+              <a class="search-result-product" href="{{ product.url }}" role="option">
+                <div class="media">
+                  {%- if product.featured_media -%}
+                    {{ product.featured_media | image_url: width: 200 | image_tag: widths: '100, 200', sizes: '72px', loading: 'lazy', alt: product.title }}
+                  {%- else -%}
+                    {% render 'placeholder', variant: forloop.index, label: product.title %}
+                  {%- endif -%}
+                </div>
+                <span>
+                  <span class="search-result-product__title">{{ product.title }}</span><br>
+                  <span class="search-result-product__price">{% render 'price', product: product, show_from: true %}</span>
+                </span>
+              </a>
+            {%- endfor -%}
+          </div>
+          <div class="search-overlay__viewall">
+            <a class="link link--lined" href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&options%5Bprefix%5D=last">{{ 'search.view_all' | t: terms: predictive_search.terms | escape }}</a>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

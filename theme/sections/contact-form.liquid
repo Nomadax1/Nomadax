@@ -1,0 +1,43 @@
+<section class="contact section section--tight" {{ section.shopify_attributes }}>
+  <div class="container contact__grid">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow eyebrow--accent">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="display-m">{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}<div class="rte muted" style="margin-top:1rem">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+    {%- form 'contact', id: 'ContactForm', class: 'contact__form' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="form-message form-message--success">{{ 'contact.form.success' | t }}</p>
+      {%- elsif form.errors -%}
+        <p class="form-error">{{ 'contact.form.error' | t }} {{ form.errors | default_errors }}</p>
+      {%- endif -%}
+      <div class="contact__row">
+        <div class="field"><label class="field__label" for="ContactName">{{ 'contact.form.name' | t }}</label><input class="field__input" id="ContactName" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}"></div>
+        <div class="field"><label class="field__label" for="ContactEmail">{{ 'contact.form.email' | t }} *</label><input class="field__input" id="ContactEmail" type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}"></div>
+      </div>
+      <div class="field"><label class="field__label" for="ContactPhone">{{ 'contact.form.phone' | t }}</label><input class="field__input" id="ContactPhone" type="tel" name="contact[phone]" autocomplete="tel" value="{{ form.phone }}"></div>
+      <div class="field"><label class="field__label" for="ContactMessage">{{ 'contact.form.message' | t }} *</label><textarea class="field__input" id="ContactMessage" name="contact[body]" rows="5" required>{{ form.body }}</textarea></div>
+      <button type="submit" class="btn">{{ 'contact.form.send' | t }}</button>
+    {%- endform -%}
+  </div>
+</section>
+<style>
+  .contact__grid { display: grid; gap: var(--space-7); }
+  .contact__form { display: flex; flex-direction: column; gap: var(--space-5); align-items: flex-start; width: 100%; }
+  .contact__form .field { width: 100%; }
+  .contact__row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); width: 100%; }
+  @media (min-width: 990px) { .contact__grid { grid-template-columns: 1fr 1.2fr; gap: var(--space-9); } }
+</style>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Client care" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Write to us" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Sizing, orders, styling questions — we reply within one working day.</p>" }
+  ],
+  "presets": [{ "name": "Contact form" }]
+}
+{% endschema %}

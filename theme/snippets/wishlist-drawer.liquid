@@ -1,0 +1,10 @@
+<wishlist-drawer id="WishlistDrawer" class="drawer drawer--right" role="dialog" aria-modal="true" aria-labelledby="WishlistDrawerTitle" tabindex="-1">
+  <div class="drawer__head">
+    <h2 class="drawer__title" id="WishlistDrawerTitle">{{ 'wishlist.title' | t }} <span class="text-sm muted" data-wishlist-drawer-count></span></h2>
+    <button type="button" class="icon-btn" data-drawer-close aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+  </div>
+  <div class="drawer__body">
+    <div class="wishlist-items" data-wishlist-items></div>
+    <p class="wishlist-empty muted" data-wishlist-empty>{{ 'wishlist.empty' | t }}</p>
+  </div>
+</wishlist-drawer>

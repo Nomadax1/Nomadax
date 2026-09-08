@@ -1,0 +1,46 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s = section.settings
+  assign image = s.image | default: collection.image
+  assign title = collection.title
+  if collection.handle == 'all' and s.all_title != blank
+    assign title = s.all_title
+  endif
+-%}
+<header class="coll-banner{% if image != blank and s.show_image %} coll-banner--with-image{% endif %}" {{ section.shopify_attributes }}>
+  <div class="container coll-banner__inner">
+    <div class="coll-banner__text" data-reveal-group>
+      {%- if s.eyebrow != blank or settings.season_label != blank -%}
+        <p class="eyebrow eyebrow--accent reveal-mask"><span>{{ s.eyebrow | default: settings.season_label }}</span></p>
+      {%- endif -%}
+      <h1 class="coll-banner__title display-xl"><span class="reveal-mask" style="--reveal-delay:100ms"><span>{{ title }}</span></span></h1>
+      {%- if s.show_description and collection.description != blank -%}
+        <div class="coll-banner__desc lead rte" data-reveal style="--reveal-delay:220ms">{{ collection.description }}</div>
+      {%- elsif s.fallback_text != blank -%}
+        <p class="coll-banner__desc lead" data-reveal style="--reveal-delay:220ms">{{ s.fallback_text }}</p>
+      {%- endif -%}
+    </div>
+    {%- if image != blank and s.show_image -%}
+      <div class="coll-banner__media" data-reveal="scale">
+        <div class="media media--tall">
+          {% render 'image', image: image, sizes: '(min-width: 990px) 30vw, 100vw', loading: 'eager', alt: collection.title %}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Collection banner",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "Defaults to the season label." },
+    { "type": "text", "id": "all_title", "label": "Title for the 'All products' collection", "default": "The collection" },
+    { "type": "checkbox", "id": "show_description", "label": "Show collection description", "default": true },
+    { "type": "text", "id": "fallback_text", "label": "Text when the collection has no description", "default": "An edit of pieces designed to be noticed and worn on repeat." },
+    { "type": "checkbox", "id": "show_image", "label": "Show campaign image", "default": true },
+    { "type": "image_picker", "id": "image", "label": "Image override", "info": "Uses the collection image when empty." }
+  ]
+}
+{% endschema %}

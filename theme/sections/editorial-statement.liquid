@@ -1,0 +1,31 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- assign s = section.settings -%}
+<section class="statement section{% if s.inverse %} section--inverse{% endif %}{% if s.sand %} section--sand{% endif %}" {{ section.shopify_attributes }}>
+  <div class="container statement__inner statement__inner--{{ s.align }}" data-reveal-group>
+    {%- if s.eyebrow != blank -%}<p class="eyebrow eyebrow--accent reveal-mask"><span>{{ s.eyebrow }}</span></p>{%- endif -%}
+    <div class="statement__text display-{{ s.size }}" data-reveal style="--reveal-delay:120ms">{{ s.text }}</div>
+    {%- if s.cta_text != blank -%}<a class="btn btn--outline{% if s.inverse %} btn--ghost{% endif %}" href="{{ s.cta_link }}" data-reveal style="--reveal-delay:260ms">{{ s.cta_text }}</a>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Editorial statement",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "richtext", "id": "text", "label": "Statement", "default": "<p>Clothes with a point of view. <em>Yours.</em></p>" },
+    { "type": "select", "id": "size", "label": "Size", "options": [
+      { "value": "s", "label": "Small" }, { "value": "m", "label": "Medium" }, { "value": "l", "label": "Large" }, { "value": "xl", "label": "Extra large" }
+    ], "default": "l" },
+    { "type": "select", "id": "align", "label": "Alignment", "options": [
+      { "value": "left", "label": "Left" }, { "value": "center", "label": "Centre" }
+    ], "default": "left" },
+    { "type": "text", "id": "cta_text", "label": "Button text" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+    { "type": "checkbox", "id": "inverse", "label": "Dark background", "default": false },
+    { "type": "checkbox", "id": "sand", "label": "Sand background", "default": false }
+  ],
+  "presets": [{ "name": "Editorial statement" }]
+}
+{% endschema %}

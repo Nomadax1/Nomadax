@@ -1,0 +1,26 @@
+<section class="notfound section" {{ section.shopify_attributes }}>
+  <div class="container notfound__inner" data-reveal-group>
+    <p class="eyebrow eyebrow--accent reveal-mask"><span>404</span></p>
+    <h1 class="display-xl"><span class="reveal-mask" style="--reveal-delay:100ms"><span>{%- assign td_2 = '404.title' | t -%}{{ section.settings.title | default: td_2 }}</span></span></h1>
+    <p class="lead" data-reveal style="--reveal-delay:220ms">{%- assign td_3 = '404.subtitle' | t -%}{{ section.settings.subtitle | default: td_3 }}</p>
+    <a class="btn" href="{{ section.settings.link | default: routes.all_products_collection_url }}" data-reveal style="--reveal-delay:340ms">{%- assign td_4 = '404.cta' | t -%}{{ section.settings.cta | default: td_4 }}</a>
+  </div>
+</section>
+<style>
+  .notfound { min-height: 60vh; display: flex; align-items: center; }
+  .notfound__inner { display: flex; flex-direction: column; gap: var(--space-5); align-items: flex-start; }
+  .notfound .display-xl { text-transform: uppercase; max-width: 8em; }
+</style>
+
+{% schema %}
+{
+  "name": "404",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle" },
+    { "type": "text", "id": "cta", "label": "Button text" },
+    { "type": "url", "id": "link", "label": "Button link" }
+  ]
+}
+{% endschema %}

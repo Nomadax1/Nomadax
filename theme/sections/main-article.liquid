@@ -1,0 +1,59 @@
+<article class="article section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <header class="article__head" data-reveal-group>
+      <a class="eyebrow eyebrow--muted reveal-mask" href="{{ blog.url }}"><span>{{ blog.title }} — {{ article.published_at | date: format: 'month_day_year' }}</span></a>
+      <h1 class="display-l article__title"><span class="reveal-mask" style="--reveal-delay:100ms"><span>{{ article.title }}</span></span></h1>
+      {%- if section.settings.show_author and article.author != blank -%}<p class="muted" data-reveal>{{ 'blog.by' | t }} {{ article.author }}</p>{%- endif -%}
+    </header>
+    {%- if article.image and section.settings.show_image -%}
+      <div class="media media--cinema article__image reveal-clip">
+        {% render 'image', image: article.image, sizes: '100vw', loading: 'eager', alt: article.title %}
+      </div>
+    {%- endif -%}
+    <div class="article__body rte">{{ article.content }}</div>
+    <footer class="article__foot">
+      <a class="link link--lined" href="{{ blog.url }}">{{ 'blog.back_to_blog' | t }}</a>
+    </footer>
+
+    {%- if blog.comments_enabled? -%}
+      <div class="article__comments">
+        <h2 class="display-s">{{ 'blog.comments' | t: count: article.comments_count }}</h2>
+        {%- paginate article.comments by 10 -%}
+          {%- for comment in article.comments -%}
+            <div class="article__comment"><p>{{ comment.content }}</p><span class="text-xs muted">{{ comment.author }} · {{ comment.created_at | date: format: 'month_day_year' }}</span></div>
+          {%- endfor -%}
+        {%- endpaginate -%}
+        {%- form 'new_comment', article, class: 'article__comment-form' -%}
+          {%- if form.posted_successfully? -%}<p class="form-message form-message--success">Thank you for your comment.</p>{%- endif -%}
+          {%- if form.errors -%}<p class="form-error">{{ form.errors | default_errors }}</p>{%- endif -%}
+          <div class="field"><label class="field__label" for="CommentAuthor">{{ 'contact.form.name' | t }}</label><input class="field__input" id="CommentAuthor" type="text" name="comment[author]" required value="{{ form.author }}"></div>
+          <div class="field"><label class="field__label" for="CommentEmail">{{ 'contact.form.email' | t }}</label><input class="field__input" id="CommentEmail" type="email" name="comment[email]" required value="{{ form.email }}"></div>
+          <div class="field"><label class="field__label" for="CommentBody">{{ 'contact.form.message' | t }}</label><textarea class="field__input" id="CommentBody" name="comment[body]" rows="4" required>{{ form.body }}</textarea></div>
+          <button type="submit" class="btn">{{ 'contact.form.send' | t }}</button>
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+  </div>
+</article>
+<style>
+  .article__head { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--section-gap-s) 0 var(--space-7); max-width: 60rem; }
+  .article__title { max-width: 14em; }
+  .article__image { margin-bottom: var(--space-8); }
+  .article__body { max-width: 66ch; margin-inline: auto; font-size: var(--text-md); }
+  .article__foot { max-width: 66ch; margin: var(--space-8) auto 0; }
+  .article__comments { max-width: 66ch; margin: var(--space-9) auto 0; display: flex; flex-direction: column; gap: var(--space-5); }
+  .article__comment { border-top: 1px solid var(--color-line); padding-top: var(--space-4); }
+  .article__comment-form { display: flex; flex-direction: column; gap: var(--space-4); align-items: flex-start; }
+  .article__comment-form .field { width: 100%; }
+</style>
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "div",
+  "settings": [
+    { "type": "checkbox", "id": "show_image", "label": "Show featured image", "default": true },
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": false }
+  ]
+}
+{% endschema %}

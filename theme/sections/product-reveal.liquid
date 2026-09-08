@@ -1,0 +1,108 @@
+{{ 'home.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s = section.settings
+  assign product = s.product
+  assign variant = product.selected_or_first_available_variant
+  assign image = s.image | default: product.featured_media
+  assign title = product.title | default: s.placeholder_title
+  assign color_option = blank
+  for option in product.options_with_values
+    assign oname = option.name | downcase
+    if oname == 'color' or oname == 'colour' or oname == 'couleur' or oname == 'farbe'
+      assign color_option = option
+    endif
+  endfor
+-%}
+<section class="reveal section--flush{% if s.inverse %} section--inverse{% endif %}" {{ section.shopify_attributes }}>
+  <div class="reveal__inner">
+    <div class="reveal__media">
+      <div class="reveal__sticky">
+        <div class="media reveal__frame">
+          {% render 'image', image: image, sizes: '(min-width: 990px) 58vw, 100vw', placeholder: 5, placeholder_label: title %}
+        </div>
+        {%- if s.image_caption != blank -%}<span class="reveal__caption eyebrow eyebrow--bare">{{ s.image_caption }}</span>{%- endif -%}
+      </div>
+    </div>
+
+    <div class="reveal__steps">
+      <div class="reveal__step" data-reveal>
+        {%- if s.eyebrow != blank -%}<p class="eyebrow eyebrow--accent">{{ s.eyebrow }}</p>{%- endif -%}
+        <h2 class="display-l reveal__title">{{ title }}</h2>
+        <p class="reveal__price display-s">
+          {%- if product != blank -%}{% render 'price', variant: variant %}{%- else -%}{{ s.placeholder_price | default: 24900 | money }}{%- endif -%}
+        </p>
+      </div>
+
+      <div class="reveal__step" data-reveal>
+        <p class="eyebrow eyebrow--muted">{{ s.fabric_label | default: 'Fabric' }}</p>
+        <p class="lead">{{ s.fabric_text | default: product.description | strip_html | truncate: 220 }}</p>
+      </div>
+
+      {%- if s.detail_text != blank -%}
+        <div class="reveal__step" data-reveal>
+          <p class="eyebrow eyebrow--muted">{{ s.detail_label | default: 'Detail' }}</p>
+          <p class="lead">{{ s.detail_text }}</p>
+        </div>
+      {%- endif -%}
+
+      {%- if color_option != blank -%}
+        <div class="reveal__step" data-reveal>
+          <p class="eyebrow eyebrow--muted">{{ 'products.product.color' | t }} — {{ color_option.values.size }}</p>
+          <div class="reveal__colors">
+            {%- for value in color_option.values -%}
+              <span class="reveal__color">{% render 'swatch', value: value, class: 'swatch swatch--lg' %}<span class="text-sm">{{ value }}</span></span>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- elsif s.colors_text != blank -%}
+        <div class="reveal__step" data-reveal>
+          <p class="eyebrow eyebrow--muted">{{ 'products.product.color' | t }}</p>
+          <div class="reveal__colors">
+            {%- assign colors = s.colors_text | split: ',' -%}
+            {%- for c in colors -%}
+              {%- assign cname = c | strip -%}
+              <span class="reveal__color">{% render 'swatch', value: cname, class: 'swatch swatch--lg' %}<span class="text-sm">{{ cname }}</span></span>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="reveal__step reveal__step--cta" data-reveal>
+        {%- if product != blank -%}
+          {%- if product.has_only_default_variant -%}
+            <button type="button" class="btn" data-quick-add-variant="{{ variant.id }}" {% unless product.available %}disabled{% endunless %}>
+              <span class="btn__label">{% if product.available %}{{ 'products.product.add_to_bag' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</span><span class="btn__spinner" aria-hidden="true"></span>
+            </button>
+          {%- else -%}
+            <a class="btn" href="{{ product.url }}">{{ 'products.product.select_size' | t }}</a>
+          {%- endif -%}
+          <a class="link link--lined" href="{{ product.url }}">{{ 'products.product.view_full_details' | t }}</a>
+        {%- else -%}
+          <a class="btn" href="{{ routes.all_products_collection_url }}">{{ 'products.product.view_product' | t }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product reveal",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Hero product" },
+    { "type": "image_picker", "id": "image", "label": "Image override" },
+    { "type": "text", "id": "image_caption", "label": "Image caption", "default": "Worn in Ivory · Size S" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The piece" },
+    { "type": "text", "id": "placeholder_title", "label": "Placeholder name", "default": "Linea Satin Dress" },
+    { "type": "text", "id": "placeholder_price", "label": "Placeholder price (cents)", "default": "24900" },
+    { "type": "text", "id": "fabric_label", "label": "Fabric label", "default": "Fabric" },
+    { "type": "textarea", "id": "fabric_text", "label": "Fabric text", "default": "Heavy silk-blend satin with a liquid drape and matte reverse. Cut on the bias so it moves before you do." },
+    { "type": "text", "id": "detail_label", "label": "Detail label", "default": "Detail" },
+    { "type": "textarea", "id": "detail_text", "label": "Detail text", "default": "Cowl neckline, open back with a single covered button, French seams throughout." },
+    { "type": "text", "id": "colors_text", "label": "Colours (if no product selected)", "default": "Ivory, Ink, Oxblood" },
+    { "type": "checkbox", "id": "inverse", "label": "Dark background", "default": false }
+  ],
+  "presets": [{ "name": "Product reveal" }]
+}
+{% endschema %}

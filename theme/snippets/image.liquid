@@ -1,0 +1,27 @@
+{%- comment -%}
+  Responsive image with Shopify CDN srcset, or an editorial placeholder.
+  Usage:
+    {% render 'image', image: section.settings.image, sizes: '(min-width: 990px) 50vw, 100vw', class: '', loading: 'lazy', preload: false, alt: '', placeholder: 2, placeholder_label: 'Campaign' %}
+{%- endcomment -%}
+{%- liquid
+  assign sizes_attr = sizes | default: '100vw'
+  assign loading_attr = loading | default: 'lazy'
+  assign fetch = 'auto'
+  if loading_attr == 'eager'
+    assign fetch = 'high'
+  endif
+  assign alt_text = alt | default: image.alt | default: ''
+-%}
+{%- if image != blank -%}
+  {{ image | image_url: width: 2400 | image_tag:
+      widths: '360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048, 2400',
+      sizes: sizes_attr,
+      loading: loading_attr,
+      fetchpriority: fetch,
+      preload: preload,
+      class: class,
+      alt: alt_text
+  }}
+{%- else -%}
+  {% render 'placeholder', variant: placeholder, label: placeholder_label, class: 'placeholder' %}
+{%- endif -%}

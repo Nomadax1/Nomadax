@@ -1,0 +1,32 @@
+{%- comment -%} Shared address form fields. Usage: {% render 'address-fields', form: form, prefix: 'New' %} {%- endcomment -%}
+<div class="customer__row">
+  <div class="field"><label class="field__label" for="AddressFirstName{{ prefix }}">{{ 'customer.addresses.first_name' | t }}</label><input class="field__input" id="AddressFirstName{{ prefix }}" type="text" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name"></div>
+  <div class="field"><label class="field__label" for="AddressLastName{{ prefix }}">{{ 'customer.addresses.last_name' | t }}</label><input class="field__input" id="AddressLastName{{ prefix }}" type="text" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name"></div>
+</div>
+<div class="field"><label class="field__label" for="AddressCompany{{ prefix }}">{{ 'customer.addresses.company' | t }}</label><input class="field__input" id="AddressCompany{{ prefix }}" type="text" name="address[company]" value="{{ form.company }}" autocomplete="organization"></div>
+<div class="field"><label class="field__label" for="AddressAddress1{{ prefix }}">{{ 'customer.addresses.address1' | t }}</label><input class="field__input" id="AddressAddress1{{ prefix }}" type="text" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1"></div>
+<div class="field"><label class="field__label" for="AddressAddress2{{ prefix }}">{{ 'customer.addresses.address2' | t }}</label><input class="field__input" id="AddressAddress2{{ prefix }}" type="text" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2"></div>
+<div class="customer__row">
+  <div class="field"><label class="field__label" for="AddressCity{{ prefix }}">{{ 'customer.addresses.city' | t }}</label><input class="field__input" id="AddressCity{{ prefix }}" type="text" name="address[city]" value="{{ form.city }}" autocomplete="address-level2"></div>
+  <div class="field"><label class="field__label" for="AddressZip{{ prefix }}">{{ 'customer.addresses.zip' | t }}</label><input class="field__input" id="AddressZip{{ prefix }}" type="text" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code"></div>
+</div>
+<div class="customer__row">
+  <div class="field">
+    <label class="field__label" for="AddressCountry{{ prefix }}">{{ 'customer.addresses.country' | t }}</label>
+    <select class="field__input" id="AddressCountry{{ prefix }}" name="address[country]" data-default="{{ form.country }}" autocomplete="country">{{ all_country_option_tags }}</select>
+  </div>
+  <div class="field">
+    <label class="field__label" for="AddressProvince{{ prefix }}">{{ 'customer.addresses.province' | t }}</label>
+    <select class="field__input" id="AddressProvince{{ prefix }}" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1"></select>
+  </div>
+</div>
+<div class="field"><label class="field__label" for="AddressPhone{{ prefix }}">{{ 'customer.addresses.phone' | t }}</label><input class="field__input" id="AddressPhone{{ prefix }}" type="tel" name="address[phone]" value="{{ form.phone }}" autocomplete="tel"></div>
+<label class="checkbox"><input type="checkbox" name="address[default]" {% if form.set_as_default_checkbox contains 'checked' %}checked{% endif %}> {{ 'customer.addresses.set_default' | t }}</label>
+<script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.Shopify && Shopify.CountryProvinceSelector) {
+      new Shopify.CountryProvinceSelector('AddressCountry{{ prefix }}', 'AddressProvince{{ prefix }}', { hideElement: 'AddressProvince{{ prefix }}' });
+    }
+  });
+</script>
